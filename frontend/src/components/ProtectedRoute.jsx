@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { CircularProgress, Box } from '@mui/material';
 
 import { authService } from '../services/authService';
 
-export default function ProtectedRoute({ children }) {
+export default function ProtectedRoute() {
     const [isValid, setIsValid] = useState(null)
     const refreshToken = localStorage.getItem('refresh_token')
 
@@ -33,5 +33,5 @@ export default function ProtectedRoute({ children }) {
         )
     }
 
-    return isValid ? children : <Navigate to="/login" replace />
+    return isValid ? <Outlet /> : <Navigate to="/login" replace />
 }

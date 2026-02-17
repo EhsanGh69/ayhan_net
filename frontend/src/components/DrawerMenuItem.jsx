@@ -1,20 +1,35 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Box, Collapse, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { useLocation } from 'react-router-dom';
 
 
-const DrawerMenuItem = ({ item, level = 0, handleNavigation }) => {
-    const [openMenu, setOpenMenu] = useState(false)
+const DrawerMenuItem = ({ item, level = 0, handleNavigation, openMenus, setOpenMenus }) => {
     const location = useLocation()
 
     const hasChildren = item.children && item.children.length > 0;
-    const isSelected = !hasChildren && location.pathname === item.path
+    const isSelected = !hasChildren && (location.pathname === item.path || item?.subPaths?.includes(location.pathname))
     const Icon = item.icon
+
+    const shouldBeOpen = () => {
+        if (!hasChildren) return false
+
+        return item.children.some(child => 
+            child.path === location.pathname || child?.subPaths?.includes(location.pathname))
+    }
+
+    useEffect(() => {
+        if (shouldBeOpen() && !openMenus[item.title]) {
+            setOpenMenus(prev => ({ ...prev, [item.title]: true }))
+        }
+    }, [location.pathname])
 
     const handleItemClick = () => {
         if (hasChildren) {
-            setOpenMenu(!openMenu)
+            setOpenMenus(prev => ({
+                ...prev,
+                [item.title]: !prev[item.title]
+            }));
         } else {
             handleNavigation(item.path)
         }
@@ -28,6 +43,8 @@ const DrawerMenuItem = ({ item, level = 0, handleNavigation }) => {
                     selected={isSelected}
                     sx={{
                         pr: level * 3 + 2,
+                        bgcolor: hasChildren && !!openMenus[item.title] ? '#cecacaff' : 'white',
+                        border: hasChildren ? "1px solid #ddd" : null,
                         '&.Mui-selected': {
                             backgroundColor: 'primary.light',
                             color: 'whitesmoke',
@@ -53,21 +70,21 @@ const DrawerMenuItem = ({ item, level = 0, handleNavigation }) => {
                     <ListItemIcon sx={{ minWidth: 40 }}>
                         <Icon />
                     </ListItemIcon>
-                    <ListItemText 
-                        primary={item.title} 
+                    <ListItemText
+                        primary={item.title}
                         slotProps={{
                             primary: { fontSize: '0.9rem', fontWeight: isSelected ? 600 : 400 }
                         }}
                     />
-                    {hasChildren && (openMenu ? <ExpandLess /> : <ExpandMore />)}
+                    {hasChildren && (!!openMenus[item.title] ? <ExpandLess /> : <ExpandMore />)}
                 </ListItemButton>
             </ListItem>
 
             {hasChildren && (
-                <Collapse in={openMenu} timeout="auto" unmountOnExit>
+                <Collapse in={!!openMenus[item.title]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {item.children.map(child => (
-                            <DrawerMenuItem item={child} handleNavigation={handleNavigation} level={level + 1} />
+                        {item.children.map((child, idx) => (
+                            <DrawerMenuItem key={idx} item={child} handleNavigation={handleNavigation} level={level + 1} />
                         ))}
                     </List>
                 </Collapse>

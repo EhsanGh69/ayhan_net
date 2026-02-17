@@ -1,0 +1,28 @@
+from fastapi import APIRouter, HTTPException, Depends
+from sqlmodel import Session
+
+from app.db.session import get_session
+from app.models.user_model import User
+from app.core.security import hash_password
+from app.schemas.auth_schema import AdminCreateSchema
+from app.core.config import ADMIN_BOOTSTRAP_SECRET
+
+router = APIRouter(prefix="/api/admin", tags=["Admin"])
+
+@router.post("/create")
+def create_admin(data: AdminCreateSchema, session: Session = Depends(get_session)):
+    # check secret
+    if data.secret != ADMIN_BOOTSTRAP_SECRET:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    
+    # # create admin user
+    user = User(
+        username=data.username, password=hash_password(data.password),
+        first_name=data.first_name, last_name=data.last_name,
+        is_admin=True, is_staff=True
+    )
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+
+    return {"detail": "Admin created successfully", "id": user.id, "username": user.username}

@@ -19,5 +19,24 @@ export const userService = {
         } catch (error) {
             throw error
         }
+    },
+    getStaffUsers: async () => {
+        try {
+            const { data } = await axiosInstance.get('/users/staff/list/')
+            return data.results
+        } catch (error) {
+            throw error
+        }
+    },
+    addStaffUser: async (staffData) => {
+        try {
+            const { data } = await axiosInstance.post('/users/staff/create/', staffData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            })
+            return data
+        } catch (error) {
+            console.log(error.response.data)
+            throw error
+        }
     }
 }

@@ -1,8 +1,8 @@
 import {
   Dashboard, ShoppingCart , People , Settings , ContactPhone,
-  LocalOffer, Assessment , Person , ShoppingBasket , Comment , Payment ,
-  Store as StoreIcon, LocalShipping as DeliveryIcon, AssignmentReturn ,
-  Security as SecurityIcon, Engineering, AdminPanelSettings, SupervisedUserCircle
+  LocalOffer, Assessment , ShoppingBasket , Comment , Payment ,
+  Store as StoreIcon, AssignmentReturn ,
+  Engineering, AdminPanelSettings, SupervisedUserCircle
 } from '@mui/icons-material';
 
 export const menuItems = [
@@ -34,7 +34,9 @@ export const menuItems = [
     },
     {
         title: 'کاربران و نقش ها', icon: SupervisedUserCircle, children: [
-            { title: 'کاربران', icon: People, path: '/search_subscriber' },
+            { title: 'کاربران', icon: People, path: '/users/staff', subPaths: [
+                '/users/staff/add'
+            ]},
             { title: 'نقش ها و دسترسی ها', icon: AdminPanelSettings, path: '/feasibility_cartable' },
         ]
     },

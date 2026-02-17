@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { 
     Avatar, Box, Chip, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography
 } from '@mui/material'
@@ -9,6 +10,7 @@ import { menuItems } from '../constants/menuItems'
 
 export default function PanelDrawer({ open, user, drawerWidth, handleLogout, isMobile, setOpen }) {
     const navigate = useNavigate()
+    const [openMenus, setOpenMenus] = useState({})
 
     const handleDrawerClose = () => {
         if (isMobile) {
@@ -41,7 +43,6 @@ export default function PanelDrawer({ open, user, drawerWidth, handleLogout, isM
                     borderLeft: 'none',
                     left: 0,
                     right: 'auto',
-                    mt: isMobile ? 5 : 0
                 },
             }}
             variant={isMobile ? 'temporary' : 'persistent'}
@@ -79,6 +80,8 @@ export default function PanelDrawer({ open, user, drawerWidth, handleLogout, isM
                         key={idx}
                         item={item}
                         handleNavigation={handleNavigation}
+                        openMenus={openMenus}
+                        setOpenMenus={setOpenMenus}
                     />
                 ))}
             </List>

@@ -29,14 +29,16 @@ export default function Captcha({ onChange, error, helperText }) {
     return (
         <Box width="100%">
             <Box display="flex" alignItems="center" gap={1} mb={1}>
-                <img 
-                    src={captchaImage} alt="captcha"
-                    style={{ 
-                        borderRadius: 4, 
-                        border: '1px solid #ddd', 
-                        backgroundColor: '#fafafa' 
-                    }} 
-                />
+                {captchaImage && (
+                    <img
+                        src={captchaImage} alt="captcha"
+                        style={{
+                            borderRadius: 4,
+                            border: '1px solid #ddd',
+                            backgroundColor: '#fafafa'
+                        }}
+                    />
+                )}
 
                 <Button
                     onClick={handleCaptcha}

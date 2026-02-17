@@ -1,0 +1,4 @@
+.customPlaceholderInput input::placeholder {
+  color: #3f3e3e !important;
+  opacity: 1 !important;
+}

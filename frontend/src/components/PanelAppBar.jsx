@@ -18,7 +18,7 @@ export default function PanelAppBar({
         <AppBar 
             position='fixed' 
             sx={{
-                zIndex: (theme) => theme.zIndex.drawer + 1,
+                // zIndex: (theme) => theme.zIndex.drawer + 1,
                 left: 0,
                 right: 'auto',
                 transition: (theme) => theme.transitions.create(['width', 'margin'], {
