@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { IconButton, Box, Typography, FormHelperText } from "@mui/material";
-import { Upload, Delete } from '@mui/icons-material';
+import { IconButton, Box, Typography, FormHelperText, Link } from "@mui/material";
+import { Upload, Image } from '@mui/icons-material';
 
 export default function FileInput({
-    name, label, setFieldValue, formats, helper, error, 
-    // object, removeHandler
+    name, label, setFieldValue, formats, helper, error, image_url=''
 }) {
     const [filename, setFilename] = useState(null)
 
@@ -44,15 +43,16 @@ export default function FileInput({
                 </Typography>
             )}
 
-            {/* <IconButton
-                component="span"
-                color="error"
-                sx={{ display: user.avatar ? '' : 'none' }}
-                onClick={removeHandler}
+            <IconButton
+                component="a"
+                href={image_url}
+                target="_blank"
+                color="secondary"
+                sx={{ display: image_url ? '' : 'none' }}
             >
-                <Typography>حذف تصویر کنونی</Typography>
-                <Delete />
-            </IconButton> */}
+                <Typography>تصویر کنونی</Typography>
+                <Image />
+            </IconButton>
 
             <FormHelperText error={!!error} sx={{ fontSize: 15 }} component="div">
                 {error || (

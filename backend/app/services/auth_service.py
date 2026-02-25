@@ -1,10 +1,12 @@
+from datetime import datetime, timezone
+from fastapi import HTTPException
 from sqlmodel import Session, select
 from jose import jwt, JWTError
 
-
-from app.models.user_model import User
-from app.models.refresh_token import RefreshToken
-from app.core.security import verify_password, create_access_token, create_refresh_token
+from app.models import User, RefreshToken
+from app.core.security import (
+    verify_password, create_access_token, create_refresh_token, hash_password
+)
 from app.core.config import SECRET_KEY, ALGORITHM
 
 
@@ -20,14 +22,15 @@ def login_user(session: Session, username: str, password: str):
     user = authenticate_user(session, username, password)
     if not user:
         return None
+    user.last_login = datetime.now(timezone.utc)
+    session.add(user)
     
     access = create_access_token({"sub": str(user.id)})
     refresh = create_refresh_token({"sub": str(user.id)})
-
     db_token = RefreshToken(user_id=user.id, token=refresh)
     session.add(db_token)
     session.commit()
-
+    session.refresh(user)
     return access, refresh
 
 def refresh_access_token(session: Session, refresh_token: str):
@@ -60,3 +63,24 @@ def logout_user(session: Session, refresh_token: str):
     session.delete(db_token)
     session.commit()
     return True
+
+
+def change_user_password(
+    user_id: int, 
+    old_password: str, new_password: str,
+    session: Session
+):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    if not verify_password(old_password, user.password):
+        return HTTPException(status_code=400, detail="Old password is incorrect")
+    
+    user.password = hash_password(new_password)
+    session.commit()
+    return {"detail": "Password changed successfully"}
+    
+    
+
+

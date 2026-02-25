@@ -1,7 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { userService } from '../services/userService';
+import { authService } from '../services/authService';
 
 export const useUser = () => {
     const navigate = useNavigate()
@@ -9,7 +9,7 @@ export const useUser = () => {
     const { data: user, isLoading, error } = useQuery({
         queryKey: ['currentUser'],
         queryFn: async () => {
-            const data = await userService.getCurrentUser()
+            const data = await authService.getCurrentUser()
             return data
         },
         enabled: !!localStorage.getItem('access_token'),
@@ -18,57 +18,30 @@ export const useUser = () => {
         retry: 1
     })
 
-    const changePasswordMutation = useMutation({
+    const { 
+        mutateAsync: changePassword, isPending: changePassPending, 
+        isError: isChangePassErr, error: changePassErr
+    } = useMutation({
         mutationFn: async ({ oldPassword, newPassword }) => {
-            const result = await userService.changePassword(oldPassword, newPassword)
+            const result = await authService.changePassword(oldPassword, newPassword)
             return result
         },
         onSuccess: () => navigate('/home')
     })
 
-    return {
-        user, error, isLoading,
-        changePassword: changePasswordMutation.mutate,
-        isChangingPassword: changePasswordMutation.isPending,
-        changePasswordError: changePasswordMutation.error
-    }
-}
-
-export const useStaffList = () => {
-    const { data: staffList, isLoading: staffListLoading, error: staffListError } = useQuery({
-        queryKey: ['staffList'],
-        queryFn: async () => {
-            const data = await userService.getStaffUsers()
-            return data
-        },
-        staleTime: 5 * 60 * 1000,
-        gcTime: 10 * 60 * 1000,
-        retry: 1
-    })
-
-    return {
-        staffList, staffListLoading, staffListError
-    }
-}
-
-export const useStaff = () => {
-    const queryClient = useQueryClient()
-    const navigate = useNavigate()
-    const addStaffMutation = useMutation({
-        mutationFn: async (staffData) => {
-            const result = await userService.addStaffUser(staffData)
+    const {
+        mutateAsync: resetPassword, isPending: resetPassPending, 
+        isError: isResetPassErr, error: resetPassErr
+    } = useMutation({
+        mutationFn: async ({ userId, password }) => {
+            const result = await authService.resetPassword(userId, password)
             return result
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['staffList'] })
-            navigate('/users/staff')
         }
     })
 
     return {
-        addStaff: addStaffMutation.mutateAsync,
-        addStaffPending: addStaffMutation.isPending,
-        addStaffError: addStaffMutation.error,
-        isAddStaffError: addStaffMutation.isError
+        user, error, isLoading,
+        changePassword, changePassPending, changePassErr, isChangePassErr,
+        resetPassword, resetPassPending, isResetPassErr, resetPassErr
     }
 }

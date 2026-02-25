@@ -1,12 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException, Header, Body
 from sqlmodel import Session
 
 from app.db.session import get_session
-from app.schemas.auth_schema import LoginSchema, CurrentUserSchema
+from app.schemas.auth_schema import LoginSchema, CurrentUserSchema, ChangePasswordSchema
 from app.services.auth_service import (
-    login_user, refresh_access_token, logout_user
+    login_user, refresh_access_token, logout_user, change_user_password
 )
-from app.core.dependencies import get_current_user
+from app.core.dependencies import get_current_user, verify_access
 
 router = APIRouter(prefix="/api/auth", tags=["Auth"])
 
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/api/auth", tags=["Auth"])
 def login(credentials: LoginSchema, session: Session = Depends(get_session)):
     tokens = login_user(session, credentials.username, credentials.password)
     if not tokens:
-        raise HTTPException(status_code=401, detail="Invalid Credentials")
+        raise HTTPException(status_code=401, detail="نام کاربری یا رمز عبور اشتباه است")
     
     access, refresh = tokens
     return {"access_token": access, "refresh_token": refresh}
@@ -46,3 +46,14 @@ def logout(authorization: str = Header(...), session: Session = Depends(get_sess
         raise HTTPException(status_code=400, detail="Invalid refresh token")
     
     return {"detail": "Logged out successfully"}
+
+
+@router.post("/change-password")
+def change_password(
+    data: ChangePasswordSchema,
+    user_id: int = Depends(verify_access),
+    session: Session = Depends(get_session)
+):
+    return change_user_password(user_id, data.old_password, data.new_password, session)
+
+

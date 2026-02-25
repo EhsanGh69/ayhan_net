@@ -10,8 +10,8 @@ export const useAuth = () => {
     const loginMutation = useMutation({
         mutationFn: async (credentials) => await authService.login(credentials),
         onSuccess: (data) => {
-            localStorage.setItem('access_token', data.access);
-            localStorage.setItem('refresh_token', data.refresh);
+            localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('refresh_token', data.refresh_token);
             navigate('/');
         }
     })

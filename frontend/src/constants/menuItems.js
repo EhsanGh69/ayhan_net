@@ -17,7 +17,9 @@ export const menuItems = [
     },
     {
         title: 'فنی', icon: Engineering, children: [
-            { title: 'جست و جوی مشترک', icon: AssignmentReturn, path: '/search_subscriber' },
+            { title: 'جست و جوی مشترک', icon: AssignmentReturn, path: '/subscribers', 
+                subPaths: ['/subscribers/add', '/subscribers/edit']
+            },
             { title: 'کارتابل امکان سنجی اولیه', icon: AssignmentReturn, path: '/feasibility_cartable' },
             { title: 'کارتابل اجراها و هماهنگی', icon: AssignmentReturn, path: '/operations_cartable' },
             { title: 'کارتابل تیم اجرا(داخلی)', icon: AssignmentReturn, path: '/internal_opt_cartable' },
@@ -35,7 +37,7 @@ export const menuItems = [
     {
         title: 'کاربران و نقش ها', icon: SupervisedUserCircle, children: [
             { title: 'کاربران', icon: People, path: '/users/staff', subPaths: [
-                '/users/staff/add'
+                '/users/staff/add', '/users/staff/edit'
             ]},
             { title: 'نقش ها و دسترسی ها', icon: AdminPanelSettings, path: '/feasibility_cartable' },
         ]

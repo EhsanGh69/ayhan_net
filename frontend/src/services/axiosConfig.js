@@ -21,8 +21,8 @@ axiosInstance.interceptors.response.use((response) => response, async (error) =>
       return Promise.reject(error);
     }
 
-    const isLoginRoute = originalRequest.url.includes('/login/')
-    const isRefreshRoute = originalRequest.url.includes('/token/refresh/')
+    const isLoginRoute = originalRequest.url.includes('/login')
+    const isRefreshRoute = originalRequest.url.includes('/refresh')
 
     if(error.response?.status === 401 && !isRefreshRoute && !isLoginRoute) {
         originalRequest._retry = true;
@@ -33,10 +33,12 @@ axiosInstance.interceptors.response.use((response) => response, async (error) =>
                 throw new Error('No refresh token')
             }
 
-            const { data } = await axiosInstance.post('/token/refresh/', { refresh: refreshToken })
-            localStorage.setItem('access_token', data.access)
+            const { data } = await axios.post('http://127.0.0.1:8000/api/auth/refresh', {}, {
+                headers: { "Authorization": `Bearer ${refreshToken}` }
+            })
+            localStorage.setItem('access_token', data.access_token)
 
-            originalRequest.headers.Authorization = `Bearer ${data.access}`;
+            originalRequest.headers.Authorization = `Bearer ${data.access_token}`;
             return axiosInstance(originalRequest)
         } catch (refreshError) {
             localStorage.removeItem('access_token');

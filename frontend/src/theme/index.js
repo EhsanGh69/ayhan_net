@@ -13,7 +13,7 @@ export const theme = createTheme({
     //     secondary: {
     //         main: '#dc004e'
     //     }
-    // }
+    // },
     shape: {
         borderRadius: 8
     },
@@ -23,6 +23,17 @@ export const theme = createTheme({
                 root: {
                     textTransform: 'none'
                 }
+            }
+        },
+        MuiTableCell: {
+            styleOverrides: {
+                body: {
+                    fontSize: "1.1rem"
+                },
+                head: {
+                    fontSize: "1.11rem",
+                    fontWeight: 800
+                },
             }
         }
     }

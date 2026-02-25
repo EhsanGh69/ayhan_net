@@ -8,14 +8,16 @@ const DrawerMenuItem = ({ item, level = 0, handleNavigation, openMenus, setOpenM
     const location = useLocation()
 
     const hasChildren = item.children && item.children.length > 0;
-    const isSelected = !hasChildren && (location.pathname === item.path || item?.subPaths?.includes(location.pathname))
+    const isSelected = !hasChildren && (location.pathname === item.path || 
+        item?.subPaths?.some(subPath => location.pathname.includes(subPath)))
     const Icon = item.icon
 
     const shouldBeOpen = () => {
         if (!hasChildren) return false
 
         return item.children.some(child => 
-            child.path === location.pathname || child?.subPaths?.includes(location.pathname))
+            child.path === location.pathname || 
+            child?.subPaths?.some(subPath => location.pathname.includes(subPath)))
     }
 
     useEffect(() => {
@@ -73,7 +75,7 @@ const DrawerMenuItem = ({ item, level = 0, handleNavigation, openMenus, setOpenM
                     <ListItemText
                         primary={item.title}
                         slotProps={{
-                            primary: { fontSize: '0.9rem', fontWeight: isSelected ? 600 : 400 }
+                            primary: { fontSize: '1.1rem', fontWeight: isSelected ? 600 : 400 }
                         }}
                     />
                     {hasChildren && (!!openMenus[item.title] ? <ExpandLess /> : <ExpandMore />)}

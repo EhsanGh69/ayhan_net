@@ -8,19 +8,19 @@ import { useNavigate } from 'react-router-dom';
 import DrawerMenuItem from './DrawerMenuItem';
 import { menuItems } from '../constants/menuItems'
 
-export default function PanelDrawer({ open, user, drawerWidth, handleLogout, isMobile, setOpen }) {
+export default function PanelDrawer({ open, user, drawerWidth, handleLogout, isTemp, setOpen }) {
     const navigate = useNavigate()
     const [openMenus, setOpenMenus] = useState({})
 
     const handleDrawerClose = () => {
-        if (isMobile) {
+        if (isTemp) {
             setOpen(false);
         }
     };
 
     const handleNavigation = (path) => {
         navigate(path);
-        if (isMobile) {
+        if (isTemp) {
             handleDrawerClose();
         }
     };
@@ -45,7 +45,7 @@ export default function PanelDrawer({ open, user, drawerWidth, handleLogout, isM
                     right: 'auto',
                 },
             }}
-            variant={isMobile ? 'temporary' : 'persistent'}
+            variant={isTemp ? 'temporary' : 'persistent'}
             anchor="left"
             open={open}
             ModalProps={{ keepMounted: true }}

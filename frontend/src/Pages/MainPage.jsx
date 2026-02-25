@@ -1,23 +1,24 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Box, Toolbar, CircularProgress, useMediaQuery } from '@mui/material';
+import { Box, Toolbar, CircularProgress, useMediaQuery, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 import { useUser } from '../hooks/useUser';
 import { useAuth } from '../hooks/useAuth';
 import PanelAppBar from '../components/PanelAppBar';
 import PanelDrawer from '../components/PanelDrawer';
+import LoadingBox from '../components/LoadingBox';
 
 export default function MainPage({ children }) {
   const drawerWidth = useMemo(() => 280);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isTemp = useMediaQuery(theme.breakpoints.down('lg'));
   const [open, setOpen] = useState(true)
   const [anchorEl, setAnchorEl] = useState(null)
   const { user, isLoading } = useUser()
 
   useEffect(() => {
-    setOpen(!isMobile);
-  }, [isMobile]);
+    setOpen(!isTemp);
+  }, [isTemp]);
 
   const handleDrawerToggle = () => setOpen(!open)
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget)
@@ -31,11 +32,7 @@ export default function MainPage({ children }) {
   }
 
   if (isLoading) {
-    return (
-      <Box display="flex" justifyContent='center' alignItems='center' height='100vh'>
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingBox />
   }
 
   return (
@@ -58,7 +55,7 @@ export default function MainPage({ children }) {
         user={user} 
         drawerWidth={drawerWidth} 
         handleLogout={handleLogout} 
-        isMobile={isMobile}
+        isTemp={isTemp}
       />
 
       <Box 

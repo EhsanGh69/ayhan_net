@@ -3,7 +3,8 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import LazyWrapper from './components/LazyWrapper';
 import ProtectedRoute from './components/ProtectedRoute';
-import usersRoutes from './Pages/users/routes';
+import staffRoutes from './Pages/staff/routes';
+import subscriberRoutes from './Pages/subscriber/routes';
 
 const Login = lazy(() => import("./Pages/Login"));
 const Home = lazy(() => import("./Pages/Home"));
@@ -15,5 +16,6 @@ export const router = createBrowserRouter([
         { path: "", element: <LazyWrapper><Home /></LazyWrapper> },
     ]},
     { path: "*", element: <LazyWrapper><NotFound /></LazyWrapper> },
-    ...usersRoutes
+    ...staffRoutes,
+    ...subscriberRoutes
 ])

@@ -22,7 +22,7 @@ def get_current_user(authorization: str = Header(...), session: Session = Depend
     
     return user
 
-def verify_access(authorization: str = Header(...)):
+def verify_access(authorization: str = Header(...)) -> int:
     if not authorization.startswith("Bearer "): 
         raise HTTPException(status_code=400, detail="Invalid authorization header")
     token = authorization.split(" ")[1]
@@ -31,3 +31,12 @@ def verify_access(authorization: str = Header(...)):
         raise HTTPException(status_code=401, detail="invalid token")
     
     return user_id
+
+def verify_admin(authorization: str = Header(...), session: Session = Depends(get_session)):
+    admin = get_current_user(authorization, session).is_admin
+    if not admin:
+        raise HTTPException(status_code=403, detail="Access denied")
+    return admin
+
+
+
