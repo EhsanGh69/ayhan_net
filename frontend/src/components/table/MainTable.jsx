@@ -1,22 +1,17 @@
 import { useEffect, useState, useMemo } from 'react'
-import {
-  Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination,
-  TableSortLabel, TextField, IconButton, Box, InputAdornment, useMediaQuery
-} from '@mui/material'
+import { Alert, Paper, TablePagination, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from "@mui/material/styles";
-import { Search as SearchIcon, PersonAddAlt } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
 
 import MainPage from '../../Pages/MainPage'
-import styles from '../../styles/CustomStyles.module.css'
 import SnackAlert from '../../components/SnackAlert';
 import LoadingBox from '../../components/LoadingBox';
+import SearchBox from './SearchBox';
+import TableContent from './TableContent';
 
 export default function MainTable({ 
-    initOrder='', listData, normalizeHandler, isError, error, isLoading, title, addRoute, headCells,
-    children
+    initOrder='', filteredData, isError, error, isLoading, title, addRoute, headCells,
+    searchChildren, tableChildren, AddIcon
 }) {
-  const navigate = useNavigate()
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
@@ -24,7 +19,6 @@ export default function MainTable({
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState(initOrder)
-  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     const errResponse = error?.response?.data?.detail
@@ -32,24 +26,15 @@ export default function MainTable({
     if (isError) setSnackbar({ open: true, message: errorMsg, severity: 'error' })
   }, [isError, error])
 
-  const filteredStaff = listData?.filter(staff => {
-    return Object.values(staff).some(value => value.toString()
-      .toLowerCase().includes(searchTerm.toLowerCase()))
-  })
-
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
     setOrderBy(property)
   }
 
-  const normalizedRows = useMemo(() => {
-    if(!filteredStaff) return []
-    return normalizeHandler(filteredStaff)
-  }, [filteredStaff])
-
   const sortedRows = useMemo(() => {
-    return [...normalizedRows].sort((a, b) => {
+    if(!filteredData) return []
+    return [...filteredData].sort((a, b) => {
       const A = a[orderBy]
       const B = b[orderBy]
 
@@ -61,7 +46,7 @@ export default function MainTable({
 
       return order === 'asc' ? A - B : B - A
     })
-  }, [filteredStaff, order, orderBy])
+  }, [filteredData, order, orderBy])
 
   const handleChangePage = (e, newPage) => setPage(newPage)
 
@@ -84,80 +69,32 @@ export default function MainTable({
           ml: isMobile ? -2 : 0
         }}
       >
-        <Box
-          width="100%"
-          sx={{
-            mb: 3, display: 'flex', justifyContent:
-              'space-between', alignItems: 'center',
-            flexDirection: isMobile ? 'column' : 'row',
-          }}
-        >
-          <TextField
-            variant='outlined'
-            placeholder={`جستجو در ${title} ...`}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            slotProps={{
-              input: {
-                className: styles.customPlaceholderInput,
-                startAdornment: (
-                  <InputAdornment position='start'><SearchIcon color='#4a4848' /></InputAdornment>
-                )
-              }
-            }}
-            sx={{ minWidth: 400 }}
-          />
+        <SearchBox addRoute={addRoute} isMobile={isMobile} title={title} AddIcon={AddIcon}>
+          {searchChildren}
+        </SearchBox>
 
-          <IconButton size='large' title={`افزودن ${title}`} color='primary'
-            sx={{ border: '1px solid #2253c5ff', mt: 2 }}
-            onClick={() => navigate(addRoute)}
-          >
-            <PersonAddAlt sx={{ fontSize: "3rem" }} />
-          </IconButton>
-        </Box>
-
-        {!!listData && (
-          <TableContainer sx={{ maxHeight: 500, border: '1px solid #000' }}>
-            <Table stickyHeader aria-label='staff-list'>
-              <TableHead>
-                <TableRow>
-                  {headCells.map(headCell => (
-                    <TableCell
-                      key={headCell.id}
-                      align='left'
-                      sortDirection={orderBy === headCell.id ? order : false}
-                      sx={{ backgroundColor: '#ccc' }}
-                    >
-                      {headCell.sortable
-                        ? (
-                          <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={() => handleRequestSort(headCell.id)}
-                          >
-                            {headCell.label}
-                          </TableSortLabel>
-                        )
-                        : headCell.label
-                      }
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {sortedRows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(row => children(row))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+        {!!filteredData?.length 
+          ? (
+            <TableContent 
+              sortedRows={sortedRows} order={order} 
+              orderBy={orderBy} headCells={headCells}
+              handleRequestSort={handleRequestSort}
+              page={page} rowsPerPage={rowsPerPage}
+            >
+              {tableChildren}
+            </TableContent>
+          ) : (
+            <Alert variant='outlined' severity='warning' icon={false}
+              sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Typography variant='h5'>اطلاعاتی جهت نمایش وجود ندارد</Typography>
+            </Alert>
+          )
+        }
 
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component='div'
-          count={filteredStaff?.length}
+          count={filteredData?.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

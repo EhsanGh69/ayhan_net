@@ -14,12 +14,28 @@ export const useSubscribersList = () => {
             const data = await subscriberService.getSubscribers()
             return data
         },
-        staleTime: 5 * 60 * 1000,
-        gcTime: 10 * 60 * 1000,
         retry: 1
     })
 
     return { subscribersList, subsListLoading, subsListErr, isSubsListErr }
+}
+
+export const useSearchSubscriber = (searchParams) => {
+    const { field, query } = searchParams || {};
+    const { 
+        data: searchSubs, isLoading: searchSubsLoading, 
+        error: searchSubsErr, isError: isSearchSubsErr
+    } = useQuery({
+        queryKey: ['subscribersList', query, field],
+        queryFn: async () => {
+            const data = await subscriberService.getSubscribers(query, field)
+            return data
+        },
+        retry: 1,
+        enabled: !!field && !!query
+    })
+
+    return { searchSubs, searchSubsLoading, searchSubsErr, isSearchSubsErr }
 }
 
 export const useSubscriber = (subsId) => {
@@ -35,10 +51,28 @@ export const useSubscriber = (subsId) => {
             setData('provinceId', data.province_id)
             return data
         },
-        retry: 1
+        retry: 1,
+        enabled: !!subsId
     })
 
     return { subscriberDetail, subsDetailLoading, subsDetailErr, isSubsDetailErr }
+}
+
+export const useRemoveSubscriber = () => {
+    const queryClient = useQueryClient()
+    const { 
+        mutateAsync: removeSubscriber, isPending: removeSubsPending,
+        error: removeSubsError, isError: isRemoveSubsError 
+    } = useMutation({
+        mutationFn: async ({ subsId }) => {
+            const result = await subscriberService.removeSubscriber(subsId)
+            return result
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['subscribersList'] })
+        
+    })
+
+    return { removeSubscriber, removeSubsError, removeSubsPending, isRemoveSubsError }
 }
 
 export const useAddSubscriber = () => {

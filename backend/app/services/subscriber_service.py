@@ -1,9 +1,15 @@
 from fastapi import HTTPException
+from fastapi.responses import JSONResponse
 from sqlmodel import Session, select
+from sqlalchemy import func
 
 from app.models import Subscriber
-from app.schemas.subscriber_schema import SubscriberBaseSchema, SubscriberListSchema
-from app.services.provinces_loader import PROVINCE_CITY_IDS, PROVINCE_MAP, CITY_MAP
+from app.schemas.subscriber_schema import (
+    SubscriberBaseSchema, SubscriberListSchema, SubscriberViewSchema
+)
+from app.services.provinces_loader import (
+    PROVINCE_CITY_IDS, PROVINCE_MAP, CITY_MAP, search_province_ids, search_city_ids
+)
 
     
 def valid_province_city_id(province_id, city_id):
@@ -69,23 +75,94 @@ def get_subscriber_detail(
 ):
     subscriber = session.get(Subscriber, subscriber_id)
     if not subscriber:
-        raise HTTPException(status_code=404, detail="")
+        raise HTTPException(status_code=404, detail="Subscriber not found")
     
     return subscriber
 
+SEARCHABLE_FIELDS = {
+    "first_name": Subscriber.first_name,
+    "last_name": Subscriber.last_name,
+    "national_id": Subscriber.national_id,
+    "phone": Subscriber.phone,
+}
 
-def get_subscribers_list(session: Session):
-    subscribers = session.exec(select(Subscriber)).all()
+def get_subscribers_list(
+    query: str | None,
+    field: str | None,
+    session: Session
+):
+    if field is None or query is None or field not in SEARCHABLE_FIELDS:
+        return [
+            SubscriberListSchema(
+                id=sub.id,
+                first_name=sub.first_name,
+                last_name=sub.last_name,
+                national_id=sub.national_id,
+                phone=sub.phone,
+                status=sub.status
+            )
+            for sub in session.exec(select(Subscriber)).all()
+        ]
+    
+    column = SEARCHABLE_FIELDS[field]
+    # return session.exec(select(Subscriber).where(column.ilike(f"%{query}%"))).all()
     return [
-        SubscriberListSchema(
-            id=sub.id,
-            first_name=sub.first_name,
-            last_name=sub.last_name,
-            mobile=sub.mobile,
-            phone=sub.phone,
-            province=PROVINCE_MAP[sub.province_id].name,
-            city=CITY_MAP[sub.city_id].name, 
-            status=sub.status
-        )
-        for sub in subscribers
-    ]
+            SubscriberViewSchema(
+                id=sub.id, first_name=sub.first_name, last_name=sub.last_name,
+                national_id=sub.national_id, phone=sub.phone, status=sub.status,
+                province=PROVINCE_MAP[sub.province_id].name, city=CITY_MAP[sub.city_id].name, 
+                birth_date=sub.birth_date, father_name=sub.father_name,
+                certificate_number=sub.certificate_number, mobile=sub.mobile,
+                area=sub.area, alley=sub.alley, building_name=sub.building_name, 
+                house_number=sub.house_number, main_street=sub.main_street, 
+                postal_code=sub.postal_code, side_street=sub.side_street,
+                subscriber_type=sub.subscriber_type
+            )
+            for sub in session.exec(select(Subscriber).where(column.ilike(f"%{query}%"))).all()
+        ]
+    
+    
+
+def remove_subscriber_service(
+    subscriber_id: int,
+    session: Session
+):
+    subscriber = session.get(Subscriber, subscriber_id)
+    if not subscriber:
+        raise HTTPException(status_code=404, detail="Subscriber not found")
+    
+    session.delete(subscriber)
+    session.commit()
+    return JSONResponse(status_code=200, content={"detail": "Subscriber removed successfully"})
+
+SEARCHABLE_FIELDS_ADV = {
+    "full_name": func.concat(Subscriber.first_name, " ",Subscriber.last_name),
+    "national_id": Subscriber.national_id,
+    "mobile": Subscriber.mobile,
+    "phone": Subscriber.phone,
+    "province": "province",
+    "city": "city"
+}
+
+def search_subscribers_service(
+    query: str,
+    field: str,
+    session: Session
+):
+    if field not in SEARCHABLE_FIELDS_ADV:
+        return []
+    
+    if field == "province":
+        ids = search_province_ids(query)
+        if not ids:
+            return []
+        return session.exec(select(Subscriber).where(Subscriber.province_id.in_(ids))).all()
+    
+    if field == "city":
+        ids = search_city_ids(query)
+        if not ids:
+            return []
+        return session.exec(select(Subscriber).where(Subscriber.city_id.in_(ids))).all()
+
+    column = SEARCHABLE_FIELDS[field]
+    return session.exec(select(Subscriber).where(column.ilike(f"%{query}%"))).all()

@@ -9,7 +9,9 @@ export const menuItems = [
     { title: 'داشبورد', icon: Dashboard, path: '/' },
     {
         title: 'بازاریابی و فروش', icon: ShoppingCart, children: [
-            { title: 'مشتریان', icon: ContactPhone, path: '/customers' },
+            { title: 'مشترکان', icon: ContactPhone, path: '/subscribers', 
+                subPaths: ['/subscribers/add', '/subscribers/edit']
+            },
             { title: 'فروش / پیگیری اشتراک تلفن ثابت', icon: ShoppingBasket, path: '/phone' },
             { title: 'فروش / پیگیری اشتراک اینترنت', icon: ShoppingBasket, path: '/internet' },
             { title: 'فروش / پیگیری تجهیز انتهایی', icon: ShoppingBasket, path: '/tools' },
@@ -17,14 +19,15 @@ export const menuItems = [
     },
     {
         title: 'فنی', icon: Engineering, children: [
-            { title: 'جست و جوی مشترک', icon: AssignmentReturn, path: '/subscribers', 
-                subPaths: ['/subscribers/add', '/subscribers/edit']
-            },
+            { title: 'جست و جوی مشترک', icon: AssignmentReturn, path: '/subscribers/search'},
             { title: 'کارتابل امکان سنجی اولیه', icon: AssignmentReturn, path: '/feasibility_cartable' },
             { title: 'کارتابل اجراها و هماهنگی', icon: AssignmentReturn, path: '/operations_cartable' },
             { title: 'کارتابل تیم اجرا(داخلی)', icon: AssignmentReturn, path: '/internal_opt_cartable' },
             { title: 'کارتابل تیم اجرا(فیوژن)', icon: AssignmentReturn, path: '/fusion_opt_cartable' },
-            { title: 'کارتابل پیگیری تیکت ها', icon: Comment, path: '/tickets_cartable' },
+            { title: 'کارتابل تیکت ها', icon: Comment, path: '/tickets/cartable' },
+            { title: 'مدیریت تیکت ها', icon: Comment, path: '/tickets', 
+                subPaths: ['/tickets/define', '/tickets/edit']
+            },
         ]
     },
     {

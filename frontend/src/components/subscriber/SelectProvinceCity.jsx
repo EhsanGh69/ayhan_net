@@ -33,7 +33,7 @@ export default function SelectProvinceCity({ values, errors, touched, setFieldVa
 
     useEffect(() => {
         if (provinceId) getCitiesHandler(provinceId)
-    }, [])
+    }, [provinceId])
 
     return (
         <>
@@ -41,7 +41,7 @@ export default function SelectProvinceCity({ values, errors, touched, setFieldVa
                 {!!provErr && <Typography variant='subtitle1' color='error'>{provErr}</Typography>}
                 <FormControl fullWidth
                     error={touched.province_id && Boolean(errors.province_id)}>
-                    <InputLabel>استان</InputLabel>
+                    <InputLabel>استان *</InputLabel>
                     <Select
                         value={provincesList ? values.province_id : ""}
                         onChange={(e) => setFieldValue("province_id", e.target.value)}
@@ -63,7 +63,7 @@ export default function SelectProvinceCity({ values, errors, touched, setFieldVa
                 {!!cityErr && <Typography variant='subtitle1' color='error'>{cityErr}</Typography>}
                 <FormControl fullWidth
                     error={touched.city_id && Boolean(errors.city_id)}>
-                    <InputLabel>شهر</InputLabel>
+                    <InputLabel>شهر *</InputLabel>
                     <Select
                         value={cities ? values.city_id : ""}
                         onChange={(e) => setFieldValue("city_id", e.target.value)}

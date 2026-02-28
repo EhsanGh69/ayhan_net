@@ -39,7 +39,7 @@ export default function LocationInputs({
             <Grid size={{ xs: 12, md: 6, lg: 3 }}>
                 <FormControl fullWidth
                     error={touched.area && Boolean(errors.area)}>
-                    <InputLabel>منطقه</InputLabel>
+                    <InputLabel>منطقه *</InputLabel>
                     <Select
                         value={values.area}
                         onChange={(e) => setFieldValue("area", e.target.value)}
@@ -60,6 +60,7 @@ export default function LocationInputs({
                 <Grid key={input.name} size={{ xs: 12, md: 6, lg: 3 }}>
                     <TextField
                         fullWidth
+                        required={input.name === 'alley' || input.name === 'building_name' ? false : true}
                         label={input.label}
                         name={input.name}
                         value={values[input.name]}

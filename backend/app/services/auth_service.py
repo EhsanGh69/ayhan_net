@@ -21,7 +21,10 @@ def authenticate_user(session: Session, username: str, password: str):
 def login_user(session: Session, username: str, password: str):
     user = authenticate_user(session, username, password)
     if not user:
-        return None
+        raise HTTPException(status_code=401, detail="نام کاربری یا رمز عبور اشتباه است")
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="حساب کاربری شما غیر فعال است")
+    
     user.last_login = datetime.now(timezone.utc)
     session.add(user)
     

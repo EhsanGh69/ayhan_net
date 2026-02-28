@@ -17,6 +17,7 @@ export default function ContactInputs({ values, handleChange, handleBlur, errors
                 <Grid key={input.name} size={{ xs: 12, md: 6, lg: 3 }}>
                     <TextField
                         fullWidth
+                        required
                         label={input.label}
                         name={input.name}
                         value={values[input.name]}
@@ -24,10 +25,12 @@ export default function ContactInputs({ values, handleChange, handleBlur, errors
                         onBlur={handleBlur}
                         error={touched[input.name] && Boolean(errors[input.name])}
                         helperText={touched[input.name] && errors[input.name]}
-                        sx={{ mb: 2 }}
+                        sx={{ mb: 1 }}
                     />
                     {input.name === 'phone' && (
-                        <Typography variant='subtitle2'>شماره ثابت ده رقمی بدون صفر پیش شماره</Typography>
+                        <Typography variant='subtitle2' color='#808080' mt={0}>
+                            *<span>شماره ثابت ده رقمی بدون صفر پیش شماره</span>
+                        </Typography>
                     )}
                 </Grid>
             ))}

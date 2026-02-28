@@ -6,7 +6,6 @@ export const subscriberService = {
             const { data } = await axiosInstance.post('/subscribers', subsData)
             return data
         } catch (error) {
-            console.log(error.response.data)
             throw error
         }
     },
@@ -18,9 +17,11 @@ export const subscriberService = {
             throw error
         }
     },
-    getSubscribers: async () => {
+    getSubscribers: async (query, field) => {
         try {
-            const { data } = await axiosInstance.get('/subscribers')
+            const { data } = await axiosInstance.get('/subscribers', {
+                params: { query, field }
+            })
             return data
         } catch (error) {
             throw error
@@ -29,6 +30,14 @@ export const subscriberService = {
     getSubscriber: async (subsId) => {
         try {
             const { data } = await axiosInstance.get(`/subscribers/${subsId}`)
+            return data
+        } catch (error) {
+            throw error
+        }
+    },
+    removeSubscriber: async (subsId) => {
+        try {
+            const { data } = await axiosInstance.delete(`/subscribers/${subsId}`)
             return data
         } catch (error) {
             throw error

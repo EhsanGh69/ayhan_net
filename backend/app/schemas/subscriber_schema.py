@@ -13,8 +13,6 @@ class SubscriberBaseSchema(BaseModel):
     certificate_number: str = Field(pattern=r"^\d{1,10}$")
     mobile: str = Field(pattern=r"^(\+98|0)?9\d{9}$")
     phone: str = Field(pattern=r"^[1-9]\d{9}$")
-    province_id: int
-    city_id: int
     area: int
     main_street: str = Field(max_length=50)
     side_street: str = Field(max_length=50)
@@ -28,15 +26,21 @@ class SubscriberListSchema(BaseModel):
     id: int
     first_name: str
     last_name: str
-    mobile: str
+    national_id: str
     phone: str
-    province: str
-    city: str
     status: str
     
     model_config = { "from_attributes": True }
     
+class SubscriberViewSchema(SubscriberBaseSchema):
+    province: str
+    city: str
+    
+    model_config = { "from_attributes": True }
+
 class SubscriberDetailSchema(SubscriberBaseSchema):
+    province_id: int
+    city_id: int
     
     model_config = { "from_attributes": True }
     

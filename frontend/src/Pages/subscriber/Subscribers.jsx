@@ -1,25 +1,56 @@
+import { useState } from 'react'
+import { PersonAdd } from '@mui/icons-material'
+
 import MainTable from '../../components/table/MainTable';
-import { subscriberHeadCells } from '../../constants/usersTable'
+import { subscriberHeadCells } from '../../constants/tableHeadCells'
 import { useSubscribersList } from '../../hooks/useSubscriber'
 import SubscriberTableRow from '../../components/subscriber/SubscriberTableRow';
+import RemoveSubsModal from '../../components/subscriber/RemoveSubsModal';
+import SnackAlert from '../../components/SnackAlert';
+import SearchInput from '../../components/table/SearchInput';
 
 export default function Subscribers() {
+    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
+    const [removeModalOpen, setRemoveModalOpen] = useState(false)
+    const [subs, setSubs] = useState({ id: null, fullName: null })
+    const [searchTerm, setSearchTerm] = useState("")
+
     const { subscribersList, subsListLoading, subsListErr, isSubsListErr } = useSubscribersList()
 
-    const normalizeHandler = (filteredData) => {
-        return filteredData.map(row => {
-            return { ...row, full_name: `${row.first_name} ${row.last_name}` }
-        })
-    }
+    const filteredSubs = subscribersList?.filter(subs => {
+        return Object.values(subs).some(value => value.toString()
+            .toLowerCase().includes(searchTerm.toLowerCase()))
+    })
 
     return (
-        <MainTable
-            listData={subscribersList} error={subsListErr}
-            isError={isSubsListErr} isLoading={subsListLoading}
-            headCells={subscriberHeadCells} addRoute="/subscribers/add"
-            normalizeHandler={normalizeHandler} title="مشترکان" initOrder='full_name'
-        >
-            {row => <SubscriberTableRow key={row.id} row={row} />}
-        </MainTable>
+        <>
+            <RemoveSubsModal
+                subs={subs}
+                open={removeModalOpen}
+                closeHandler={() => setRemoveModalOpen(false)}
+                setSnackbar={setSnackbar}
+            />
+            <MainTable
+                error={subsListErr} isError={isSubsListErr} isLoading={subsListLoading}
+                headCells={subscriberHeadCells} addRoute="/subscribers/add" AddIcon={PersonAdd}
+                filteredData={filteredSubs} title="مشترکان" initOrder='first_name'
+                searchChildren={
+                    <SearchInput
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        title="مشترکان"
+                    />
+                }
+                tableChildren={row => (
+                    <SubscriberTableRow
+                        key={row.id}
+                        row={row}
+                        setSubs={setSubs}
+                        setRemoveModalOpen={setRemoveModalOpen}
+                    />
+                )}
+            />
+            <SnackAlert snackbar={snackbar} setSnackbar={setSnackbar} />
+        </>
     )
 }

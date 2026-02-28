@@ -1,19 +1,16 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from sqlmodel import Session
-from typing import List
 
 from app.db.session import get_session
 from app.core.dependencies import verify_access
-from app.schemas.subscriber_schema import (
-    SubscriberBaseSchema, SubscriberDetailSchema, SubscriberListSchema
-)
+from app.schemas.subscriber_schema import SubscriberBaseSchema, SubscriberDetailSchema
 from app.services.subscriber_service import (
-    create_subscriber_service, update_subscriber_service, get_subscribers_list, get_subscriber_detail
+    create_subscriber_service, update_subscriber_service, get_subscribers_list, get_subscriber_detail,
+    remove_subscriber_service,
 )
 
 router = APIRouter(prefix="/api/subscribers", tags=['Subscribers'])
-
 
 
 @router.post("/")
@@ -37,14 +34,16 @@ def update_subscriber(
     return JSONResponse(status_code=200, content={"detail": "Subscriber updated successfully"})
 
 
-@router.get('/', response_model=List[SubscriberListSchema])
+@router.get('/')
 def subscribers_list(
+    query: str | None=None,
+    field: str | None=None, 
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
 ):
-    return get_subscribers_list(session)
+    return get_subscribers_list(query, field, session)
 
-@router.get('/{subscriber_id}')
+@router.get('/{subscriber_id}', response_model=SubscriberDetailSchema)
 def subscriber_detail(
     subscriber_id: int,
     auth_user: int = Depends(verify_access),
@@ -52,6 +51,13 @@ def subscriber_detail(
 ):
     return get_subscriber_detail(subscriber_id, session)
 
+@router.delete('/{subscriber_id}')
+def remove_subscriber(
+    subscriber_id: int,
+    auth_user: int = Depends(verify_access),
+    session: Session = Depends(get_session)
+):
+    return remove_subscriber_service(subscriber_id, session)
 
 
 

@@ -67,7 +67,6 @@ export default function MainPage({ children }) {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
           }),
-          // ml: { xs: 0, md: open ? `${drawerWidth}px` : 0}
           m: 0
         }}
       >

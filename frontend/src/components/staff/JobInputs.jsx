@@ -1,7 +1,7 @@
 import { useMemo, useContext } from 'react'
-import { Check } from '@mui/icons-material'
-import { 
-    Box, Chip, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography 
+import { Badge } from '@mui/icons-material'
+import {
+    Box, Chip, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography
 } from '@mui/material'
 
 import { jobInfos } from '../../constants/StaffInputs'
@@ -24,9 +24,9 @@ export default function JobInputs({
     return (
         <Grid container bgcolor="#e3e3e3ff" mb={1} p={2} borderRadius={1} gap={1}>
             <Grid size={{ xs: 12 }} mb={1}>
-                <Typography variant='h6' color='warning'
+                <Typography variant='h6' mb={1} color='warning'
                     display="flex" alignItems="center">
-                    <Check />
+                    <Badge fontSize='large' sx={{ mr: 1 }} />
                     <span>اطلاعات شغلی</span>
                 </Typography>
             </Grid>
@@ -34,6 +34,7 @@ export default function JobInputs({
                 <Grid key={input.name} size={{ xs: 12, md: 6, lg: 3 }}>
                     <TextField
                         fullWidth
+                        required
                         label={input.label}
                         name={input.name}
                         value={values[input.name]}
@@ -48,7 +49,7 @@ export default function JobInputs({
             <Grid size={{ xs: 12, md: 6, lg: 3 }}>
                 <FormControl fullWidth
                     error={touched.cartable_types && Boolean(errors.cartable_types)}>
-                    <InputLabel>نوع کارتابل</InputLabel>
+                    <InputLabel>نوع کارتابل *</InputLabel>
                     <Select
                         multiple
                         value={values.cartable_types}

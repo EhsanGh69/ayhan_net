@@ -5,6 +5,7 @@ import LazyWrapper from './components/LazyWrapper';
 import ProtectedRoute from './components/ProtectedRoute';
 import staffRoutes from './Pages/staff/routes';
 import subscriberRoutes from './Pages/subscriber/routes';
+import ticketRoutes from './Pages/ticket/routes';
 
 const Login = lazy(() => import("./Pages/Login"));
 const Home = lazy(() => import("./Pages/Home"));
@@ -17,5 +18,6 @@ export const router = createBrowserRouter([
     ]},
     { path: "*", element: <LazyWrapper><NotFound /></LazyWrapper> },
     ...staffRoutes,
-    ...subscriberRoutes
+    ...subscriberRoutes,
+    ...ticketRoutes
 ])

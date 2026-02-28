@@ -31,7 +31,7 @@ export default function IdentityInputs({
             <Field
               fullWidth
               name="birth_date"
-              label="تاریخ تولد"
+              label="تاریخ تولد *"
               component={JalaliDateField}
             />
           </Grid>
@@ -40,7 +40,7 @@ export default function IdentityInputs({
           <Grid key={input.name} size={{ xs: 12, md: 6, lg: 3 }}>
             <FormControl fullWidth
               error={touched.subscriber_type && Boolean(errors.subscriber_type)}>
-              <InputLabel>نوع مشترک</InputLabel>
+              <InputLabel>نوع مشترک *</InputLabel>
               <Select
                 value={values.subscriber_type}
                 onChange={(e) => setFieldValue("subscriber_type", e.target.value)}
@@ -62,6 +62,7 @@ export default function IdentityInputs({
           <Grid key={input.name} size={{ xs: 12, md: 6, lg: 3 }}>
             <TextField
               fullWidth
+              required
               label={input.label}
               name={input.name}
               value={values[input.name]}

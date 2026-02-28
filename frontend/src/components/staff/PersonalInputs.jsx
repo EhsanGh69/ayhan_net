@@ -1,5 +1,5 @@
 import { Grid, TextField, Typography } from '@mui/material'
-import { Check } from '@mui/icons-material'
+import { Portrait } from '@mui/icons-material'
 import { Field } from 'formik'
 
 import JalaliDateField from '../inputs/JalaliDateField'
@@ -11,8 +11,8 @@ export default function PersonalInputs({ values, handleChange, handleBlur, error
             <Grid size={{ xs: 12 }}>
                 <Typography variant='h6' mb={1} color='primary'
                     display="flex" alignItems="center">
-                    <Check />
-                    اطلاعات فردی
+                    <Portrait fontSize='large' sx={{ mr: 1 }} />
+                    <span>اطلاعات فردی</span>
                 </Typography>
             </Grid>
             {personalInfos.map(input => {
@@ -21,7 +21,7 @@ export default function PersonalInputs({ values, handleChange, handleBlur, error
                         <Field
                             fullWidth
                             name="birth_date"
-                            label="تاریخ تولد"
+                            label="تاریخ تولد *"
                             component={JalaliDateField}
                         />
                     </Grid>
@@ -30,6 +30,7 @@ export default function PersonalInputs({ values, handleChange, handleBlur, error
                     <Grid key={input.name} size={{ xs: 12, md: 6, lg: 3 }}>
                         <TextField
                             fullWidth
+                            required
                             label={input.label}
                             name={input.name}
                             value={values[input.name]}

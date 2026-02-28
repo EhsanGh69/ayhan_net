@@ -64,11 +64,11 @@ export default function PanelDrawer({ open, user, drawerWidth, handleLogout, isT
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                     {user?.full_name || user?.username}
                 </Typography>
-                {user?.is_superuser && (
-                    <Chip label="مدیر" size="small" color="success" sx={{ mt: 1 }} />
+                {user?.is_admin && (
+                    <Chip label="مدیر" size="medium" color="success" sx={{ mt: 0.5 }} />
                 )}
-                {!user?.is_superuser && user?.is_staff && (
-                    <Chip label="کارمند" size="small" color="primary" sx={{ mt: 1 }} />
+                {!user?.is_admin && user?.is_staff && (
+                    <Chip label="کارمند" size="medium" color="primary" sx={{ mt: 0.5 }} />
                 )}
             </Box>
 

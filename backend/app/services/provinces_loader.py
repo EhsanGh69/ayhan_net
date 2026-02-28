@@ -20,3 +20,22 @@ PROVINCE_CITY_IDS = {
 
 PROVINCE_MAP = {p["id"]: Province(**p) for p in PROVINCES}
 CITY_MAP = {c["id"]: City(**c) for prov in CITIES for c in prov["cities"]}
+
+def search_province_ids(query: str):
+    query = query.strip()
+    return [
+        p["id"]
+        for p in PROVINCES
+        if query in p["name"]
+    ]
+
+def search_city_ids(query: str):
+    query = query.strip()
+    result_ids = []
+    
+    for item in CITIES:
+        for city in item["cities"]:
+            if query in city["name"]:
+                result_ids.append(city["id"])
+    
+    return result_ids
