@@ -20,7 +20,7 @@ export default function SearchInput({ title, searchTerm, setSearchTerm }) {
                     )
                 }
             }}
-            sx={{ minWidth: 400 }}
+            sx={{ width: { xs: "100%", sm: "80%", md: "50%", xl: "30%" } }}
         />
     )
 }

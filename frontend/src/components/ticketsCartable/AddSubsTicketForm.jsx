@@ -58,7 +58,7 @@ export default function AddSubsTicketForm({
                             touched={touched}
                         />
 
-                        <Box width={{ xs: "100%", md: "60%" }}>
+                        <Box width="100%">
                             <TextField
                                 fullWidth
                                 required

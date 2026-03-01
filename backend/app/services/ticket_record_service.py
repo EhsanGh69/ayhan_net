@@ -35,6 +35,7 @@ def generate_ticket_data(data: TicketRecordCreate, is_response: bool = False):
         'content': data.content,
         'user_id': data.user_id,
         'status': data.status,
+        'is_active': True
     }
     if data.staff_id:
         ticket_data['staff_id'] = data.staff_id

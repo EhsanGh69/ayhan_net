@@ -9,7 +9,7 @@ export const menuItems = [
     { title: 'داشبورد', icon: Dashboard, path: '/' },
     {
         title: 'بازاریابی و فروش', icon: ShoppingCart, children: [
-            { title: 'مشترکان', icon: ContactPhone, path: '/subscribers', 
+            { title: 'مشتری ها', icon: ContactPhone, path: '/subscribers', 
                 subPaths: ['/subscribers/add', '/subscribers/edit']
             },
             { title: 'فروش / پیگیری اشتراک تلفن ثابت', icon: ShoppingBasket, path: '/phone' },
@@ -19,7 +19,7 @@ export const menuItems = [
     },
     {
         title: 'فنی', icon: Engineering, children: [
-            { title: 'جست و جوی مشترک', icon: AssignmentReturn, path: '/subscribers/search'},
+            { title: 'جست و جوی مشتری', icon: AssignmentReturn, path: '/subscribers/search'},
             { title: 'کارتابل امکان سنجی اولیه', icon: AssignmentReturn, path: '/feasibility_cartable' },
             { title: 'کارتابل اجراها و هماهنگی', icon: AssignmentReturn, path: '/operations_cartable' },
             { title: 'کارتابل تیم اجرا(داخلی)', icon: AssignmentReturn, path: '/internal_opt_cartable' },

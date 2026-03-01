@@ -39,7 +39,7 @@ class TicketRecord(SQLModel, table=True):
     
     status: TicketStatus = Field(default=TicketStatus.OPEN, 
                                 sa_column=Column(SAEnum(TicketStatus, name="ticket_status")))
-    is_active: bool = Field(default=True)
+    is_active: Optional[bool] = None
     created_at: Optional[datetime] = Field(default=None, 
                 sa_column_kwargs={"server_default": func.now()})
     updated_at: Optional[datetime] = Field(default=None,

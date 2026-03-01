@@ -56,7 +56,8 @@ def create_ticket_service(
         raise HTTPException(status_code=409, detail="در این گروه تیکتی با این نام وجود دارد")
     
     ticket = Ticket(
-        group_id=group_ticket.id, name=ticket_data.name, description=ticket_data.description
+        group_id=group_ticket.id, name=ticket_data.name, description=ticket_data.description,
+        is_active=True
     )
     
     session.add(ticket)

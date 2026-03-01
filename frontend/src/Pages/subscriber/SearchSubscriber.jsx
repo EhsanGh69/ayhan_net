@@ -84,7 +84,7 @@ export default function Subscribers() {
                 {!!searchSubs && searchSubs.length === 0 && (
                     <Alert variant='outlined' severity='warning' icon={false}
                         sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-                        <Typography variant='h5'>مشترکی مطابق جستجوی شما وجود ندارد</Typography>
+                        <Typography variant='h5'>هیچ مشتری مطابق جستجوی شما وجود ندارد</Typography>
                     </Alert>
                 )}
             </Paper>

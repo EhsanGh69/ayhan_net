@@ -34,12 +34,12 @@ export default function Subscribers() {
             <MainTable
                 error={subsListErr} isError={isSubsListErr} isLoading={subsListLoading}
                 headCells={subscriberHeadCells} addRoute="/subscribers/add" AddIcon={PersonAdd}
-                filteredData={filteredSubs} title="مشترکان" 
+                filteredData={filteredSubs} title="مشتری ها" 
                 searchChildren={
                     <SearchInput
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
-                        title="مشترکان"
+                        title="مشتری ها"
                     />
                 }
                 tableChildren={row => (

@@ -38,7 +38,7 @@ export const subsTicketHeadCells = [
     { id: 'group', label: 'گروه تیکت', sortable: true },
     { id: 'name', label: 'نام تیکت', sortable: true },
     { id: 'user', label: 'کاربر ثبت کننده', sortable: true },
-    { id: 'datetime', label: 'تاریخ و ساعت ثبت', sortable: true },
+    { id: 'datetime', label: 'زمان ثبت', sortable: true },
     { id: 'staff', label: 'ارجاع شده به کارتابل', sortable: true },
     { id: 'status', label: 'وضعیت', sortable: true },
     { id: 'actions', label: ' ', sortable: false }

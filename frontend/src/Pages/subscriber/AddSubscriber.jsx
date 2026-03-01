@@ -61,7 +61,7 @@ export default function AddSubscriber() {
                 <Typography variant='h4' color='success'
                     display="flex" alignItems="center" justifyContent="center">
                     <PersonAdd fontSize='large' sx={{ fontSize: '3rem', mr: 2 }} />
-                    <span>ایجاد مشترک جدید</span>
+                    <span>ایجاد مشتری جدید</span>
                 </Typography>
             </Box>
 
@@ -83,7 +83,7 @@ export default function AddSubscriber() {
                 open={openConfirm}
                 closeHandler={() => setOpenConfirm(false)}
                 confirmHandler={() => handleAddSubscriber(confirmValues)}
-                message="مشترکی با اطلاعات وارد شده از قبل وجود دارد. آیا ادامه می دهید؟"
+                message="مشتری با اطلاعات وارد شده از قبل وجود دارد. آیا ادامه می دهید؟"
             />
             <SnackAlert snackbar={snackbar} setSnackbar={setSnackbar} />
         </MainPage>

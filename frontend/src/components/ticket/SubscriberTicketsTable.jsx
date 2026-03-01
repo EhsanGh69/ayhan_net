@@ -67,7 +67,7 @@ export default function SubscriberTicketsTable({ subsId }) {
                 <SearchInput
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
-                    title="تیکت های مشترک"
+                    title="تیکت های مشتری"
                 />
             </SearchBox>
 

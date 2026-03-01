@@ -19,7 +19,7 @@ export default function SearchBox({
             
             {showAddBtn && (
                 <IconButton size='large' title={`افزودن ${title}`} color='primary'
-                    sx={{ border: '1px solid #2253c5ff', mb: 2 }}
+                    sx={{ border: '1px solid #2253c5ff', mt: { xs: 2, sm: 0 } }}
                     onClick={() => {
                         if (Boolean(addHandler)) addHandler()
                         else if (addRoute) navigate(addRoute)

@@ -12,6 +12,7 @@ import SnackAlert from '../SnackAlert';
 import LoadingBox from '../LoadingBox';
 import TicketRows from './TicketRows';
 import ChangeTicketActivateModal from './ChangeTicketActivateModal';
+import deepSearch from '../../utils/deepSearch';
 
 export default function ManageTicketsTable() {
     const theme = useTheme();
@@ -24,10 +25,7 @@ export default function ManageTicketsTable() {
 
     const { ticketsList, ticketsListLoading, isTicketsListErr, ticketsListErr } = useTicketsList()
 
-    const filteredTickets = ticketsList?.filter(ticket => {
-        return Object.values(ticket).some(value => value.toString()
-            .toLowerCase().includes(searchTerm.toLowerCase()))
-    })
+    const filteredTickets = ticketsList?.filter(ticket => deepSearch(ticket, searchTerm));
 
     const normalizeHandler = (filteredData) => {
         return filteredData.map(row => {
@@ -46,7 +44,7 @@ export default function ManageTicketsTable() {
     }, [isTicketsListErr, ticketsListErr])
 
     const setCellColor = (isActive) => {
-        if(isActive) return { color: "#000" }
+        if (isActive) return { color: "#000" }
         return { color: "#696969ff" }
     }
 
@@ -77,7 +75,7 @@ export default function ManageTicketsTable() {
                     >
                         {(row, index) => (
                             <>
-								<TableCell sx={setCellColor(row.is_active)} align='center'>{index + 1}</TableCell>
+                                <TableCell sx={setCellColor(row.is_active)} align='center'>{index + 1}</TableCell>
                                 <TableCell sx={setCellColor(row.is_active)} align='center'>{row.group}</TableCell>
                                 <TableCell sx={setCellColor(row.is_active)} align='center'>{row.name}</TableCell>
                                 <TableCell sx={setCellColor(row.is_active)} align='center'>{row.description}</TableCell>
@@ -89,26 +87,26 @@ export default function ManageTicketsTable() {
                                     >
                                         <Edit fontSize='medium' />
                                     </IconButton>
-                                    <IconButton 
-                                        size='medium' 
-                                        title={row.is_active ? 'غیرفعال سازی': 'فعال سازی'}
-                                        color={row.is_active ? 'error': 'success'}
-                                        sx={{ 
-                                            border: row.is_active ? '1px solid #c53522' : '1px solid #45c522ff', 
-                                            mr: 2, mt: 1 
+                                    <IconButton
+                                        size='medium'
+                                        title={row.is_active ? 'غیرفعال سازی' : 'فعال سازی'}
+                                        color={row.is_active ? 'error' : 'success'}
+                                        sx={{
+                                            border: row.is_active ? '1px solid #c53522' : '1px solid #45c522ff',
+                                            mr: 2, mt: 1
                                         }}
                                         onClick={() => {
                                             setTicket((prev) => ({
-                                                ...prev, 
-                                                id: row.id, 
-                                                name: row.name, 
+                                                ...prev,
+                                                id: row.id,
+                                                name: row.name,
                                                 group: row.group,
                                                 isActive: row.is_active
                                             }))
                                             setActiveModal(true)
                                         }}
                                     >
-                                        {row.is_active 
+                                        {row.is_active
                                             ? <ClearRounded fontSize='medium' />
                                             : <CheckRounded fontSize='medium' />
                                         }
