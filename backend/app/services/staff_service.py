@@ -121,7 +121,7 @@ def change_staff_activate(user_id: int, session: Session):
 
 
 def get_staff_list(session: Session):
-    staffs = session.exec(select(Staff)).all()
+    staffs = session.exec(select(Staff).order_by(Staff.id)).all()
     return staffs
 
 def get_staff_detail(user_id: int, session: Session):
@@ -130,7 +130,4 @@ def get_staff_detail(user_id: int, session: Session):
         raise HTTPException(status_code=404, detail="User staff not found")
     
     return staff
-    
-
-
     

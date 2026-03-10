@@ -17,6 +17,14 @@ export const staffService = {
             throw error
         }
     },
+    getCurrentStaff: async (userId) => {
+        try {
+            const { data } = await axiosInstance.get(`/staff/current/${userId}`)
+            return data
+        } catch (error) {
+            throw error
+        }
+    },
     addStaffUser: async (staffData) => {
         try {
             const { data } = await axiosInstance.post('/staff/', staffData, {

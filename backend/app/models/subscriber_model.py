@@ -1,13 +1,13 @@
 from datetime import date
 from enum import Enum
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
 
 
 class SubscriberTypes(str, Enum):
     real = "real"
     legal = "legal"
-
+ 
 
 class Subscriber(SQLModel, table=True):
     __tablename__ = "subscribers"
@@ -15,26 +15,29 @@ class Subscriber(SQLModel, table=True):
     
     first_name: str
     last_name: str
-    father_name: str
-    national_id: str
-    birth_date: date
-    certificate_number: str = Field(description="شماره شناسنامه")
+    father_name: Optional[str] = None
+    national_id: Optional[str] = None
+    birth_date: Optional[date] = None
+    certificate_number: Optional[str] = Field(default=None, description="شماره شناسنامه")
     
     mobile: str
-    phone: str
+    phone: Optional[str] = None
     
-    province_id: int
-    city_id: int
-    area: int = Field(description="منطقه")
+    province_id: Optional[int] = None
+    city_id: Optional[int] = None
+    area: Optional[int] = Field(default=None, description="منطقه")
     
-    main_street: str = Field(description="خیابان اصلی")
-    side_street: str = Field(description="خیابان فرعی")
-    alley:str = Field(description="کوچه")
+    main_street: Optional[str] = Field(default=None, description="خیابان اصلی")
+    side_street: Optional[str] = Field(default=None, description="خیابان فرعی")
+    alley: Optional[str] = Field(default=None, description="کوچه")
     
-    building_name: str = Field(description="نام ساختمان")
-    house_number: str = Field(description="پلاک")
+    building_name: Optional[str] = Field(default=None, description="نام ساختمان")
+    house_number: Optional[str] = Field(default=None, description="پلاک")
     postal_code: str = Field(description="کد پستی")
     
-    subscriber_type: SubscriberTypes
+    subscriber_type: Optional[SubscriberTypes] = None
     status: str = Field(default="پیش ثبت نام")
+    subscriber_code: Optional[str] = None
+    
+    subscriber_ticket: Optional["TicketRecord"] = Relationship(back_populates="subscriber") # type: ignore
      

@@ -1,3 +1,5 @@
+import secrets
+import time
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from passlib.context import CryptContext
@@ -34,3 +36,12 @@ def verify_token(token: str):
         return None
     return user_id
 
+
+def generate_random_code(length):
+    timestamp_part = str(int(time.time()))
+    time_digits = timestamp_part[-min(5, length // 2):]
+    
+    random_length = length - len(time_digits)
+    random_part = ''.join(secrets.choice('0123456789') for _ in range(random_length))
+    
+    return random_part + time_digits

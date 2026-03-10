@@ -4,3 +4,4 @@ from .staff_model import Staff
 from .subscriber_model import Subscriber
 from .ticket_group_model import TicketGroup
 from .ticket_model import Ticket
+from .ticket_record_model import TicketRecord

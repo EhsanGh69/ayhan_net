@@ -20,6 +20,7 @@ def add_ticket_group_service(
     session.commit()
     return JSONResponse(status_code=201, content={"detail": "Ticket group created successfully"})
 
+
 def update_ticket_group_service(
     group_id: int,
     group_data: AddTicketGroup,

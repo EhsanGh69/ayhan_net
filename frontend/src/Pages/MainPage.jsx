@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Box, Toolbar, CircularProgress, useMediaQuery, Typography } from '@mui/material';
+import { useEffect, useMemo, useState, useContext } from 'react';
+import { Box, Toolbar, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 import { useUser } from '../hooks/useUser';
@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import PanelAppBar from '../components/PanelAppBar';
 import PanelDrawer from '../components/PanelDrawer';
 import LoadingBox from '../components/LoadingBox';
+import { GlobalContext } from '../context/GlobalContext'
 
 export default function MainPage({ children }) {
   const drawerWidth = useMemo(() => 280);
@@ -15,10 +16,15 @@ export default function MainPage({ children }) {
   const [open, setOpen] = useState(true)
   const [anchorEl, setAnchorEl] = useState(null)
   const { user, isLoading } = useUser()
+  const { setData } = useContext(GlobalContext)
 
   useEffect(() => {
     setOpen(!isTemp);
   }, [isTemp]);
+
+  useEffect(() => {
+    if(!isLoading && user) setData("userData", user)
+  }, [user, isLoading]);
 
   const handleDrawerToggle = () => setOpen(!open)
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget)

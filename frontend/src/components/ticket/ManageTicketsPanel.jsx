@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { Box, Tab, Tabs } from '@mui/material'
 
 import ManageTicketsTable from './ManageTicketsTable'
+import TicketsRefersList from './TicketsRefersList'
 
 function TabPanel({ children, value, index }) {
     return (
@@ -20,7 +21,7 @@ export default function ManageTicketsPanel() {
 
     const TabPanelItems = useMemo(() => ([
         { label: "لیست تیکت ها", component: <ManageTicketsTable /> },
-        { label: "لیست ارجاعات تیکت ها", component: <h1>لیست ارجاعات تیکت ها</h1> },
+        { label: "لیست ارجاعات تیکت ها", component: <TicketsRefersList /> },
     ]))
 
     const handleChange = (_, newValue) => setValue(newValue)

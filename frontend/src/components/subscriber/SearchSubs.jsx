@@ -14,6 +14,7 @@ export default function SearchSubs({
         { name: "last_name", label: "نام خانوادگی" },
         { name: "national_id", label: "کد ملی" },
         { name: "phone", label: "شماره تلفن" },
+        { name: "subscriber_code", label: "کد رهگیری" },
         { name: "net_username", label: "نام کاربری اینترنت" },
     ]))
 
@@ -42,6 +43,7 @@ export default function SearchSubs({
                 <TextField
                     variant='outlined'
                     placeholder='عبارت جستجو'
+                    autoComplete='off'
                     value={queryInput}
                     onChange={(e) => setQueryInput(e.target.value)}
                     sx={{ minWidth: 300 }}

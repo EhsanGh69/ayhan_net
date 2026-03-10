@@ -6,7 +6,7 @@ import MainPage from '../MainPage';
 import SnackAlert from '../../components/SnackAlert';
 import { useAddTicket } from '../../hooks/useTicket'
 import TicketForm from '../../components/ticket/TicketForm';
-import { defineTicketSchema } from '../../validations/inputsValidations'
+import { defineTicketSchema } from '../../validations/ticketsValidations';
 import TicketGroupModal from '../../components/ticket/TicketGroupModal';
 
 export default function DefineTicket() {

@@ -33,3 +33,10 @@ class StaffListSchema(BaseModel):
     cartable_types: List[CartableTypes]
     
     model_config = { "from_attributes": True }
+    
+
+class CurrentStaffSchema(BaseModel):
+    id: int
+    display_name: str
+    
+    model_config = { "from_attributes": True }

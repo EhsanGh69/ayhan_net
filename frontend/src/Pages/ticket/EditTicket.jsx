@@ -7,7 +7,7 @@ import MainPage from '../MainPage';
 import SnackAlert from '../../components/SnackAlert';
 import { useTicket, useEditTicket } from '../../hooks/useTicket'
 import TicketForm from '../../components/ticket/TicketForm';
-import { defineTicketSchema } from '../../validations/inputsValidations'
+import { defineTicketSchema } from '../../validations/authValidations'
 import TicketGroupModal from '../../components/ticket/TicketGroupModal';
 import LoadingBox from '../../components/LoadingBox';
 

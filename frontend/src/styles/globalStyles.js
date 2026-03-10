@@ -7,5 +7,12 @@ export const modalBox = {
     boxShadow: 24,
     p: 4,
     borderRadius: 2,
-    textAlign: 'center'
+    textAlign: 'center',
+    maxHeight: '90vh',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    scrollbarWidth: 'none',
+    '&::-webkit-scrollbar': {
+        display: 'none',
+    }
 }

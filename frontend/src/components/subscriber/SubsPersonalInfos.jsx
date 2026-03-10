@@ -1,18 +1,17 @@
-import { Badge, Box, Grid, Typography, Divider } from '@mui/material'
 import { useMemo } from 'react'
+import { Grid, Typography } from '@mui/material'
+import { ArrowLeft, Remove } from '@mui/icons-material'
 import moment from "jalali-moment"
 
 export default function SubsPersonalInfos({ rowData }) {
-    const infoStyles = {
-        bgcolor: "primary.main",
+    const infoStyles = useMemo(() => ({
+        bgcolor: "info.dark",
         display: 'flex',
         justifyContent: 'space-around',
         p: 2,
         borderRadius: 2,
         color: 'whitesmoke'
-    }
-
-    const jDate = moment(rowData.birth_date)
+    }))
 
     const infoItems = useMemo(() => ([
         { name: 'subscriber_type', label: 'نوع مشترک', 
@@ -23,7 +22,7 @@ export default function SubsPersonalInfos({ rowData }) {
         { name: 'national_id', label: 'کد ملی'},
         { name: 'certificate_number', label: 'شماره شناسنامه'},
         { name: 'birth_date', label: 'تاریخ تولد', 
-            value: `${jDate.jYear()}/${jDate.jMonth()}/${jDate.jDay()}`
+            value: moment(rowData.birth_date).format('jYYYY/jMM/jDD')
         },
         { name: 'father_name', label: 'نام پدر'},
         { name: 'mobile', label: 'شماره همراه'},
@@ -44,8 +43,12 @@ export default function SubsPersonalInfos({ rowData }) {
             {infoItems.map(item => (
                 <Grid size={{ xs: 12, md: 3 }} key={item.name}>
                     <Typography sx={{ ...infoStyles }} component='p'>
-                        <span>{item.label}</span>{"-"}
-                        <b>{item?.value ? item?.value : rowData[item.name]}</b>
+                        <span>{item.label}</span>
+                        <ArrowLeft sx={{ fontSize: 28 }} />
+                        <b>{
+                            item?.value ? item?.value : rowData[item.name] 
+                            ? rowData[item.name] : <Remove />
+                        }</b>
                     </Typography>
                 </Grid>
             ))}

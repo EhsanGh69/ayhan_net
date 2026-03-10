@@ -6,12 +6,14 @@ import ProtectedRoute from '../../components/ProtectedRoute';
 const ManageTickets = lazy(() => import("./ManageTickets"))
 const DefineTicket = lazy(() => import("./DefineTicket"))
 const EditTicket = lazy(() => import("./EditTicket"))
+const TicketsCartable = lazy(() => import("./TicketsCartable"))
 
 const ticketRoutes = [{
     path: "/tickets", element: <ProtectedRoute />, children: [
         { path: "", element: <LazyWrapper><ManageTickets /></LazyWrapper> },
         { path: "define", element: <LazyWrapper><DefineTicket /></LazyWrapper> },
         { path: "edit/:ticketId", element: <LazyWrapper><EditTicket /></LazyWrapper> },
+        { path: "cartable", element: <LazyWrapper><TicketsCartable /></LazyWrapper> },
     ]
 }]
 

@@ -1,6 +1,14 @@
 import axiosInstance from './axiosConfig';
 
 export const subscriberService = {
+    checkSubscriberExist: async (subsData) => {
+        try {
+            const { data } = await axiosInstance.post('/subscribers/exist', subsData)
+            return data
+        } catch (error) {
+            throw error
+        }
+    },
     addSubscriber: async (subsData) => {
         try {
             const { data } = await axiosInstance.post('/subscribers', subsData)

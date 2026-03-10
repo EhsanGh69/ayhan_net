@@ -9,7 +9,6 @@ export const authService = {
             const { data } = await axios.post(`${BASE_URL}/auth/login`, credentials)
             return data
         } catch (error) {
-            console.log(error)
             throw error
         }
     },
@@ -59,6 +58,14 @@ export const authService = {
     resetPassword: async (userId, password) => {
         try {
             const { data } = await axiosInstance.post(`/admin/reset-password/${userId}`, { password })
+            return data
+        } catch (error) {
+            throw error
+        }
+    },
+    subscriberRegister: async (subsData) => {
+        try {
+            const { data } = await axios.post(`${BASE_URL}/subscribers/register`, subsData)
             return data
         } catch (error) {
             throw error

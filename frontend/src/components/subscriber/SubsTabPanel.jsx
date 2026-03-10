@@ -1,7 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Box, Tab, Tabs } from '@mui/material'
 
-import SubsPersonalInfos from './SubsPersonalInfos'
+import SubsPersonalInfos from './SubsPersonalInfos';
+import SubscriberTicketsTable from '../ticket/SubscriberTicketsTable';
 
 function TabPanel({ children, value, index }) {
     return (
@@ -17,6 +18,13 @@ function TabPanel({ children, value, index }) {
 
 export default function SubsTabPanel({ rowData }) {
     const [value, setValue] = useState(0)
+    const [ticketsProp, setTicketsProps] = useState(null)
+
+    useEffect(() => {
+        if(rowData) {
+            if (value === 5) setTicketsProps(rowData.id)
+        }
+    }, [rowData, value])
 
     const TabPanelItems = useMemo(() => ([
         { label: "مشخصات فردی مشترک", component: <SubsPersonalInfos rowData={rowData} /> },
@@ -24,7 +32,7 @@ export default function SubsTabPanel({ rowData }) {
         { label: "اشتراک تلفن ثابت", component: <h1>اشتراک تلفن ثابت</h1> },
         { label: "اشتراک سرویس اینترنت", component: <h1>اشتراک سرویس اینترنت</h1> },
         { label: "تجهیزات انتهایی", component: <h1>تجهیزات انتهایی</h1> },
-        { label: "کارتابل تیکت ها", component: <h1>کارتابل تیکت ها</h1> },
+        { label: "کارتابل تیکت ها", component: <SubscriberTicketsTable subsId={ticketsProp} /> },
     ]))
 
     const handleChange = (_, newValue) => setValue(newValue)

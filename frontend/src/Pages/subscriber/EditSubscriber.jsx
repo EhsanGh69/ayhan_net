@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Typography, Box } from '@mui/material'
 import { Person, Edit } from '@mui/icons-material'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import moment from "jalali-moment"
 
 import MainPage from '../MainPage';
@@ -16,6 +16,7 @@ export default function EditSubscriber() {
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
     const [initValues, setInitValues] = useState(null)
     const { subsId } = useParams()
+    const navigate = useNavigate()
     const {
         subscriberDetail, subsDetailLoading, subsDetailErr, isSubsDetailErr
     } = useSubscriber(Number(subsId))
@@ -24,17 +25,27 @@ export default function EditSubscriber() {
     useEffect(() => {
         if (!subsDetailLoading && subscriberDetail) {
             setInitValues({
-                first_name: subscriberDetail.first_name, last_name: subscriberDetail.last_name,
-                national_id: subscriberDetail.national_id, father_name: subscriberDetail.father_name,
-                mobile: subscriberDetail.mobile, phone: subscriberDetail.phone,
-                birth_date: moment(subscriberDetail.birth_date, "YYYY-MM-DD").locale("fa"),
-                certificate_number: subscriberDetail.certificate_number,
-                subscriber_type: subscriberDetail.subscriber_type,
-                province_id: String(subscriberDetail.province_id), city_id: String(subscriberDetail.city_id),
-                area: String(subscriberDetail.area), main_street: subscriberDetail.main_street,
-                side_street: subscriberDetail.side_street, alley: subscriberDetail.alley,
-                building_name: subscriberDetail.building_name, house_number: subscriberDetail.house_number,
-                postal_code: subscriberDetail.postal_code
+                // required fields
+                first_name: subscriberDetail.first_name,
+                last_name: subscriberDetail.last_name,
+                mobile: subscriberDetail.mobile,
+                postal_code: subscriberDetail.postal_code,
+                // optional fields
+                phone: subscriberDetail?.phone ?? "",
+                national_id: subscriberDetail?.national_id ?? "",
+                father_name: subscriberDetail?.father_name ?? "",
+                birth_date: subscriberDetail?.birth_date
+                    ? moment(subscriberDetail.birth_date, "YYYY-MM-DD").locale("fa") : null,
+                certificate_number: subscriberDetail?.certificate_number ?? "",
+                subscriber_type: subscriberDetail?.subscriber_type ?? "",
+                province_id: subscriberDetail?.province_id ? String(subscriberDetail.province_id) : "",
+                city_id: subscriberDetail?.city_id ? String(subscriberDetail.city_id) : "",
+                area: subscriberDetail?.area ? String(subscriberDetail.area) : "",
+                main_street: subscriberDetail?.main_street ?? "",
+                side_street: subscriberDetail?.side_street ?? "",
+                alley: subscriberDetail?.alley ?? "",
+                building_name: subscriberDetail?.building_name ?? "",
+                house_number: subscriberDetail?.house_number ?? "",
             })
         }
     }, [subscriberDetail, subsDetailLoading])
@@ -48,6 +59,12 @@ export default function EditSubscriber() {
             area: Number(values.area)
         }
         await editSubscriber({ subsId: Number(subsId), subsData: preparedValues })
+            .then(() => {
+                setSnackbar({
+                    open: true, message: 'مشترک با موفقیت ویرایش شد', severity: 'success'
+                })
+                setTimeout(() => navigate('/subscribers'), 500)
+            })
     }
 
     useEffect(() => {

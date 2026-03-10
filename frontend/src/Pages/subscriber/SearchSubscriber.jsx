@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, Paper, TableCell } from '@mui/material';
-import { Visibility } from '@mui/icons-material';
+import { Visibility, Remove } from '@mui/icons-material';
 
 import MainPage from '../../Pages/MainPage'
 import { searchSubsHeadCells } from '../../constants/tableHeadCells'
@@ -58,8 +58,8 @@ export default function Subscribers() {
                                 <>
                                     <TableCell align='left'>{row.first_name}</TableCell>
                                     <TableCell align='left'>{row.last_name}</TableCell>
-                                    <TableCell align='left'>{row.national_id}</TableCell>
-                                    <TableCell align='left'>{row.phone}</TableCell>
+                                    <TableCell align='left'>{row.national_id ?? <Remove />}</TableCell>
+                                    <TableCell align='left'>{row.subscriber_code ?? <Remove />}</TableCell>
                                     <TableCell align='left'>
                                         <Button variant='contained' color='info'
                                         onClick={() => {

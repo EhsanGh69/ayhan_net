@@ -11,7 +11,7 @@ export const baseSubsHeadCells = [
     { id: 'first_name', label: 'نام', sortable: true },
     { id: 'last_name', label: 'نام خانوادگی', sortable: true },
     { id: 'national_id', label: 'کد ملی', sortable: false },
-    { id: 'phone', label: 'شماره تلفن', sortable: false },
+    { id: 'subscriber_code', label: 'کد مشترک', sortable: false },
 ]
 
 export const subscriberHeadCells = [
@@ -29,5 +29,14 @@ export const ticketHeadCells = [
     { id: 'group', label: 'گروه', sortable: true },
     { id: 'name', label: 'نام', sortable: true },
     { id: 'description', label: 'توضیحات', sortable: true },
+    { id: 'actions', label: ' ', sortable: false }
+]
+
+export const subsTicketHeadCells = [
+    { id: 'group', label: 'گروه', sortable: true },
+    { id: 'name', label: 'نام', sortable: true },
+    { id: 'datetime', label: 'تاریخ و ساعت ثبت', sortable: true },
+    { id: 'staff', label: 'کاربر', sortable: true },
+    { id: 'status', label: 'وضعیت', sortable: true },
     { id: 'actions', label: ' ', sortable: false }
 ]

@@ -7,7 +7,10 @@ export const useAuth = () => {
     const navigate = useNavigate()
     const queryClient = useQueryClient()
 
-    const loginMutation = useMutation({
+    const { 
+        mutateAsync: login, is: isLoggingIn, 
+        isError: isLoginError, error: loginError
+    } = useMutation({
         mutationFn: async (credentials) => await authService.login(credentials),
         onSuccess: (data) => {
             localStorage.setItem('access_token', data.access_token);
@@ -16,7 +19,7 @@ export const useAuth = () => {
         }
     })
 
-    const logoutMutation = useMutation({
+    const { mutate: logout, isPending: isLoggingOut } = useMutation({
         mutationFn: async () => await authService.logout(),
         onSuccess: () => {
             queryClient.clear()
@@ -25,10 +28,17 @@ export const useAuth = () => {
     })
 
     return {
-        login: loginMutation.mutate,
-        isLoggingIn: loginMutation.isPending,
-        loginError: loginMutation.error,
-        logout: logoutMutation.mutate,
-        isLoggingOut: logoutMutation.isPending
+        login, isLoggingIn, isLoginError, loginError, logout, isLoggingOut
     }
+}
+
+export const useSubscriberRegister = () => {
+    const { 
+        mutateAsync: subscriberRegister, isPending: subsRegisterPending,
+        isError: isSubsRegisterErr, error: subsRegisterErr
+    } = useMutation({
+        mutationFn: async (subsData) => await authService.subscriberRegister(subsData)
+    }) 
+
+    return { subscriberRegister, subsRegisterPending, isSubsRegisterErr, subsRegisterErr }
 }

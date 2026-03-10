@@ -1,33 +1,34 @@
-import { useState } from 'react';
-import { Container, Paper, Box, Typography, TextField, Button, Alert, CircularProgress } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Container, Paper, Box, Typography, TextField, Button, CircularProgress } from '@mui/material';
 import { Login as LoginIcon } from '@mui/icons-material';
+import { Form, Formik } from 'formik'
 
 import Captcha from '../components/Captcha';
 import EndInputAdornment from '../components/auth/EndInputAdornment';
 import { useAuth } from '../hooks/useAuth';
+import { loginSchema } from '../validations/authValidations'
+import SnackAlert from '../components/SnackAlert';
 
 export default function Login() {
+    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
+    const [captchaInput, setCaptchaInput] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [captchaValid, setCaptchaValid] = useState(false)
-    const [formData, setFormData] = useState({ username: '', password: '' })
-    const { login, isLoggingIn, loginError } = useAuth()
+    const { login, isLoggingIn, isLoginError, loginError } = useAuth()
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
+    const handleLogin = async (values, { setSubmitting, resetForm, setFieldError }) => {
         if (!captchaValid) {
+            setFieldError('captcha', 'کد امنیتی وارد شده نادرست است')
             return;
         }
-
-        login(formData)
+        await login({ username: values.username, password: values.password })
     }
+
+    useEffect(() => {
+        const errResponse = loginError?.response?.data?.detail
+        const errorMsg = typeof errResponse === 'string' ? errResponse : 'خطا در ارسال اطلاعات'
+        if (isLoginError) setSnackbar({ open: true, message: errorMsg, severity: 'error' })
+    }, [isLoginError, loginError])
 
     return (
         <Container component="main" maxWidth="xs">
@@ -47,68 +48,75 @@ export default function Login() {
                         ورود به آیهان نت
                     </Typography>
 
-                    {loginError && (
-                        <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
-                            {loginError?.response?.data?.detail || 'نام کاربری یا رمز عبور اشتباه است'}
-                        </Alert>
-                    )}
+                    <Formik
+                        initialValues={{ username: '', password: '', captcha: captchaInput }}
+                        validationSchema={loginSchema}
+                        onSubmit={handleLogin}
+                    >
+                        {({ values, handleChange, touched, errors }) => (
+                            <Form noValidate>
+                                <TextField
+                                    margin='normal'
+                                    required
+                                    fullWidth
+                                    id="username"
+                                    name='username'
+                                    label='نام کاربری'
+                                    autoComplete='off'
+                                    autoFocus
+                                    value={values.username}
+                                    onChange={handleChange}
+                                    variant='outlined'
+                                    error={touched.username && Boolean(errors.username)}
+                                    helperText={touched.username &&  errors.username}
+                                />
 
-                    <Box component="form" onSubmit={handleSubmit} width="100%" noValidate>
-                        <TextField
-                            margin='normal'
-                            required
-                            fullWidth
-                            id="username"
-                            name='username'
-                            label='نام کاربری'
-                            autoComplete='username'
-                            autoFocus
-                            value={formData.username}
-                            onChange={handleChange}
-                            variant='outlined'
-                        />
+                                <TextField
+                                    margin='normal'
+                                    required
+                                    fullWidth
+                                    id="password"
+                                    name='password'
+                                    label='رمز عبور'
+                                    autoComplete='off'
+                                    value={values.password}
+                                    onChange={handleChange}
+                                    variant='outlined'
+                                    error={touched.password && Boolean(errors.password)}
+                                    helperText={touched.password && errors.password}
+                                    type={showPassword ? 'text' : 'password'}
+                                    slotProps={{
+                                        input: {
+                                            endAdornment: <EndInputAdornment
+                                                showPassword={showPassword} setShowPassword={setShowPassword} />
+                                        }
+                                    }}
+                                />
+                                <Box my={2}>
+                                    <Captcha
+                                        value={captchaInput}
+                                        setValue={setCaptchaInput}
+                                        onChange={handleChange}
+                                        setCaptchaValid={setCaptchaValid}
+                                        error={touched.captcha && Boolean(errors.captcha)}
+                                        helperText={touched.captcha && errors.captcha}
+                                    />
+                                </Box>
 
-                        <TextField
-                            margin='normal'
-                            required
-                            fullWidth
-                            id="password"
-                            name='password'
-                            label='رمز عبور'
-                            autoComplete='current-password'
-                            value={formData.password}
-                            onChange={handleChange}
-                            variant='outlined'
-                            type={showPassword ? 'text' : 'password'}
-                            slotProps={{
-                                input: {
-                                    endAdornment: <EndInputAdornment
-                                        showPassword={showPassword} setShowPassword={setShowPassword} />
-                                }
-                            }}
-                        />
-
-                        <Box my={2}>
-                            <Captcha
-                                onChange={setCaptchaValid}
-                                error={!captchaValid && loginError}
-                                helperText={!captchaValid && loginError ? 'کد امنیتی اشتباه است' : ''}
-                            />
-                        </Box>
-
-                        <Button
-                            type='submit'
-                            fullWidth
-                            variant='contained'
-                            // disabled={isLoggingIn || !captchaValid}
-                            sx={{ mt: 3, mb: 2, py: 1.5, fontSize: '1.1rem' }}
-                            endIcon={isLoggingIn ? <CircularProgress size={20} /> : <LoginIcon />}
-                        >
-                            {/* <span style={{ marginRight: 10 }}>{isLoggingIn ? 'ورود' : 'در حال ورود ...'}</span> */}
-                            <span style={{ marginRight: 10 }}>ورود</span>
-                        </Button>
-                    </Box>
+                                <Button
+                                    type='submit'
+                                    fullWidth
+                                    variant='contained'
+                                    sx={{ mt: 3, mb: 2, py: 1.5, fontSize: '1.1rem' }}
+                                    endIcon={isLoggingIn ? <CircularProgress size={20} /> : <LoginIcon />}
+                                >
+                                    <span style={{ marginRight: 10 }}>ورود</span>
+                                </Button>
+                            </Form>
+                        )}
+                    </Formik>
                 </Paper>
+                <SnackAlert snackbar={snackbar} setSnackbar={setSnackbar} />
             </Box>
         </Container>
     )

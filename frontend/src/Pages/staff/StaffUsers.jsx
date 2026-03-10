@@ -54,7 +54,7 @@ export default function StaffUsers() {
       <MainTable
         error={staffListErr} isError={isStaffListErr} isLoading={staffListLoading}
         headCells={staffHeadCells} addRoute="/users/staff/add" AddIcon={PersonAddAlt}
-        filteredData={normalizedData} title="کاربران" initOrder='full_name'
+        filteredData={normalizedData} title="کاربران"
         searchChildren={
           <SearchInput
             searchTerm={searchTerm}

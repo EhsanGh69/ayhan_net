@@ -3,9 +3,9 @@ import { Box, Button, Modal, TextField, Typography } from '@mui/material'
 import { CommentOutlined } from '@mui/icons-material'
 import { Form, Formik } from 'formik'
 
-import { useAddTicketGroup, useEditTicketGroup } from '../../hooks/useTicket'
-import { modalBox } from "../../styles/globalStyles"
-import { addTicketGroupSchema } from "../../validations/inputsValidations"
+import { useAddTicketGroup, useEditTicketGroup } from '../../hooks/useTicket';
+import { modalBox } from "../../styles/globalStyles";
+import { addTicketGroupSchema } from "../../validations/ticketsValidations";
 
 export default function TicketGroupModal({ open, closeHandler, group = null, setSnackbar }) {
   const { addTicketGroup, addTGroupPending, isAddTGroupError, addTGroupError } = useAddTicketGroup()

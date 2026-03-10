@@ -6,9 +6,12 @@ from typing import List
 
 from app.db.session import get_session
 from app.schemas.auth_schema import UserCreateSchema, UserBaseSchema
-from app.schemas.staff_schema import StaffBaseSchema, StaffListSchema, StaffDetailSchema
+from app.schemas.staff_schema import (
+    StaffBaseSchema, StaffListSchema, StaffDetailSchema, CurrentStaffSchema
+)
 from app.services.staff_service import (
-    create_staff_service, update_staff_services, change_staff_activate, get_staff_list, get_staff_detail
+    create_staff_service, update_staff_services, change_staff_activate, 
+    get_staff_list, get_staff_detail
 )
 from app.core.dependencies import verify_access
 
@@ -90,12 +93,23 @@ def staff_list(
 ):
     return get_staff_list(session)
 
-@router.get("/{staff_id}", response_model=StaffDetailSchema)
+@router.get("/{user_id}", response_model=StaffDetailSchema)
 def staff_detail(
-    staff_id: int,
+    user_id: int,
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
 ):
-    return get_staff_detail(staff_id, session)
+    return get_staff_detail(user_id, session)
+
+@router.get("/current/{user_id}", response_model=CurrentStaffSchema)
+def current_staff(
+    user_id: int,
+    auth_user: int = Depends(verify_access),
+    session: Session = Depends(get_session)
+):
+    return get_staff_detail(user_id, session)
+
+
+
 
 

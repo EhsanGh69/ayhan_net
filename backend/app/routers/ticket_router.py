@@ -29,7 +29,7 @@ def add_ticket_group(
 def update_ticket_group(
     group_id: int,
     data: AddTicketGroup,
-    # auth_user: int = Depends(verify_access),
+    auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
 ):
     return update_ticket_group_service(group_id, data, session)

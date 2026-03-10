@@ -46,7 +46,8 @@ export const useStaff = (userId) => {
     const { setData } = useContext(GlobalContext)
 
     const { 
-        data: staffDetail, isLoading: staffDetailLoading, error: staffDetailErr, isError: isStaffDetailErr
+        data: staffDetail, isLoading: staffDetailLoading, 
+        error: staffDetailErr, isError: isStaffDetailErr
     } = useQuery({
         queryKey: ['staffDetail', userId],
         queryFn: async () => {
@@ -59,6 +60,23 @@ export const useStaff = (userId) => {
     })
 
     return { staffDetail, staffDetailLoading, staffDetailErr, isStaffDetailErr }
+}
+
+export const useCurrentStaff = (userId) => {
+    const { 
+        data: currentStaff, isLoading: currentStaffLoading, 
+        error: currentStaffErr, isError: isCurrentStaffErr
+    } = useQuery({
+        queryKey: ['currentStaff', userId],
+        queryFn: async () => {
+            const data = await staffService.getCurrentStaff(userId)
+            return data
+        },
+        retry: 0,
+        enabled: !!userId
+    })
+
+    return { currentStaff, currentStaffLoading, currentStaffErr, isCurrentStaffErr }
 }
 
 export const useChangeStaff = () => {

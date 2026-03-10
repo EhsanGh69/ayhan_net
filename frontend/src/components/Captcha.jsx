@@ -5,9 +5,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import generateCaptcha from '../utils/generateCaptcha';
 
 
-export default function Captcha({ onChange, error, helperText }) {
+export default function Captcha({ onChange, error, helperText, value, setValue, setCaptchaValid }) {
     const [captchaCode, setCaptchaCode] = useState('')
-    const [userInput, setUserInput] = useState('')
     const [captchaImage, setCaptchaImage] = useState('')
 
     const handleCaptcha = useCallback(() => {
@@ -22,8 +21,8 @@ export default function Captcha({ onChange, error, helperText }) {
 
     const handleInputChange = (e) => {
         const value = e.target.value
-        setUserInput(value)
-        onChange(value === captchaCode)
+        setValue(value)
+        setCaptchaValid(value === captchaCode)
     }
 
     return (
@@ -52,14 +51,21 @@ export default function Captcha({ onChange, error, helperText }) {
             </Box>
 
             <TextField
+                id="captcha"
+                name='captcha'
                 fullWidth
+                required
                 size='small'
+                label='کد امنیتی'
                 placeholder='کد امنیتی را وارد کنید'
-                value={userInput}
-                onChange={handleInputChange}
+                value={value}
+                onChange={(e) => {
+                    onChange(e)
+                    handleInputChange(e)
+                }}
                 error={error}
                 helperText={helperText}
-                dir='ltr'
+                // dir='ltr'
                 sx={{ input: { textAlign: 'left' } }}
             />
         </Box>

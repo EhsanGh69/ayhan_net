@@ -27,7 +27,7 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 from app.models import (
     user_model, refresh_token, staff_model, subscriber_model, ticket_group_model,
-    ticket_model
+    ticket_model, ticket_record_model
 )
 
 target_metadata = SQLModel.metadata

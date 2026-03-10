@@ -8,6 +8,7 @@ from app.routers.staff_router import router as staff_router
 from app.routers.provinces_router import router as provinces_router
 from app.routers.subscriber_router import router as subscriber_router
 from app.routers.ticket_router import router as ticket_router
+from app.routers.ticket_record_router import router as ticket_record_router
 
 
 app = FastAPI()
@@ -26,5 +27,6 @@ app.include_router(staff_router)
 app.include_router(provinces_router)
 app.include_router(subscriber_router)
 app.include_router(ticket_router)
+app.include_router(ticket_record_router)
 
 app.mount("/media", StaticFiles(directory="app/media"), name="media")

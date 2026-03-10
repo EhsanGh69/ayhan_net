@@ -14,7 +14,7 @@ export default function TableContent({
                         {headCells.map(headCell => (
                             <TableCell
                                 key={headCell.id}
-                                align='left'
+                                align='center'
                                 sortDirection={orderBy === headCell.id ? order : false}
                                 sx={{ backgroundColor: '#ccc' }}
                             >

@@ -17,6 +17,7 @@ class TokenSchema(BaseModel):
     token_type: str = "bearer"
 
 class CurrentUserSchema(BaseModel):
+    id: int
     username: str
     first_name: str | None
     last_name: str | None
@@ -58,8 +59,9 @@ class PasswordSchema(BaseModel):
         return v
 
 class UserCreateSchema(UserBaseSchema, PasswordSchema):
+    
     model_config = ConfigDict(extra="forbid")
-    pass
+
 
 class ChangePasswordSchema(BaseModel):
     old_password: str

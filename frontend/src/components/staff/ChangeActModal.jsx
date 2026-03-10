@@ -31,8 +31,7 @@ export default function ChangeActModal({ open, closeHandler, userAct, setSnackba
 
   return (
     <Modal open={open} onClose={closeHandler}>
-        <Box sx={modalBox}
-            width={{ xs: "80%", md: "60%", lg: "40%", xl: "35%" }}>
+        <Box sx={modalBox} width={{ xs: "80%", md: "60%", lg: "40%", xl: "35%" }}>
             <Typography 
               variant='h6' mb={2} sx={{ fontFamily: 'Vazir', textAlign: "center" }}
               component="div" display="flex" flexDirection="column" alignItems="center"

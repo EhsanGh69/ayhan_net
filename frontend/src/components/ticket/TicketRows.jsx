@@ -9,7 +9,7 @@ export default function TicketRows({ dataRows, headCells, children }) {
                         {headCells.map((headCell, index) => (
                             <TableCell
                                 key={index}
-                                align='left'
+                                align='center'
                                 sx={{ backgroundColor: '#ccc' }}
                             >
                                 {headCell.label}

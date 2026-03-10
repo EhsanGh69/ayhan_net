@@ -1,11 +1,13 @@
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
-from sqlmodel import Session, select
+from sqlmodel import Session, select, and_, desc
 from sqlalchemy import func
 
 from app.models import Subscriber
+from app.core.security import generate_random_code
 from app.schemas.subscriber_schema import (
-    SubscriberBaseSchema, SubscriberListSchema, SubscriberViewSchema
+    SubscriberCreateSchema, SubscriberListSchema, SubscriberViewSchema, SubscriberRegister,
+    CheckSubscriberExist
 )
 from app.services.provinces_loader import (
     PROVINCE_CITY_IDS, PROVINCE_MAP, CITY_MAP, search_province_ids, search_city_ids
@@ -19,30 +21,65 @@ def valid_province_city_id(province_id, city_id):
     
     if city_id not in city_ids:
         raise HTTPException(status_code=422, detail="City id is not valid")
+    
+
+def check_subs_exist_service(
+    subs_data: CheckSubscriberExist,
+    session: Session
+):
+    subs_exist = session.exec(
+        select(Subscriber).where(
+            and_(
+                Subscriber.mobile == subs_data.mobile.strip(), 
+                Subscriber.postal_code == subs_data.postal_code.strip()
+            )
+        )
+    ).first()
+    if(subs_exist):
+        return JSONResponse(content={"subs_exist": True})
+    return JSONResponse(content={"subs_exist": False})
 
 
 def create_subscriber_service(
-    subscriber_data: SubscriberBaseSchema,
+    subscriber_data: SubscriberCreateSchema,
     session: Session
 ):
     valid_province_city_id(subscriber_data.province_id, subscriber_data.city_id)
-    phone_exist = session.exec(
-        select(Subscriber).where(Subscriber.phone == subscriber_data.phone)
-    ).first()
-    if(phone_exist):
-        raise HTTPException(status_code=409, detail="مشترکی با شماره ثابت وارد شده از قبل وجود دارد")
     
-    subscriber = Subscriber(**subscriber_data.model_dump(), status="پیش ثبت نام")
+    subs_code = generate_random_code(10)
+    subscriber = Subscriber(
+        **subscriber_data.model_dump(), 
+        status="پیش ثبت نام",
+        subscriber_code=subs_code
+    )
     
     session.add(subscriber)
     session.commit()
-    session.refresh(subscriber)
-    return subscriber
+    return JSONResponse(status_code=201, content={"detail": "New subscriber created successfully"})
+
+
+def subscriber_register_service(
+    subscriber_data: SubscriberRegister,
+    session: Session
+):
+    track_code = generate_random_code(6)
+    subscriber = Subscriber(
+        first_name=subscriber_data.first_name,
+        last_name=subscriber_data.last_name,
+        mobile=subscriber_data.mobile,
+        postal_code=subscriber_data.postal_code,
+        status="پیش ثبت نام آنلاین",
+        subscriber_code=track_code
+    )
+    
+    session.add(subscriber)
+    session.commit()
+    return JSONResponse(status_code=201, content={"track_code": track_code})
 
 
 def update_subscriber_service(
     subscriber_id: int,
-    subscriber_data: SubscriberBaseSchema,
+    subscriber_data: SubscriberCreateSchema,
     session: Session
 ):
     subscriber = session.get(Subscriber, subscriber_id)
@@ -53,21 +90,17 @@ def update_subscriber_service(
     city_changed = subscriber_data.city_id != subscriber.city_id
     if province_changed or city_changed:
         valid_province_city_id(subscriber_data.province_id, subscriber_data.city_id)
- 
-    if subscriber.phone != subscriber_data.phone:
-        phone_exist = session.exec(
-            select(Subscriber).where(Subscriber.phone == subscriber_data.phone)
-        ).first()
-        
-        if(phone_exist):
-            raise HTTPException(status_code=409, detail="مشترکی با شماره ثابت وارد شده از قبل وجود دارد")
         
     for field, value in subscriber_data.model_dump().items():
         setattr(subscriber, field, value)
+        
+    if len(subscriber.subscriber_code) < 10:
+        subs_code = generate_random_code(10)
+        subscriber.subscriber_code = subs_code
+        subscriber.status = "پیش ثبت نام"
     
     session.commit()
-    session.refresh(subscriber)
-    return subscriber
+    return JSONResponse(status_code=200, content={"detail": "Subscriber updated successfully"})
 
 def get_subscriber_detail(
     subscriber_id: int,
@@ -84,6 +117,7 @@ SEARCHABLE_FIELDS = {
     "last_name": Subscriber.last_name,
     "national_id": Subscriber.national_id,
     "phone": Subscriber.phone,
+    "subscriber_code": Subscriber.subscriber_code
 }
 
 def get_subscribers_list(
@@ -98,10 +132,10 @@ def get_subscribers_list(
                 first_name=sub.first_name,
                 last_name=sub.last_name,
                 national_id=sub.national_id,
-                phone=sub.phone,
+                subscriber_code=sub.subscriber_code,
                 status=sub.status
             )
-            for sub in session.exec(select(Subscriber)).all()
+            for sub in session.exec(select(Subscriber).order_by(desc(Subscriber.id))).all()
         ]
     
     column = SEARCHABLE_FIELDS[field]
@@ -116,7 +150,7 @@ def get_subscribers_list(
                 area=sub.area, alley=sub.alley, building_name=sub.building_name, 
                 house_number=sub.house_number, main_street=sub.main_street, 
                 postal_code=sub.postal_code, side_street=sub.side_street,
-                subscriber_type=sub.subscriber_type
+                subscriber_type=sub.subscriber_type, subscriber_code=sub.subscriber_code
             )
             for sub in session.exec(select(Subscriber).where(column.ilike(f"%{query}%"))).all()
         ]

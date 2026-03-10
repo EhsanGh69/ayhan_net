@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 
 import { subscriberService } from '../services/subscriberService';
 import { GlobalContext } from '../context/GlobalContext'
@@ -75,9 +74,21 @@ export const useRemoveSubscriber = () => {
     return { removeSubscriber, removeSubsError, removeSubsPending, isRemoveSubsError }
 }
 
+export const useCheckSubscriberExist = () => {
+    const { 
+        mutateAsync: checkSubsExist, isError: isCheckSubsExistErr
+    } = useMutation({
+        mutationFn: async (subsData) => {
+            const result = await subscriberService.checkSubscriberExist(subsData)
+            return result
+        }
+    })
+
+    return { checkSubsExist, isCheckSubsExistErr }
+}
+
 export const useAddSubscriber = () => {
     const queryClient = useQueryClient()
-    const navigate = useNavigate()
 
     const { 
         mutateAsync: addSubscriber, isPending: addSubsPending, 
@@ -87,10 +98,7 @@ export const useAddSubscriber = () => {
             const result = await subscriberService.addSubscriber(subsData)
             return result
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['subscribersList'] })
-            navigate('/subscribers')
-        }
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['subscribersList'] })
     })
 
     return { addSubscriber, addSubsPending, addSubsError, isAddSubsError }
@@ -98,7 +106,6 @@ export const useAddSubscriber = () => {
 
 export const useEditSubscriber = () => {
     const queryClient = useQueryClient()
-    const navigate = useNavigate()
 
     const { 
         mutateAsync: editSubscriber, isPending: editSubsPending, 
@@ -108,10 +115,7 @@ export const useEditSubscriber = () => {
             const result = await subscriberService.updateSubscriber(subsId, subsData)
             return result
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['subscribersList'] })
-            navigate('/subscribers')
-        }
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['subscribersList'] })
     })
 
     return { editSubscriber, editSubsPending, editSubsError, isEditSubsError }

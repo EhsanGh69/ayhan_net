@@ -8,15 +8,15 @@ export default function StaffTableRow({ row, setUserAct, setResetModalOpen, setA
 
     return (
         <TableRow hover>
-            <TableCell align='left'>{row.full_name}</TableCell>
-            <TableCell align='left'>
+            <TableCell align='center'>{row.full_name}</TableCell>
+            <TableCell align='center'>
                 {row.is_active
                     ? <Chip label='فعال' color='success' icon={<Check />} />
                     : <Chip label='غیر فعال' color='error' icon={<Clear />} />}
             </TableCell>
-            <TableCell align='left'>{row.display_name}</TableCell>
-            <TableCell align='left'>{row.mobile}</TableCell>
-            <TableCell align='left'>
+            <TableCell align='center'>{row.display_name}</TableCell>
+            <TableCell align='center'>{row.mobile}</TableCell>
+            <TableCell align='center'>
                 {row.cartable_types.map((type) => (
                     <div key={type}>
                         <span>{type === 'tickets' && 'تیکت ها'}</span>
@@ -25,7 +25,7 @@ export default function StaffTableRow({ row, setUserAct, setResetModalOpen, setA
                     </div>
                 ))}
             </TableCell>
-            <TableCell>
+            <TableCell align='center'>
                 <IconButton size='medium' title='ویرایش' color='secondary'
                     sx={{ border: '1px solid #8c22c5', mr: 2, mt: 1 }}
                     onClick={() => navigate(`/users/staff/edit/${row.id}`)}>

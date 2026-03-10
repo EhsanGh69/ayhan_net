@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PersonAdd } from '@mui/icons-material'
 
 import MainTable from '../../components/table/MainTable';
@@ -22,6 +22,7 @@ export default function Subscribers() {
             .toLowerCase().includes(searchTerm.toLowerCase()))
     })
 
+
     return (
         <>
             <RemoveSubsModal
@@ -33,7 +34,7 @@ export default function Subscribers() {
             <MainTable
                 error={subsListErr} isError={isSubsListErr} isLoading={subsListLoading}
                 headCells={subscriberHeadCells} addRoute="/subscribers/add" AddIcon={PersonAdd}
-                filteredData={filteredSubs} title="مشترکان" initOrder='first_name'
+                filteredData={filteredSubs} title="مشترکان" 
                 searchChildren={
                     <SearchInput
                         searchTerm={searchTerm}

@@ -35,4 +35,9 @@ class Staff(SQLModel, table=True):
         sa_column=Column(ARRAY(String)),
         default_factory=list
     )
+    
+    user_ticket: "TicketRecord" = Relationship(back_populates="user", # type: ignore
+                                sa_relationship_kwargs={"foreign_keys": "[TicketRecord.user_id]"}) 
+    staff_ticket: Optional["TicketRecord"] = Relationship(back_populates="staff", # type: ignore
+                                sa_relationship_kwargs={"foreign_keys": "[TicketRecord.staff_id]"}) 
 

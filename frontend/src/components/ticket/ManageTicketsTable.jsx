@@ -72,10 +72,10 @@ export default function ManageTicketsTable() {
                 >
                     {row => (
                         <>
-                            <TableCell align='left'>{row.group}</TableCell>
-                            <TableCell align='left'>{row.name}</TableCell>
-                            <TableCell align='left'>{row.description}</TableCell>
-                            <TableCell>
+                            <TableCell align='center'>{row.group}</TableCell>
+                            <TableCell align='center'>{row.name}</TableCell>
+                            <TableCell align='center'>{row.description}</TableCell>
+                            <TableCell align='center'>
                                 <IconButton size='medium' title='ویرایش' color='secondary'
                                     sx={{ border: '1px solid #8c22c5', mr: 2, mt: 1 }}
                                     onClick={() => navigate(`/tickets/edit/${row.id}`)}
