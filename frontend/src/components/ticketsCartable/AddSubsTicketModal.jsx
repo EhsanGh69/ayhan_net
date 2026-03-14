@@ -10,8 +10,6 @@ import { GlobalContext } from '../../context/GlobalContext';
 
 
 export default function AddSubsTicketModal({ open, closeHandler, setSnackbar, subsId }) {
-    const [userId, setUserId] = useState(null)
-    const [staffId, setStaffId] = useState(null)
     const { getData } = useContext(GlobalContext)
     const userData = getData("userData")
 

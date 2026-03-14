@@ -1,23 +1,30 @@
 import { useEffect, useState } from 'react'
 import {
-    Box, Button, CircularProgress, Grid, FormControlLabel,
+    Box, Button, CircularProgress, Grid, FormControlLabel, IconButton,
     Checkbox, FormControl, InputLabel, Select, MenuItem, FormHelperText, TextField
 } from '@mui/material';
+import { Search as SearchIcon, Clear } from '@mui/icons-material'
 import { Form, Formik, Field } from 'formik'
 
 import { addSubsTicketSchema } from '../../validations/ticketsValidations';
 import { useTicketsInGroup, useTicketCartableStaffs } from '../../hooks/useTicketRecord';
+import SearchToggleMenu from '../../components/inputs/SearchToggleMenu';
+import SelectTicketGroupTitle from './SelectTicketGroupTitle';
+import SelectTicketName from './SelectTicketName';
+import SelectTicketCartable from './SelectTicketCartable';
 
 
 export default function AddSubsTicketForm({
     handleSubmit, isPending, ticketGroupsList, handleClose, setSnackbar
 }) {
     const [groupId, setGroupId] = useState(null)
+    const [selectedCartable, setSelectedCartable] = useState('')
+    const [showSearchCartable, setShowSearchCartable] = useState(false)
     const [isReferVal, setIsReferVal] = useState(false)
 
     const { ticketsInGroup, isTInGroupErr } = useTicketsInGroup(groupId)
-    const { 
-        ticketCartableStaffs, tcStaffsLoading, isTcStaffsErr 
+    const {
+        ticketCartableStaffs, tcStaffsLoading, isTcStaffsErr
     } = useTicketCartableStaffs(isReferVal)
 
     useEffect(() => {
@@ -36,54 +43,25 @@ export default function AddSubsTicketForm({
                 <Form noValidate>
                     <Grid container bgcolor="#e3e3e3ff" my={1} p={2} borderRadius={1} gap={1}
                         display="flex" flexDirection="column" alignItems="center">
-                        <Box width={{ xs: "100%", md: "60%" }}>
-                            <FormControl fullWidth
-                                error={touched.group && Boolean(errors.group)}>
-                                <InputLabel>گروه تیکت *</InputLabel>
-                                <Select
-                                    value={values.group ?? ''}
-                                    onChange={(e) => setFieldValue("group", e.target.value)}
-                                    label="گروه تیکت"
-                                    sx={{ textAlign: 'left' }}
-                                >
-                                    {!!ticketGroupsList && ticketGroupsList.map(group => (
-                                        <MenuItem key={group.id} value={group.title}
-                                            onClick={() => setGroupId(Number(group.id))}
-                                        >
-                                            {group.title}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <FormHelperText>
-                                    {touched.group && errors.group}
-                                </FormHelperText>
-                            </FormControl>
-                        </Box>
+                        {!!ticketGroupsList && (
+                            <SelectTicketGroupTitle
+                                ticketGroupsList={ticketGroupsList}
+                                setGroupId={setGroupId}
+                                setFieldValue={setFieldValue}
+                                values={values}
+                                errors={errors}
+                                touched={touched}
+                            />
+                        )}
 
-                        <Box width={{ xs: "100%", md: "60%" }}>
-                            <FormControl fullWidth
-                                error={touched.name && Boolean(errors.name)}>
-                                <InputLabel>نام تیکت *</InputLabel>
-                                <Select
-                                    value={values.name ?? ''}
-                                    onChange={(e) => setFieldValue("name", e.target.value)}
-                                    label="نام تیکت"
-                                    disabled={!values.group}
-                                    sx={{ textAlign: 'left' }}
-                                >
-                                    {!!ticketsInGroup && ticketsInGroup.map(ticket => (
-                                        <MenuItem key={ticket.id} value={ticket.name}
-                                            onClick={() => setFieldValue("content", ticket.description)}
-                                        >
-                                            {ticket.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <FormHelperText>
-                                    {touched.name && errors.name}
-                                </FormHelperText>
-                            </FormControl>
-                        </Box>
+                        <SelectTicketName
+                            ticketsInGroup={ticketsInGroup}
+                            groupId={groupId}
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            errors={errors}
+                            touched={touched}
+                        />
 
                         <Box width={{ xs: "100%", md: "60%" }}>
                             <TextField
@@ -118,28 +96,13 @@ export default function AddSubsTicketForm({
                             />
                         </Box>
 
-                        <Box width={{ xs: "100%", md: "60%" }}>
-                            <FormControl fullWidth
-                                error={touched.staff_id && Boolean(errors.staff_id)}>
-                                <InputLabel>انتخاب کارتابل *</InputLabel>
-                                <Select
-                                    value={values.staff_id ? values.staff_id : ''}
-                                    onChange={(e) => setFieldValue("staff_id", e.target.value)}
-                                    label="انتخاب کارتابل"
-                                    disabled={!values.isRefer}
-                                    sx={{ textAlign: 'left' }}
-                                >
-                                    {!!ticketCartableStaffs && ticketCartableStaffs.map(staff => (
-                                        <MenuItem key={staff.id} value={staff.id}>
-                                            {staff.display_name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <FormHelperText>
-                                    {touched.staff_id && errors.staff_id}
-                                </FormHelperText>
-                            </FormControl>
-                        </Box>
+                        <SelectTicketCartable
+                            ticketCartableStaffs={ticketCartableStaffs}
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            errors={errors}
+                            touched={touched}
+                        />
                     </Grid>
 
                     <Box

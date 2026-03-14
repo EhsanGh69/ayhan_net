@@ -44,8 +44,8 @@ export default function Login() {
                         borderRadius: 2
                     }}
                 >
-                    <Typography component="h1" variant='h4' sx={{ mb: 3, color: 'primary.main' }}>
-                        ورود به آیهان نت
+                    <Typography variant='h5' sx={{ mb: 3, color: 'primary.main' }}>
+                        سامانه مدیریت مشتریان FTTH آیهان نت
                     </Typography>
 
                     <Formik

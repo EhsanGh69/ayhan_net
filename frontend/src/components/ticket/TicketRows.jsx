@@ -19,7 +19,7 @@ export default function TicketRows({ dataRows, headCells, children }) {
                 </TableHead>
 
                 <TableBody>
-                    {dataRows.map((row, index) => <TableRow key={index}>{children(row)}</TableRow>)}
+                    {dataRows.map((row, index) => <TableRow key={index}>{children(row, index)}</TableRow>)}
                 </TableBody>
             </Table>
         </TableContainer>

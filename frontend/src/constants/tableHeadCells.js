@@ -1,16 +1,16 @@
 export const staffHeadCells = [
     { id: 'full_name', label: 'نام و نام خانوادگی', sortable: true },
     { id: 'is_active', label: 'وضعیت', sortable: true },
-    { id: 'formal_name', label: 'نام نمایشی', sortable: false },
-    { id: 'mobile', label: 'شماره موبایل', sortable: false },
-    { id: 'cartable_types', label: 'کارتابل', sortable: false },
+    { id: 'formal_name', label: 'نام نمایشی', sortable: true },
+    { id: 'mobile', label: 'شماره موبایل', sortable: true },
+    { id: 'cartable_types', label: 'کارتابل', sortable: true },
     { id: 'actions', label: ' ', sortable: false }
 ]
 
 export const baseSubsHeadCells = [
     { id: 'first_name', label: 'نام', sortable: true },
     { id: 'last_name', label: 'نام خانوادگی', sortable: true },
-    { id: 'national_id', label: 'کد ملی', sortable: false },
+    { id: 'national_id', label: 'کد ملی', sortable: true },
     { id: 'subscriber_code', label: 'کد مشترک', sortable: false },
 ]
 
@@ -26,17 +26,20 @@ export const searchSubsHeadCells = [
 ]
 
 export const ticketHeadCells = [
-    { id: 'group', label: 'گروه', sortable: true },
-    { id: 'name', label: 'نام', sortable: true },
-    { id: 'description', label: 'توضیحات', sortable: true },
+    { id: 'row', label: 'ردیف', sortable: true },
+    { id: 'group', label: 'گروه تیکت', sortable: true },
+    { id: 'name', label: 'نام تیکت', sortable: true },
+    { id: 'description', label: 'توضیحات نام تیکت', sortable: true },
     { id: 'actions', label: ' ', sortable: false }
 ]
 
 export const subsTicketHeadCells = [
-    { id: 'group', label: 'گروه', sortable: true },
-    { id: 'name', label: 'نام', sortable: true },
+    { id: 'row', label: 'ردیف', sortable: true },
+    { id: 'group', label: 'گروه تیکت', sortable: true },
+    { id: 'name', label: 'نام تیکت', sortable: true },
+    { id: 'user', label: 'کاربر ثبت کننده', sortable: true },
     { id: 'datetime', label: 'تاریخ و ساعت ثبت', sortable: true },
-    { id: 'staff', label: 'کاربر', sortable: true },
+    { id: 'staff', label: 'ارجاع شده به کارتابل', sortable: true },
     { id: 'status', label: 'وضعیت', sortable: true },
     { id: 'actions', label: ' ', sortable: false }
 ]

@@ -1,22 +1,22 @@
 import { Chip, IconButton, TableCell } from '@mui/material'
-import { Check, Clear, Delete, Info } from '@mui/icons-material'
+import { Check, Delete, Info, Remove, Pending } from '@mui/icons-material'
 
 export default function TicketTableCells({
-    row, setRecordId, setRecordStaffId = null, setDetailModalOpen, 
+    row, index, setRecordId, setRecordStaffId = null, setDetailModalOpen, 
     showRemoveBtn = false, setRemoveModalOpen = null
 }) {
     return (
         <>
+            <TableCell align='center'>{index + 1}</TableCell>
             <TableCell align='center'>{row.group}</TableCell>
             <TableCell align='center'>{row.name}</TableCell>
+            <TableCell align='center'>{row.user}</TableCell>
             <TableCell align='center'>{row.datetime}</TableCell>
-            <TableCell align='center'>
-                {row.user}
-            </TableCell>
+            <TableCell align='center'>{row.staff ?? <Remove />}</TableCell>
             <TableCell align='center'>
                 {row.status === 'open'
-                    ? <Chip label='باز' color='success' icon={<Check />} />
-                    : <Chip label='بسته' color='error' icon={<Clear />} />
+                    ? <Chip label='باز' color='error' icon={<Pending/>} />
+                    : <Chip label='بسته' color='success' icon={<Check />} />
                 }
             </TableCell>
             <TableCell>

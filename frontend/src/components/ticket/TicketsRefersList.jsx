@@ -44,6 +44,7 @@ export default function TicketsRefersList() {
                 ...row,
                 datetime: moment(row.created_at).format('HH:mm - jYYYY/jMM/jDD'),
                 user: row?.user.display_name,
+                staff: row?.staff.display_name,
                 status: row.status
             }
         })
@@ -84,10 +85,11 @@ export default function TicketsRefersList() {
                         dataRows={normalizedData}
                         headCells={subsTicketHeadCells}
                     >
-                        {row => (
+                        {(row, index) => (
                             <>
                                 <TicketTableCells
                                     row={row}
+                                    index={index}
                                     setRecordId={setRecordId}
                                     setRecordStaffId={setRecordStaffId}
                                     setDetailModalOpen={setDetailModalOpen}

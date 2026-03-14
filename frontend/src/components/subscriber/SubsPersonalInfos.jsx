@@ -35,7 +35,8 @@ export default function SubsPersonalInfos({ rowData }) {
         { name: 'alley', label: 'کوچه'},
         { name: 'building_name', label: 'نام ساختمان'},
         { name: 'house_number', label: 'پلاک'},
-        { name: 'postal_code', label: 'کد پستی'}
+        { name: 'postal_code', label: 'کد پستی'},
+        { name: 'status', label: 'وضعیت'},
     ]))
 
     return (

@@ -1,7 +1,7 @@
 export const ticketInputs = [
     { label: 'گروه', name: 'group_id' },
-    { label: 'نام', name: 'name' },
-    { label: 'توضیحات', name: 'description' },
+    { label: 'نام تیکت', name: 'name' },
+    { label: 'توضیحات نام تیکت', name: 'description' },
 ]
 
 export const subsRegisterInputs = [

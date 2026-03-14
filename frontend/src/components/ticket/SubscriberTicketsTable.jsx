@@ -40,6 +40,7 @@ export default function SubscriberTicketsTable({ subsId }) {
                 ...row,
                 datetime: moment(row.created_at).format('HH:mm - jYYYY/jMM/jDD'),
                 user: row?.user.display_name,
+                staff: row?.staff ? row?.staff.display_name : null,
                 status: row.status
             }
         })
@@ -92,9 +93,10 @@ export default function SubscriberTicketsTable({ subsId }) {
                         dataRows={normalizedData}
                         headCells={subsTicketHeadCells}
                     >
-                        {row => (
+                        {(row, index) => (
                             <TicketTableCells   
                                 row={row}
+                                index={index}
                                 setRecordId={setRecordId}
                                 setDetailModalOpen={setDetailModalOpen}
                             />

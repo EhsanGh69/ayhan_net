@@ -42,6 +42,7 @@ class SubscriberViewSchema(SubscriberBaseSchema):
     province: str | None
     city: str | None
     subscriber_code: str | None
+    status: str
     
     model_config = { "from_attributes": True }
 

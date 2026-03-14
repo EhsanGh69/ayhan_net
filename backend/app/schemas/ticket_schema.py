@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 class AddTicketGroup(BaseModel):
-    title: str = Field(min_length=3, max_length=50, pattern=r"^[1-9\u0600-\u06FF\s]+$")
+    title: str = Field(min_length=3, max_length=50)
 
 
 class TicketGroup(BaseModel):
@@ -12,8 +12,8 @@ class TicketGroup(BaseModel):
 
 
 class TicketBaseSchema(BaseModel):
-    name: str = Field(min_length=3, max_length=50, pattern=r"^[1-9\u0600-\u06FF\s]+$")
-    description: str = Field(min_length=1, max_length=200, pattern=r"^[\w\u0600-\u06FF\s\-,.]+$")
+    name: str = Field(min_length=3, max_length=50)
+    description: str = Field(min_length=1, max_length=200)
 
 
 class TicketCreateSchema(TicketBaseSchema):

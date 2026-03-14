@@ -36,7 +36,7 @@ export default function PanelAppBar({
                 </IconButton>
 
                 <Typography variant='h6' noWrap component='div' sx={{ flexGrow: 1 }}>
-                    پنل آیهان نت
+                    سامانه مدیریت مشتریان FTTH آیهان نت
                 </Typography>
 
                 <IconButton onClick={handleMenuOpen} sx={{ p: 0 }} disabled={isLoggingOut}>

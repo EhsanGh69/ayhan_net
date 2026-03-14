@@ -41,9 +41,9 @@ export default function SubsTicketDetailModal({
             { label: 'گروه تیکت', value: ticketRecordDetail?.group },
             { label: 'نام تیکت', value: ticketRecordDetail?.name },
             { label: 'توضیحات تیکت', value: ticketRecordDetail?.content },
-            { label: 'کاربر', value: ticketRecordDetail?.user.display_name },
+            { label: 'کاربر ثبت کننده', value: ticketRecordDetail?.user.display_name },
             {
-                label: 'کارتابل',
+                label: 'ارجاع شده به کارتابل',
                 value: ticketRecordDetail?.staff
                     ? ticketRecordDetail?.staff.display_name : <Remove />
             },

@@ -71,8 +71,9 @@ export default function ManageTicketsTable() {
                         dataRows={normalizedData}
                         headCells={ticketHeadCells}
                     >
-                        {row => (
+                        {(row, index) => (
                             <>
+                                <TableCell align='center'>{index + 1}</TableCell>
                                 <TableCell align='center'>{row.group}</TableCell>
                                 <TableCell align='center'>{row.name}</TableCell>
                                 <TableCell align='center'>{row.description}</TableCell>
