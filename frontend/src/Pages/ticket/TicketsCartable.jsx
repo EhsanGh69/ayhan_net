@@ -29,19 +29,24 @@ export default function TicketsCartable() {
     const [recordId, setRecordId] = useState(null)
     const [recordStaffId, setRecordStaffId] = useState(null)
 
-    const [userId, setUserId] = useState(null)
+    const [staffId, setStaffId] = useState(null)
     const { getData } = useContext(GlobalContext)
     const userData = getData("userData")
 
-    const { currentStaff, isCurrentStaffErr } = useCurrentStaff(userId)
+    const { getCurrentStaff, isGetCurrentStaffErr } = useCurrentStaff()
+
+    const currentStaffHandler = async (userId) => {
+        await getCurrentStaff({ userId })
+            .then(({ id }) => setStaffId(id))
+    }
 
     useEffect(() => {
-        if(userData) setUserId(userData?.id)
+        if(userData) currentStaffHandler(userData?.id)
     }, [userData])
 
     const {
         staffTicketRecords, staffTRsLoading, isStaffTRsErr
-    } = useStaffTicketRecords(currentStaff?.id)
+    } = useStaffTicketRecords(staffId)
 
     const filteredTicketRecords = staffTicketRecords?.filter(record => {
         return Object.values(record).some(value => value.toString()
@@ -65,10 +70,10 @@ export default function TicketsCartable() {
     }, [filteredTicketRecords])
 
     useEffect(() => {
-        if (isCurrentStaffErr || isStaffTRsErr) {
+        if (isGetCurrentStaffErr || isStaffTRsErr) {
             setSnackbar({ open: true, message: 'خطا در دریافت اطلاعات', severity: 'error' })
         }
-    }, [isCurrentStaffErr, isStaffTRsErr])
+    }, [isGetCurrentStaffErr, isStaffTRsErr])
 
     if (staffTRsLoading) {
         return <LoadingBox />

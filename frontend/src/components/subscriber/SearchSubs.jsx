@@ -14,7 +14,7 @@ export default function SearchSubs({
         { name: "last_name", label: "نام خانوادگی" },
         { name: "national_id", label: "کد ملی" },
         { name: "phone", label: "شماره تلفن" },
-        { name: "subscriber_code", label: "کد رهگیری" },
+        { name: "subscriber_code", label: "کد رهگیری / کد مشترک" },
         { name: "net_username", label: "نام کاربری اینترنت" },
     ]))
 

@@ -47,7 +47,7 @@ def create_ticket_record(
     data: TicketRecordCreate,
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
-):
+): 
     return create_ticket_record_service(data, session)
 
 @router.post('/response/{record_id}')

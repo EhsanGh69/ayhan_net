@@ -8,7 +8,7 @@ export const useAuth = () => {
     const queryClient = useQueryClient()
 
     const { 
-        mutateAsync: login, is: isLoggingIn, 
+        mutateAsync: login, isPending: isLoggingIn, 
         isError: isLoginError, error: loginError
     } = useMutation({
         mutationFn: async (credentials) => await authService.login(credentials),

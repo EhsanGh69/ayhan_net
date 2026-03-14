@@ -1,6 +1,6 @@
 from datetime import date
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List 
 
 from app.models.staff_model import CartableTypes
 from app.schemas.auth_schema import UserDetailSchema

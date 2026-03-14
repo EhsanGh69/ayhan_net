@@ -6,6 +6,7 @@ export const ticketRecordService = {
             const { data } = await axiosInstance.post('/ticket-records', recordData)
             return data
         } catch (error) {
+            console.log(error.response?.data?.detail)
             throw error
         }
     },

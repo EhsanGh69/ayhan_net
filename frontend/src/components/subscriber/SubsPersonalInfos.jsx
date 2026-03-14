@@ -22,7 +22,7 @@ export default function SubsPersonalInfos({ rowData }) {
         { name: 'national_id', label: 'کد ملی'},
         { name: 'certificate_number', label: 'شماره شناسنامه'},
         { name: 'birth_date', label: 'تاریخ تولد', 
-            value: moment(rowData.birth_date).format('jYYYY/jMM/jDD')
+            value: rowData.birth_date ? moment(rowData.birth_date).format('jYYYY/jMM/jDD') : null
         },
         { name: 'father_name', label: 'نام پدر'},
         { name: 'mobile', label: 'شماره همراه'},

@@ -127,7 +127,7 @@ def get_subscribers_list(
 ):
     if field is None or query is None or field not in SEARCHABLE_FIELDS:
         return [
-            SubscriberListSchema(
+            SubscriberListSchema(     
                 id=sub.id,
                 first_name=sub.first_name,
                 last_name=sub.last_name,
@@ -144,7 +144,8 @@ def get_subscribers_list(
             SubscriberViewSchema(
                 id=sub.id, first_name=sub.first_name, last_name=sub.last_name,
                 national_id=sub.national_id, phone=sub.phone, status=sub.status,
-                province=PROVINCE_MAP[sub.province_id].name, city=CITY_MAP[sub.city_id].name, 
+                province=(None if sub.province_id is None else PROVINCE_MAP.get(sub.province_id).name), 
+                city=(None if sub.city_id is None else CITY_MAP[sub.city_id].name), 
                 birth_date=sub.birth_date, father_name=sub.father_name,
                 certificate_number=sub.certificate_number, mobile=sub.mobile,
                 area=sub.area, alley=sub.alley, building_name=sub.building_name, 

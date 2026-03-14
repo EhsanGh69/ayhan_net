@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('statics', path='/styles.css') }}">
+    <title>{{ app_name }} - Routes Overview</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>{{ app_name }} - Routes Overview</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Route Path</th>
+                    <th>Method</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for route in routes %}
+                <tr>
+                    <td><code>{{ route.path }}</code></td>
+                    <td><span class="method method-{{ route.method | lower }}">{{ route.method }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

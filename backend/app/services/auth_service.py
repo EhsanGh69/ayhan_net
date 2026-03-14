@@ -25,6 +25,12 @@ def login_user(session: Session, username: str, password: str):
     if not user.is_active:
         raise HTTPException(status_code=403, detail="حساب کاربری شما غیر فعال است")
     
+    token_exist = session.exec(
+        select(RefreshToken).where(RefreshToken.user_id == user.id)
+    ).first()
+    if token_exist:
+        session.delete(token_exist)
+
     user.last_login = datetime.now(timezone.utc)
     session.add(user)
     

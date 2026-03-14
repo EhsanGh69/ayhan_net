@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Paper, TableCell } from '@mui/material';
+import { Alert, Button, Paper, TableCell, Typography } from '@mui/material';
 import { Visibility, Remove } from '@mui/icons-material';
 
 import MainPage from '../../Pages/MainPage'
@@ -62,10 +62,10 @@ export default function Subscribers() {
                                     <TableCell align='left'>{row.subscriber_code ?? <Remove />}</TableCell>
                                     <TableCell align='left'>
                                         <Button variant='contained' color='info'
-                                        onClick={() => {
-                                            setRowData(row)
-                                            setShowTabs(true)
-                                        }}>
+                                            onClick={() => {
+                                                setRowData(row)
+                                                setShowTabs(true)
+                                            }}>
                                             <Visibility sx={{ mr: 0.5 }} />
                                             <span>مشاهده</span>
                                         </Button>
@@ -79,6 +79,13 @@ export default function Subscribers() {
 
                 {!!searchSubs && searchSubs.length === 1 && (
                     <SubsTabPanel rowData={searchSubs[0]} />
+                )}
+
+                {!!searchSubs && searchSubs.length === 0 && (
+                    <Alert variant='outlined' severity='warning' icon={false}
+                        sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                        <Typography variant='h5'>مشترکی مطابق جستجوی شما وجود ندارد</Typography>
+                    </Alert>
                 )}
             </Paper>
             <SnackAlert snackbar={snackbar} setSnackbar={setSnackbar} />

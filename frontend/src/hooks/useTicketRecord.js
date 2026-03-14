@@ -65,7 +65,7 @@ export const useResponseTicketRecord = () => {
             const result = await ticketRecordService.responseTicketRecord(recordId, recordData)
             return result
         },
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['subscriberTicketRecords'] })
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['ticketCartableStaffs', 'ticketRecordsList'] })
     })
 
     return { responseTicketRecord, responseTRecordPending, responseTRecordErr, isResponseTRecordErr }

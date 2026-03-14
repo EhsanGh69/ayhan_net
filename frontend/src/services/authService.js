@@ -68,6 +68,7 @@ export const authService = {
             const { data } = await axios.post(`${BASE_URL}/subscribers/register`, subsData)
             return data
         } catch (error) {
+            console.log(error.response?.data?.detail)
             throw error
         }
     },

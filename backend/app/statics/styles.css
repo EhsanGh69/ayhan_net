@@ -1,0 +1,58 @@
+body {
+    font-family: "Vazir", sans-serif;
+    background: #f7f9fb;
+    color: #333;
+    padding: 40px;
+}
+
+.container {
+    max-width: 850px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ddd;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #212121;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background-color: #f0f0f0;
+    text-align: left;
+}
+
+.method {
+    padding: 4px 8px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.method-get { background: #2196f3; }
+.method-post { background: #4caf50; }
+.method-put { background: #ff9800; }
+.method-patch { background: #ae00ff; }
+.method-delete { background: #f44336; }
+
+code {
+    background-color: #f3f3f3;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+}

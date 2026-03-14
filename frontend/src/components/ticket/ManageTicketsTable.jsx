@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { IconButton, TableCell, useMediaQuery } from '@mui/material';
+import { Alert, IconButton, TableCell, Typography, useMediaQuery } from '@mui/material';
 import { AddComment, Delete, Edit } from '@mui/icons-material'
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from 'react-router-dom';
@@ -65,39 +65,47 @@ export default function ManageTicketsTable() {
 
             {ticketsListLoading && <LoadingBox />}
 
-            {!!ticketsList && (
-                <TicketRows
-                    dataRows={normalizedData}
-                    headCells={ticketHeadCells}
-                >
-                    {row => (
-                        <>
-                            <TableCell align='center'>{row.group}</TableCell>
-                            <TableCell align='center'>{row.name}</TableCell>
-                            <TableCell align='center'>{row.description}</TableCell>
-                            <TableCell align='center'>
-                                <IconButton size='medium' title='ویرایش' color='secondary'
-                                    sx={{ border: '1px solid #8c22c5', mr: 2, mt: 1 }}
-                                    onClick={() => navigate(`/tickets/edit/${row.id}`)}
-                                >
-                                    <Edit fontSize='medium' />
-                                </IconButton>
-                                <IconButton size='medium' title='حذف' color='error'
-                                    sx={{ border: '1px solid #c53522', mr: 2, mt: 1 }}
-                                    onClick={() => {
-                                        setTicket((prev) => ({ 
-                                            ...prev, id: row.id, name: row.name, group: row.group 
-                                        }))
-                                        setRemoveModal(true)
-                                    }}
-                                >
-                                    <Delete fontSize='medium' />
-                                </IconButton>
-                            </TableCell>
-                        </>
-                    )}
-                </TicketRows>
-            )}
+            {!!ticketsList && ticketsList?.length > 0
+                ? (
+                    <TicketRows
+                        dataRows={normalizedData}
+                        headCells={ticketHeadCells}
+                    >
+                        {row => (
+                            <>
+                                <TableCell align='center'>{row.group}</TableCell>
+                                <TableCell align='center'>{row.name}</TableCell>
+                                <TableCell align='center'>{row.description}</TableCell>
+                                <TableCell align='center'>
+                                    <IconButton size='medium' title='ویرایش' color='secondary'
+                                        sx={{ border: '1px solid #8c22c5', mr: 2, mt: 1 }}
+                                        onClick={() => navigate(`/tickets/edit/${row.id}`)}
+                                    >
+                                        <Edit fontSize='medium' />
+                                    </IconButton>
+                                    <IconButton size='medium' title='حذف' color='error'
+                                        sx={{ border: '1px solid #c53522', mr: 2, mt: 1 }}
+                                        onClick={() => {
+                                            setTicket((prev) => ({
+                                                ...prev, id: row.id, name: row.name, group: row.group
+                                            }))
+                                            setRemoveModal(true)
+                                        }}
+                                    >
+                                        <Delete fontSize='medium' />
+                                    </IconButton>
+                                </TableCell>
+                            </>
+                        )}
+                    </TicketRows>
+                )
+                : (
+                    <Alert variant='outlined' severity='warning' icon={false}
+                        sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Typography variant='h5'>اطلاعاتی جهت نمایش وجود ندارد</Typography>
+                    </Alert>
+                )
+            }
 
             <SnackAlert snackbar={snackbar} setSnackbar={setSnackbar} />
         </>

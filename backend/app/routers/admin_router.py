@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlmodel import Session
 
 from app.db.session import get_session
-from app.models import User
+from app.models import User, Staff
 from app.core.security import hash_password
 from app.core.dependencies import verify_admin
 from app.schemas.auth_schema import AdminCreateSchema
@@ -24,6 +24,23 @@ def create_admin(data: AdminCreateSchema, session: Session = Depends(get_session
         is_admin=True, is_staff=True
     )
     session.add(user)
+    session.flush()
+
+    staff = Staff(
+        org_image=None, 
+        user_id=user.id,
+        display_name="نام-نمایشی",
+        birth_date="1990-01-01",
+        national_id="0000000000",
+        father_name="نام پدر",
+        mobile="09180000000",
+        phone="08600000000",
+        org_mobile="09180000000",
+        org_phone="111",
+        address="آدرس محل سکونت"
+    )
+
+    session.add(staff)
     session.commit()
     session.refresh(user)
 

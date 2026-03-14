@@ -62,21 +62,17 @@ export const useStaff = (userId) => {
     return { staffDetail, staffDetailLoading, staffDetailErr, isStaffDetailErr }
 }
 
-export const useCurrentStaff = (userId) => {
+export const useCurrentStaff = () => {
     const { 
-        data: currentStaff, isLoading: currentStaffLoading, 
-        error: currentStaffErr, isError: isCurrentStaffErr
-    } = useQuery({
-        queryKey: ['currentStaff', userId],
-        queryFn: async () => {
+        mutateAsync: getCurrentStaff, isError: isGetCurrentStaffErr
+    } = useMutation({
+        mutationFn: async ({ userId }) => {
             const data = await staffService.getCurrentStaff(userId)
             return data
-        },
-        retry: 0,
-        enabled: !!userId
+        }
     })
 
-    return { currentStaff, currentStaffLoading, currentStaffErr, isCurrentStaffErr }
+    return { getCurrentStaff, isGetCurrentStaffErr }
 }
 
 export const useChangeStaff = () => {

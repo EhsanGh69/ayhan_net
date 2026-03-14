@@ -57,7 +57,7 @@ class PasswordSchema(BaseModel):
         if not re.search(r"[_.@-]", v):
             raise ValueError("Password must contain at least one of chars: /_-@./")
         return v
-
+ 
 class UserCreateSchema(UserBaseSchema, PasswordSchema):
     
     model_config = ConfigDict(extra="forbid")
@@ -71,8 +71,11 @@ class ChangePasswordSchema(BaseModel):
     def validate_new_password(cls, v):
         return PasswordSchema.validate_password(v)
 
-class UserDetailSchema(UserBaseSchema):
+class UserDetailSchema(BaseModel):
     id: int
+    first_name: str
+    last_name: str
+    username: str
     is_active: bool
     
     model_config = { "from_attributes": True }

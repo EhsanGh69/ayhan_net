@@ -39,8 +39,8 @@ class SubscriberListSchema(BaseModel):
     
 class SubscriberViewSchema(SubscriberBaseSchema):
     id: int
-    province: str
-    city: str
+    province: str | None
+    city: str | None
     subscriber_code: str | None
     
     model_config = { "from_attributes": True }

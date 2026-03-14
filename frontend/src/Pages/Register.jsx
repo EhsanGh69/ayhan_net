@@ -40,7 +40,7 @@ export default function Register() {
             setOpenConfirm(true)
             return
         }
-        handleSubsRegister(values)
+        handleSubsRegister({ values, resetForm })
         resetForm()
     }
 

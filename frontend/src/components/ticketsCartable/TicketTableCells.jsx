@@ -2,7 +2,7 @@ import { Chip, IconButton, TableCell } from '@mui/material'
 import { Check, Clear, Delete, Info } from '@mui/icons-material'
 
 export default function TicketTableCells({
-    row, setRecordId, setRecordStaffId, setDetailModalOpen, 
+    row, setRecordId, setRecordStaffId = null, setDetailModalOpen, 
     showRemoveBtn = false, setRemoveModalOpen = null
 }) {
     return (
@@ -24,7 +24,7 @@ export default function TicketTableCells({
                     sx={{ border: '1px solid #2279c5', mr: 2, mt: 1 }}
                     onClick={() => {
                         setRecordId(row.id)
-                        setRecordStaffId(row?.staff.id)
+                        if(setRecordStaffId && row?.staff) setRecordStaffId(row?.staff.id)
                         setDetailModalOpen(true)
                     }}
                 >
