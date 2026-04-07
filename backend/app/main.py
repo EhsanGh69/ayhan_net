@@ -50,6 +50,8 @@ def show_docs(request: Request):
             })
     
     return templates.TemplateResponse(
-        "routes.html",
-        {"request": request, "routes": routes_info, "app_name": app.title}
+        request=request,
+        name="routes.html",
+        context={"routes": routes_info, "app_name": app.title}
     )
+    

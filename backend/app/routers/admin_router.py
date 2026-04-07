@@ -17,7 +17,7 @@ def create_admin(data: AdminCreateSchema, session: Session = Depends(get_session
     if data.secret != ADMIN_BOOTSTRAP_SECRET:
         raise HTTPException(status_code=403, detail="Forbidden")
     
-    # # create admin user
+    # create admin user
     user = User(
         username=data.username, password=hash_password(data.password),
         first_name=data.first_name, last_name=data.last_name,

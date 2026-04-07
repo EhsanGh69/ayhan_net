@@ -31,8 +31,8 @@ class Staff(SQLModel, table=True):
     
     org_image: Optional[str] = None
     
-    cartable_types: List[CartableTypes] = Field(
-        sa_column=Column(ARRAY(String)),
+    cartable_types: Optional[List[CartableTypes]] = Field(
+        sa_column=Column(ARRAY(String), nullable=True),
         default_factory=list
     )
     

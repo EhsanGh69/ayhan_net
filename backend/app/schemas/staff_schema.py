@@ -16,7 +16,7 @@ class StaffBaseSchema(BaseModel):
     org_mobile: str = Field(pattern=r"^(\+98|0)?9\d{9}$")
     org_phone: str = Field(pattern=r"^\d{1,10}$")
     address: str = Field(min_length=1, max_length=200, pattern=r"^[\w\u0600-\u06FF\s\-,.]+$")
-    cartable_types: List[CartableTypes] = Field(default_factory=list)
+    cartable_types: List[CartableTypes] | None = Field(default_factory=list)
 
 
 class StaffDetailSchema(StaffBaseSchema):

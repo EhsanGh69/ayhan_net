@@ -49,7 +49,7 @@ export default function JobInputs({
             <Grid size={{ xs: 12, md: 6, lg: 3 }}>
                 <FormControl fullWidth
                     error={touched.cartable_types && Boolean(errors.cartable_types)}>
-                    <InputLabel>نوع کارتابل *</InputLabel>
+                    <InputLabel>نوع کارتابل</InputLabel>
                     <Select
                         multiple
                         value={values.cartable_types}

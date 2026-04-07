@@ -11,7 +11,7 @@ from app.schemas.staff_schema import CurrentStaffSchema
 from app.services.ticket_record_service import (
     create_ticket_record_service, tickets_in_group_service, ticket_records_list_service,
     ticket_record_detail_service, subscriber_ticket_records_service, ticket_cartable_staffs_service,
-    close_ticket_record_service, remove_ticket_record_service, staff_ticket_records_service,
+    close_ticket_record_service, change_ticket_record_activate_service, staff_ticket_records_service,
     ticket_record_change_staff_service, response_ticket_record_service
 )
 
@@ -82,13 +82,13 @@ def ticket_record_detail(
 ):
     return ticket_record_detail_service(record_id, session)
 
-@router.delete('/{record_id}')
+@router.get('/active/{record_id}')
 def remove_ticket_record(
     record_id: int,
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
 ):
-    return remove_ticket_record_service(record_id, session)
+    return change_ticket_record_activate_service(record_id, session)
 
 @router.get('/subscribers/{subs_id}', response_model=List[TicketRecordList])
 def subscriber_ticket_records(

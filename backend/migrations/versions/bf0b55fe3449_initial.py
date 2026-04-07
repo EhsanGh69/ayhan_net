@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: 7c6a77fd48a1
+Revision ID: bf0b55fe3449
 Revises: 
-Create Date: 2026-02-05 19:56:01.171403
+Create Date: 2026-04-02 17:31:51.255094
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ from sqlalchemy.dialects import postgresql
 import sqlmodel
 
 # revision identifiers, used by Alembic.
-revision: str = '7c6a77fd48a1'
+revision: str = 'bf0b55fe3449'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -96,6 +96,7 @@ def upgrade() -> None:
     sa.Column('group_id', sa.Integer(), nullable=False),
     sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('description', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['group_id'], ['ticket_groups.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
@@ -111,6 +112,7 @@ def upgrade() -> None:
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('staff_id', sa.Integer(), nullable=True),
     sa.Column('status', sa.Enum('OPEN', 'CLOSE', name='ticket_status'), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['parent_ticket_id'], ['ticket_records.id'], ),

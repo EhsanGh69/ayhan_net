@@ -1,4 +1,4 @@
-import { Check, Clear, Edit, LockPerson, SyncLock } from '@mui/icons-material'
+import { Check, Clear, Edit, LockPerson, SyncLock, Remove } from '@mui/icons-material'
 import { Chip, IconButton, TableCell, TableRow } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,13 +17,16 @@ export default function StaffTableRow({ row, setUserAct, setResetModalOpen, setA
             <TableCell align='center'>{row.display_name}</TableCell>
             <TableCell align='center'>{row.mobile}</TableCell>
             <TableCell align='center'>
-                {row.cartable_types.map((type) => (
-                    <div key={type}>
-                        <span>{type === 'tickets' && 'تیکت ها'}</span>
-                        <span>{type === 'internal' && 'داخلی'}</span>
-                        <span>{type === 'fusion' && 'فیوژن'}</span>
-                    </div>
-                ))}
+                {row.cartable_types.length 
+                    ? row.cartable_types.map((type) => (
+                        <div key={type}>
+                            <span>{type === 'tickets' && 'تیکت ها'}</span>
+                            <span>{type === 'internal' && 'داخلی'}</span>
+                            <span>{type === 'fusion' && 'فیوژن'}</span>
+                        </div>
+                    ))
+                    : <Remove />
+                }
             </TableCell>
             <TableCell align='center'>
                 <IconButton size='medium' title='ویرایش' color='secondary'

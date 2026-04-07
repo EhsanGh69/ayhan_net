@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Alert, IconButton, TableCell, Typography, useMediaQuery } from '@mui/material';
-import { AddComment, Delete, Edit } from '@mui/icons-material'
+import { AddComment, CheckRounded, Edit, ClearRounded } from '@mui/icons-material'
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from 'react-router-dom';
 
@@ -11,15 +11,15 @@ import SearchInput from '../table/SearchInput';
 import SnackAlert from '../SnackAlert';
 import LoadingBox from '../LoadingBox';
 import TicketRows from './TicketRows';
-import RemoveTicketModal from './RemoveTicketModal';
+import ChangeTicketActivateModal from './ChangeTicketActivateModal';
 
 export default function ManageTicketsTable() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
-    const [ticket, setTicket] = useState({ id: null, name: null, group: null })
+    const [ticket, setTicket] = useState({ id: null, name: null, group: null, isActive: null })
     const [searchTerm, setSearchTerm] = useState("")
-    const [removeModal, setRemoveModal] = useState(false)
+    const [activeModal, setActiveModal] = useState(false)
     const navigate = useNavigate()
 
     const { ticketsList, ticketsListLoading, isTicketsListErr, ticketsListErr } = useTicketsList()
@@ -39,12 +39,16 @@ export default function ManageTicketsTable() {
         if (!filteredTickets) return []
         return normalizeHandler(filteredTickets)
     }, [filteredTickets])
-
     useEffect(() => {
         const errResponse = ticketsListErr?.response?.data?.detail
         const errorMsg = typeof errResponse === 'string' ? errResponse : 'خطا در دریافت اطلاعات'
         if (isTicketsListErr) setSnackbar({ open: true, message: errorMsg, severity: 'error' })
     }, [isTicketsListErr, ticketsListErr])
+
+    const setCellColor = (isActive) => {
+        if(isActive) return { color: "#000" }
+        return { color: "#696969ff" }
+    }
 
     return (
         <>
@@ -56,9 +60,9 @@ export default function ManageTicketsTable() {
                 />
             </SearchBox>
 
-            <RemoveTicketModal
-                open={removeModal}
-                closeHandler={() => setRemoveModal(false)}
+            <ChangeTicketActivateModal
+                open={activeModal}
+                closeHandler={() => setActiveModal(false)}
                 setSnackbar={setSnackbar}
                 ticket={ticket}
             />
@@ -73,27 +77,41 @@ export default function ManageTicketsTable() {
                     >
                         {(row, index) => (
                             <>
-                                <TableCell align='center'>{index + 1}</TableCell>
-                                <TableCell align='center'>{row.group}</TableCell>
-                                <TableCell align='center'>{row.name}</TableCell>
-                                <TableCell align='center'>{row.description}</TableCell>
+								<TableCell sx={setCellColor(row.is_active)} align='center'>{index + 1}</TableCell>
+                                <TableCell sx={setCellColor(row.is_active)} align='center'>{row.group}</TableCell>
+                                <TableCell sx={setCellColor(row.is_active)} align='center'>{row.name}</TableCell>
+                                <TableCell sx={setCellColor(row.is_active)} align='center'>{row.description}</TableCell>
                                 <TableCell align='center'>
                                     <IconButton size='medium' title='ویرایش' color='secondary'
                                         sx={{ border: '1px solid #8c22c5', mr: 2, mt: 1 }}
                                         onClick={() => navigate(`/tickets/edit/${row.id}`)}
+                                        disabled={!row.is_active}
                                     >
                                         <Edit fontSize='medium' />
                                     </IconButton>
-                                    <IconButton size='medium' title='حذف' color='error'
-                                        sx={{ border: '1px solid #c53522', mr: 2, mt: 1 }}
+                                    <IconButton 
+                                        size='medium' 
+                                        title={row.is_active ? 'غیرفعال سازی': 'فعال سازی'}
+                                        color={row.is_active ? 'error': 'success'}
+                                        sx={{ 
+                                            border: row.is_active ? '1px solid #c53522' : '1px solid #45c522ff', 
+                                            mr: 2, mt: 1 
+                                        }}
                                         onClick={() => {
                                             setTicket((prev) => ({
-                                                ...prev, id: row.id, name: row.name, group: row.group
+                                                ...prev, 
+                                                id: row.id, 
+                                                name: row.name, 
+                                                group: row.group,
+                                                isActive: row.is_active
                                             }))
-                                            setRemoveModal(true)
+                                            setActiveModal(true)
                                         }}
                                     >
-                                        <Delete fontSize='medium' />
+                                        {row.is_active 
+                                            ? <ClearRounded fontSize='medium' />
+                                            : <CheckRounded fontSize='medium' />
+                                        }
                                     </IconButton>
                                 </TableCell>
                             </>

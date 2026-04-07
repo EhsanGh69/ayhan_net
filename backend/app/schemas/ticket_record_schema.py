@@ -30,6 +30,7 @@ class TicketRecordList(BaseModel):
     status: TicketStatus
     user: CurrentStaffSchema
     staff: CurrentStaffSchema | None
+    is_active: bool
     created_at: datetime
     
     model_config = { "from_attributes": True }
@@ -39,6 +40,7 @@ class TicketRecordDetail(TicketRecordList):
     content: str
     staff: CurrentStaffSchema | None
     subscriber: SubscriberListSchema
+    is_active: bool
     updated_at: datetime
     
     model_config = { "from_attributes": True }

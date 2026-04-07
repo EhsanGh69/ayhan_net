@@ -27,6 +27,7 @@ class TicketUpdateSchema(TicketBaseSchema):
 class TicketViewSchema(TicketBaseSchema):
     id: int
     group: TicketGroup
+    is_active: bool
 
     model_config = { "from_attributes": True }
 

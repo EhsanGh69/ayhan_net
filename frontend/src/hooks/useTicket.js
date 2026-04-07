@@ -127,19 +127,19 @@ export const useEditTicketGroup = () => {
     return { editTicketGroup, editTGroupPending, editTGroupError, isEditTGroupError }
 }
 
-export const useRemoveTicket = () => {
+export const useChangeTicketActivate = () => {
     const queryClient = useQueryClient()
     const { 
-        mutateAsync: removeTicket, isPending: removeTicketPending,
-        error: removeTicketError, isError: isRemoveTicketError 
+        mutateAsync: changeActivate, isPending: changingActivate,
+        error: changeActivateErr, isError: isChangeActivateErr
     } = useMutation({
         mutationFn: async ({ ticketId }) => {
-            const result = await ticketService.removeTicket(ticketId)
+            const result = await ticketService.changeTicketActivate(ticketId)
             return result
         },
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['ticketsList'] })
         
     })
 
-    return { removeTicket, removeTicketPending, removeTicketError, isRemoveTicketError }
+    return { changeActivate, changingActivate, changeActivateErr, isChangeActivateErr }
 }

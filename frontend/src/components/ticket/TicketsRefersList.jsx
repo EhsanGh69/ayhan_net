@@ -12,7 +12,7 @@ import LoadingBox from '../LoadingBox';
 import TicketRows from './TicketRows';
 import SubsTicketDetailModal from '../ticketsCartable/SubsTicketDetailModal';
 import TicketTableCells from '../ticketsCartable/TicketTableCells';
-import RemoveSubsTicketModal from '../ticketsCartable/RemoveSubsTicketModal';
+import ChangeSubsTicketActivateModal from '../ticketsCartable/ChangeSubsTicketActivateModal';
 import ResponseTicketModal from '../ticketsCartable/ResponseTicketModal';
 import ChangeTicketStaffModal from '../ticketsCartable/ChangeTicketStaffModal';
 
@@ -27,6 +27,7 @@ export default function TicketsRefersList() {
     const [responseModalOpen, setResponseModalOpen] = useState(false)
     const [changeStaffModalOpen, setChangeStaffModalOpen] = useState(false)
     const [recordId, setRecordId] = useState(null)
+    const [isActive, setIsActive] = useState(null)
     const [recordStaffId, setRecordStaffId] = useState(null)
 
     const {
@@ -44,7 +45,7 @@ export default function TicketsRefersList() {
                 ...row,
                 datetime: moment(row.created_at).format('HH:mm - jYYYY/jMM/jDD'),
                 user: row?.user.display_name,
-                staff: row?.staff.display_name,
+				staff: row?.staff ? row?.staff.display_name : null,
                 status: row.status
             }
         })
@@ -91,6 +92,7 @@ export default function TicketsRefersList() {
                                     row={row}
                                     index={index}
                                     setRecordId={setRecordId}
+                                    setIsActive={setIsActive}
                                     setRecordStaffId={setRecordStaffId}
                                     setDetailModalOpen={setDetailModalOpen}
                                     showRemoveBtn={true}
@@ -117,10 +119,11 @@ export default function TicketsRefersList() {
                 openResponse={() => setResponseModalOpen(true)}
                 openChangeStaff={() => setChangeStaffModalOpen(true)}
             />
-            <RemoveSubsTicketModal
+            <ChangeSubsTicketActivateModal
                 open={removeModalOpen}
                 closeHandler={() => setRemoveModalOpen(false)}
                 recordId={recordId}
+                isActive={isActive}
                 setSnackbar={setSnackbar}
             />
             <ResponseTicketModal

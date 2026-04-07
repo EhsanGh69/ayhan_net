@@ -19,5 +19,3 @@ export default function ManageTickets() {
         </MainPage>
     )
 }
-
-// دو تا تب: لیست تیکت ها - لیست ارجاعات تیکت ها

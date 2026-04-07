@@ -59,7 +59,7 @@ export default function TicketsCartable() {
                 ...row,
                 datetime: moment(row.created_at).format('HH:mm - jYYYY/jMM/jDD'),
                 user: row?.user.display_name,
-                staff: row?.staff.display_name,
+				staff: row?.staff ? row?.staff.display_name : null,
                 status: row.status
             }
         })
@@ -111,7 +111,7 @@ export default function TicketsCartable() {
                                 <>
                                     <TicketTableCells
                                         row={row}
-                                        index={index}
+										index={index}
                                         setRecordId={setRecordId}
                                         setRecordStaffId={setRecordStaffId}
                                         setDetailModalOpen={setDetailModalOpen}

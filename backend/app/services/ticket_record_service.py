@@ -90,11 +90,12 @@ def ticket_record_detail_service(record_id: int, session: Session):
     return check_record_exist(record_id, session)
 
 
-def remove_ticket_record_service(record_id: int, session: Session):
+def change_ticket_record_activate_service(record_id: int, session: Session):
     ticket_record = check_record_exist(record_id, session)
-    session.delete(ticket_record)
+    current_activate = ticket_record.is_active
+    ticket_record.is_active = not current_activate
     session.commit()
-    return JSONResponse(status_code=200, content={"detail": "Ticket record removed successfully"})
+    return JSONResponse(status_code=200, content={"detail": "Ticket record activate changed successfully"})
 
 
 def subscriber_ticket_records_service(subs_id: id, session: Session):

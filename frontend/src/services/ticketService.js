@@ -57,9 +57,9 @@ export const ticketService = {
             throw error
         }
     },
-    removeTicket: async (ticketId) => {
+    changeTicketActivate: async (ticketId) => {
         try {
-            const { data } = await axiosInstance.delete(`/tickets/${ticketId}`)
+            const { data } = await axiosInstance.get(`/tickets/active/${ticketId}`)
             return data
         } catch (error) {
             throw error

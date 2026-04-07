@@ -8,7 +8,7 @@ from app.schemas.ticket_schema import (
     TicketCreateSchema, TicketUpdateSchema, TicketViewSchema, AddTicketGroup
 )
 from app.services.ticket_service import (
-    create_ticket_service, update_ticket_service, remove_ticket_service, tickets_list_service,
+    create_ticket_service, update_ticket_service, change_ticket_activate_service, tickets_list_service,
     ticket_detail_service, add_ticket_group_service, group_tickets_list_service,
     update_ticket_group_service
 )
@@ -62,13 +62,13 @@ def update_ticket(
     return update_ticket_service(ticket_id, data, session)
 
 
-@router.delete('/{ticket_id}')
-def remove_ticket(
+@router.get('/active/{ticket_id}')
+def change_ticket_activate(
     ticket_id: int,
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
 ):
-    return remove_ticket_service(ticket_id, session)
+    return change_ticket_activate_service(ticket_id, session)
 
 
 @router.get('/', response_model=List[TicketViewSchema])
@@ -80,7 +80,7 @@ def tickets_list(
 
 
 @router.get('/{ticket_id}', response_model=TicketViewSchema)
-def tickets_detail(
+def ticket_detail(
     ticket_id: int,
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)

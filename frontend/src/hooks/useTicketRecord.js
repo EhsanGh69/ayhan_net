@@ -155,21 +155,21 @@ export const useTicketRecordDetail = (recordId) => {
     return { ticketRecordDetail, tRecordDetailLoading, tRecordDetailErr, isTRecordDetailErr }
 }
 
-export const useRemoveTicketRecord = () => {
+export const useChangeTicketRecordActivate = () => {
     const queryClient = useQueryClient()
 
     const { 
-        mutateAsync: removeTicketRecord, isPending: removeTRecordPending, 
-        error: removeTRecordErr, isError: isRemoveTRecordErr 
+        mutateAsync: changeActivate, isPending: changingActivate, 
+        error: changeActivateErr, isError: isChangeActivateErr
     } = useMutation({
         mutationFn: async ({ recordId }) => {
-            const result = await ticketRecordService.removeTicketRecord(recordId)
+            const result = await ticketRecordService.changeTicketRecordActivate(recordId)
             return result
         },
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['ticketRecordsList'] })
     })
 
-    return { removeTicketRecord, removeTRecordPending, removeTRecordErr, isRemoveTRecordErr }
+    return { changeActivate, changingActivate, changeActivateErr, isChangeActivateErr }
 }
 
 export const useChangeTicketRecordStaff = () => {

@@ -12,5 +12,6 @@ class Ticket(SQLModel, table=True):
 
     name: str = Field(index=True)
     description: str 
+    is_active: bool = Field(default=True)
 
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

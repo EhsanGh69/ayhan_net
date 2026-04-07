@@ -21,7 +21,7 @@ router = APIRouter(prefix="/api/staff", tags=["Staff"])
 
 @router.post("/")
 def create_staff(
-    auth_user: int = Depends(verify_access),
+    # auth_user: int = Depends(verify_access),
     user_data: str = Form(...), 
     staff_data: str = Form(...), 
     org_image: UploadFile | None = File(None), 

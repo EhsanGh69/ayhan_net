@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react'
 import {
-    Box, Button, CircularProgress, Grid, FormControlLabel, IconButton,
-    Checkbox, FormControl, InputLabel, Select, MenuItem, FormHelperText, TextField
+    Box, Button, CircularProgress, Grid, FormControlLabel, Checkbox, TextField
 } from '@mui/material';
-import { Search as SearchIcon, Clear } from '@mui/icons-material'
 import { Form, Formik, Field } from 'formik'
 
 import { addSubsTicketSchema } from '../../validations/ticketsValidations';
 import { useTicketsInGroup, useTicketCartableStaffs } from '../../hooks/useTicketRecord';
-import SearchToggleMenu from '../../components/inputs/SearchToggleMenu';
 import SelectTicketGroupTitle from './SelectTicketGroupTitle';
 import SelectTicketName from './SelectTicketName';
 import SelectTicketCartable from './SelectTicketCartable';
@@ -18,8 +15,6 @@ export default function AddSubsTicketForm({
     handleSubmit, isPending, ticketGroupsList, handleClose, setSnackbar
 }) {
     const [groupId, setGroupId] = useState(null)
-    const [selectedCartable, setSelectedCartable] = useState('')
-    const [showSearchCartable, setShowSearchCartable] = useState(false)
     const [isReferVal, setIsReferVal] = useState(false)
 
     const { ticketsInGroup, isTInGroupErr } = useTicketsInGroup(groupId)

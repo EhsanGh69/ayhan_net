@@ -35,7 +35,8 @@ const staffObject = {
     .matches(/^[\w\u0600-\u06FF\s\-,.،]+$/, 'آدرس می تواند شامل حروف، اعداد، فاصله و -،,. باشد'),
     org_image: Yup.mixed().nullable(),
     cartable_types: Yup.array().of(Yup.string().oneOf(VALID_CARTABLE_TYPES, 'نوع کارتابل نامعتبر است'))
-        .min(1, 'حداقل یک نوع کارتابل باید انتخاب شود').max(3, 'حداکثر ۳ نوع کارتابل می‌توانید انتخاب کنید')
+        // .min(1, 'حداقل یک نوع کارتابل باید انتخاب شود')
+        .max(3, 'حداکثر ۳ نوع کارتابل می‌توانید انتخاب کنید')
         .test('unique-values', 'نوع کارتابل نمی‌تواند تکراری باشد',
         (values) => {
             if (!values) return true;

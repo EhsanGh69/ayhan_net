@@ -92,7 +92,7 @@ def update_ticket_service(
     return JSONResponse(status_code=200, content={"detail": "Ticket updated successfully"})
 
 
-def remove_ticket_service(
+def change_ticket_activate_service(
     ticket_id: int,
     session: Session
 ): 
@@ -100,9 +100,10 @@ def remove_ticket_service(
     if not ticket:
         raise HTTPException(status_code=404, detail="Ticket not found")
     
-    session.delete(ticket)
+    current_activate = ticket.is_active
+    ticket.is_active = not current_activate
     session.commit()
-    return JSONResponse(status_code=200, content={"detail": "Ticket removed successfully"})
+    return JSONResponse(status_code=200, content={"detail": "Ticket activate changed successfully"})
 
 
 def tickets_list_service(session: Session):

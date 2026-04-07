@@ -33,11 +33,13 @@ class TicketRecord(SQLModel, table=True):
     
     staff_id: Optional[int] = Field(foreign_key="staffs.id", ondelete="CASCADE", default=None,
                                     description="کاربر ارجاع تیکت")
+    
     staff: "Staff" = Relationship(back_populates="staff_ticket", # type: ignore
                                 sa_relationship_kwargs={"foreign_keys": "[TicketRecord.staff_id]"}) 
     
     status: TicketStatus = Field(default=TicketStatus.OPEN, 
                                 sa_column=Column(SAEnum(TicketStatus, name="ticket_status")))
+    is_active: bool = Field(default=True)
     created_at: Optional[datetime] = Field(default=None, 
                 sa_column_kwargs={"server_default": func.now()})
     updated_at: Optional[datetime] = Field(default=None,
