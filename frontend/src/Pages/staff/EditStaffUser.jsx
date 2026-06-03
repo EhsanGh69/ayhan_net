@@ -10,6 +10,7 @@ import { useChangeStaff, useStaff } from '../../hooks/useStaff'
 import { editStaffSchema } from '../../validations/usersValidations'
 import StaffForm from '../../components/staff/StaffForm';
 import LoadingBox from '../../components/LoadingBox';
+import getISODate from '../../utils/getISODate';
 
 
 export default function AddStaffUser() {
@@ -29,7 +30,7 @@ export default function AddStaffUser() {
                 mobile: staffDetail.mobile, phone: staffDetail.phone,
                 org_mobile: staffDetail.org_mobile, org_phone: staffDetail.org_phone,
                 address: staffDetail.address, cartable_types: [...staffDetail.cartable_types],
-                birth_date: moment(staffDetail.birth_date, "YYYY-MM-DD").locale("fa"), 
+                birth_date: moment(staffDetail.birth_date).format('jYYYY/jMM/jDD'), 
                 org_image: null,
             })
         }
@@ -45,7 +46,7 @@ export default function AddStaffUser() {
         }))
         formData.append("staff_data", JSON.stringify({
             display_name: values.display_name, national_id: values.national_id,
-            birth_date: values.birth_date.toDate().toISOString().slice(0, 10),
+            birth_date: getISODate(values.birth_date),
             father_name: values.father_name, mobile: values.mobile,
             phone: values.phone, org_mobile: values.org_mobile,
             org_phone: values.org_phone, address: values.address,

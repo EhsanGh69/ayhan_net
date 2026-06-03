@@ -13,18 +13,22 @@ class SubscriberBaseSchema(BaseModel):
     certificate_number: str | None = Field(pattern=r"^\d{1,10}$")
     mobile: str = Field(pattern=r"^(\+98|0)?9\d{9}$")
     phone: str | None = Field(pattern=r"^[1-9]\d{9}$")
-    area: int | None
     main_street: str | None = Field(max_length=50)
     side_street: str | None = Field(max_length=50)
     alley: str | None = Field(max_length=50)
+    side_alley: str | None = Field(max_length=50)
     building_name: str | None = Field(max_length=50)
+    floor: str | None = Field(max_length=50)
+    unit: str | None = Field(max_length=50)
     house_number: str | None = Field(max_length=10, min_length=1)
     postal_code: str = Field(max_length=10, min_length=10)
     subscriber_type: SubscriberTypes | None
-    
-class SubscriberCreateSchema(SubscriberBaseSchema):
+
+
+class SubscriberCreateUpdateSchema(SubscriberBaseSchema):
     province_id: int | None
     city_id: int | None
+    area: int | None
 
     
 class SubscriberListSchema(BaseModel):
@@ -41,12 +45,16 @@ class SubscriberViewSchema(SubscriberBaseSchema):
     id: int
     province: str | None
     city: str | None
+    area: str | None
     subscriber_code: str | None
     status: str
+    corporate_name: str | None
+    registration_number: str | None
+    corporate_national_id: str | None
     
     model_config = { "from_attributes": True }
 
-class SubscriberDetailSchema(SubscriberCreateSchema):
+class SubscriberDetailSchema(SubscriberCreateUpdateSchema):
     
     model_config = { "from_attributes": True }
     
@@ -61,3 +69,10 @@ class SubscriberRegister(BaseModel):
 class CheckSubscriberExist(BaseModel):
     mobile: str = Field(pattern=r"^(\+98|0)?9\d{9}$")
     postal_code: str = Field(max_length=10, min_length=10)
+
+
+class CorporationSchema(BaseModel):
+    name: str
+    registration_number: str
+    national_id: str
+

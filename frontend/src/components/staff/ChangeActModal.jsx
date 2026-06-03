@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
 import { Box, Button, Modal, Typography } from '@mui/material'
 import { LockPerson } from '@mui/icons-material'
 
 import { useChangeStaff } from "../../hooks/useStaff"
 import { modalBox } from "../../styles/globalStyles"
+import useErrorHandler from '../../hooks/useErrorHandler'
 
 export default function ChangeActModal({ open, closeHandler, userAct, setSnackbar }) {
     const { changeAct, changeActPending, changeActError, isChangeActError } = useChangeStaff()
@@ -20,14 +20,9 @@ export default function ChangeActModal({ open, closeHandler, userAct, setSnackba
         }
     }
 
-    useEffect(() => {
-        const errResponse = changeActError?.response?.data?.detail
-        const errorMsg = typeof errResponse === 'string' ? errResponse : 'خطا در ارسال اطلاعات'
-        if (isChangeActError) {
-            setSnackbar({ open: true, message: errorMsg, severity: 'error' })
-            closeHandler()
-        }
-    }, [changeActError, isChangeActError])
+    useErrorHandler(isChangeActError, changeActError, setSnackbar)
+    if (isChangeActError) closeHandler()
+    
 
   return (
     <Modal open={open} onClose={closeHandler}>

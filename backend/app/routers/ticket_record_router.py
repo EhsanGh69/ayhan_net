@@ -3,6 +3,7 @@ from sqlmodel import Session
 from typing import List
 
 from app.db.session import get_session
+from app.core.error_handler import handle_errors
 from app.core.dependencies import verify_access
 from app.schemas.ticket_record_schema import (
     TicketRecordCreate, TicketRecordList, TicketRecordDetail, TicketChangeStaff, TicketRecordResponse
@@ -19,6 +20,7 @@ from app.services.ticket_record_service import (
 router = APIRouter(prefix="/api/ticket-records", tags=["TicketRecords"])
 
 @router.get('/staffs', response_model=List[CurrentStaffSchema])
+@handle_errors
 def ticket_cartable_staffs(
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
@@ -26,6 +28,7 @@ def ticket_cartable_staffs(
     return ticket_cartable_staffs_service(session)
 
 @router.get('/staffs/{staff_id}', response_model=List[TicketRecordList])
+@handle_errors
 def staff_ticket_records(
     staff_id: int,
     auth_user: int = Depends(verify_access),
@@ -34,6 +37,7 @@ def staff_ticket_records(
     return staff_ticket_records_service(staff_id, session)
 
 @router.patch('/staffs/change/{record_id}')
+@handle_errors
 def ticket_record_change_staff(
     record_id: int,
     data: TicketChangeStaff,
@@ -43,6 +47,7 @@ def ticket_record_change_staff(
     return ticket_record_change_staff_service(record_id, data, session)
 
 @router.post('/')
+@handle_errors
 def create_ticket_record(
     data: TicketRecordCreate,
     auth_user: int = Depends(verify_access),
@@ -51,6 +56,7 @@ def create_ticket_record(
     return create_ticket_record_service(data, session)
 
 @router.post('/response/{record_id}')
+@handle_errors
 def response_ticket_record(
     record_id: int,
     data: TicketRecordResponse,
@@ -60,6 +66,7 @@ def response_ticket_record(
     return response_ticket_record_service(record_id, data, session)
 
 @router.get('/groups/{group_id}')
+@handle_errors
 def tickets_in_group(
     group_id: int,
     auth_user: int = Depends(verify_access),
@@ -68,6 +75,7 @@ def tickets_in_group(
     return tickets_in_group_service(group_id, session)
 
 @router.get('/', response_model=List[TicketRecordList])
+@handle_errors
 def ticket_records_list(
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
@@ -75,6 +83,7 @@ def ticket_records_list(
     return ticket_records_list_service(session)
 
 @router.get('/{record_id}', response_model=TicketRecordDetail)
+@handle_errors
 def ticket_record_detail(
     record_id: int,
     auth_user: int = Depends(verify_access),
@@ -83,6 +92,7 @@ def ticket_record_detail(
     return ticket_record_detail_service(record_id, session)
 
 @router.get('/active/{record_id}')
+@handle_errors
 def remove_ticket_record(
     record_id: int,
     auth_user: int = Depends(verify_access),
@@ -91,6 +101,7 @@ def remove_ticket_record(
     return change_ticket_record_activate_service(record_id, session)
 
 @router.get('/subscribers/{subs_id}', response_model=List[TicketRecordList])
+@handle_errors
 def subscriber_ticket_records(
     subs_id: int,
     auth_user: int = Depends(verify_access),
@@ -100,9 +111,10 @@ def subscriber_ticket_records(
 
 
 @router.get('/close/{record_id}')
+@handle_errors
 def close_ticket_record(
     record_id: int,
-    # auth_user: int = Depends(verify_access),
+    auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
 ):
     return close_ticket_record_service(record_id, session)

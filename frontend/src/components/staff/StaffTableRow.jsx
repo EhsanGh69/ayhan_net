@@ -1,5 +1,5 @@
-import { Check, Clear, Edit, LockPerson, SyncLock, Remove } from '@mui/icons-material'
-import { Chip, IconButton, TableCell, TableRow } from '@mui/material'
+import { Check, Clear, Edit, LockPerson, SyncLock, Remove, AdminPanelSettings } from '@mui/icons-material'
+import { Chip, IconButton, TableCell, TableRow, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -8,7 +8,12 @@ export default function StaffTableRow({ row, setUserAct, setResetModalOpen, setA
 
     return (
         <TableRow hover>
-            <TableCell align='center'>{row.full_name}</TableCell>
+            <TableCell align='center'>
+                <Typography display="flex" alignItems="center" justifyContent="center">
+                    {row.is_admin && <AdminPanelSettings color='secondary' titleAccess='ادمین' /> }
+                    {row.full_name}
+                </Typography>
+            </TableCell>
             <TableCell align='center'>
                 {row.is_active
                     ? <Chip label='فعال' color='success' icon={<Check />} />
@@ -17,7 +22,7 @@ export default function StaffTableRow({ row, setUserAct, setResetModalOpen, setA
             <TableCell align='center'>{row.display_name}</TableCell>
             <TableCell align='center'>{row.mobile}</TableCell>
             <TableCell align='center'>
-                {row.cartable_types.length 
+                {row.cartable_types.length
                     ? row.cartable_types.map((type) => (
                         <div key={type}>
                             <span>{type === 'tickets' && 'تیکت ها'}</span>
@@ -45,20 +50,22 @@ export default function StaffTableRow({ row, setUserAct, setResetModalOpen, setA
                     }}>
                     <SyncLock fontSize='medium' />
                 </IconButton>
-                <IconButton
-                    size='small'
-                    sx={{ border: '1px solid #c55b22', p: 1, color: '#b56c07', mt: 1 }}
-                    title={row.is_active ? 'غیر فعال کردن' : 'فعال کردن'}
-                    onClick={() => {
-                        setUserAct(prev => ({
-                            ...prev, userId: row.id, status: row.is_active,
-                            fullName: `${row.full_name}`
-                        }))
-                        setActModalOpen(true)
-                    }}
-                >
-                    <LockPerson fontSize='medium' />
-                </IconButton>
+                {!row.is_admin && (
+                    <IconButton
+                        size='small'
+                        sx={{ border: '1px solid #c55b22', p: 1, color: '#b56c07', mt: 1 }}
+                        title={row.is_active ? 'غیر فعال کردن' : 'فعال کردن'}
+                        onClick={() => {
+                            setUserAct(prev => ({
+                                ...prev, userId: row.id, status: row.is_active,
+                                fullName: `${row.full_name}`
+                            }))
+                            setActModalOpen(true)
+                        }}
+                    >
+                        <LockPerson fontSize='medium' />
+                    </IconButton>
+                )}
             </TableCell>
         </TableRow>
     )

@@ -64,7 +64,7 @@ export const useStaff = (userId) => {
 
 export const useCurrentStaff = () => {
     const { 
-        mutateAsync: getCurrentStaff, isError: isGetCurrentStaffErr
+        mutateAsync: getCurrentStaff, isError: isGetCurrentStaffErr, error: getCurrentStaffErr
     } = useMutation({
         mutationFn: async ({ userId }) => {
             const data = await staffService.getCurrentStaff(userId)
@@ -72,7 +72,7 @@ export const useCurrentStaff = () => {
         }
     })
 
-    return { getCurrentStaff, isGetCurrentStaffErr }
+    return { getCurrentStaff, isGetCurrentStaffErr, getCurrentStaffErr }
 }
 
 export const useChangeStaff = () => {

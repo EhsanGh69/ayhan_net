@@ -4,6 +4,7 @@ from typing import List
 
 from app.db.session import get_session
 from app.core.dependencies import verify_access
+from app.core.error_handler import handle_errors
 from app.schemas.ticket_schema import (
     TicketCreateSchema, TicketUpdateSchema, TicketViewSchema, AddTicketGroup
 )
@@ -18,6 +19,7 @@ router = APIRouter(prefix="/api/tickets", tags=['Tickets'])
 
 
 @router.post('/groups')
+@handle_errors
 def add_ticket_group(
     data: AddTicketGroup,
     auth_user: int = Depends(verify_access),
@@ -26,6 +28,7 @@ def add_ticket_group(
     return add_ticket_group_service(data, session)
 
 @router.put('/groups/{group_id}')
+@handle_errors
 def update_ticket_group(
     group_id: int,
     data: AddTicketGroup,
@@ -36,6 +39,7 @@ def update_ticket_group(
 
 
 @router.get('/groups')
+@handle_errors
 def ticket_groups_list(
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
@@ -44,6 +48,7 @@ def ticket_groups_list(
 
 
 @router.post('/')
+@handle_errors
 def create_ticket(
     data: TicketCreateSchema,
     auth_user: int = Depends(verify_access),
@@ -53,6 +58,7 @@ def create_ticket(
 
 
 @router.put('/{ticket_id}')
+@handle_errors
 def update_ticket(
     ticket_id: int,
     data: TicketUpdateSchema,
@@ -63,6 +69,7 @@ def update_ticket(
 
 
 @router.get('/active/{ticket_id}')
+@handle_errors
 def change_ticket_activate(
     ticket_id: int,
     auth_user: int = Depends(verify_access),
@@ -72,6 +79,7 @@ def change_ticket_activate(
 
 
 @router.get('/', response_model=List[TicketViewSchema])
+@handle_errors
 def tickets_list(
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
@@ -80,6 +88,7 @@ def tickets_list(
 
 
 @router.get('/{ticket_id}', response_model=TicketViewSchema)
+@handle_errors
 def ticket_detail(
     ticket_id: int,
     auth_user: int = Depends(verify_access),

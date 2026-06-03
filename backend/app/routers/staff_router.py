@@ -5,6 +5,7 @@ from sqlmodel import Session
 from typing import List
 
 from app.db.session import get_session
+from app.core.error_handler import handle_errors
 from app.schemas.auth_schema import UserCreateSchema, UserBaseSchema
 from app.schemas.staff_schema import (
     StaffBaseSchema, StaffListSchema, StaffDetailSchema, CurrentStaffSchema
@@ -20,8 +21,9 @@ router = APIRouter(prefix="/api/staff", tags=["Staff"])
 
 
 @router.post("/")
+@handle_errors
 def create_staff(
-    # auth_user: int = Depends(verify_access),
+    auth_user: int = Depends(verify_access),
     user_data: str = Form(...), 
     staff_data: str = Form(...), 
     org_image: UploadFile | None = File(None), 
@@ -41,12 +43,14 @@ def create_staff(
         raise HTTPException(status_code=422, detail="اطلاعات ارسال شده نامعتبر می باشد")
     
     staff = create_staff_service(user_schema, staff_schema, org_image, session)
+    staff = create_staff_service(staff_schema, session)
     if not staff:
         raise HTTPException(status_code=409, detail="کاربری با این نام کاربری از قبل وجود دارد")
     return JSONResponse(status_code=201, content={"detail": "New staff user created successfully"})
 
 
 @router.put("/{staff_id}")
+@handle_errors
 def update_staff(
     staff_id: int,
     auth_user: int = Depends(verify_access),
@@ -75,6 +79,7 @@ def update_staff(
 
 
 @router.get('/activate/{staff_id}')
+@handle_errors
 def change_activate(
     staff_id: int, 
     auth_user: int = Depends(verify_access),
@@ -87,6 +92,7 @@ def change_activate(
 
 
 @router.get("/", response_model=List[StaffListSchema])
+@handle_errors
 def staff_list(
     auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
@@ -94,6 +100,7 @@ def staff_list(
     return get_staff_list(session)
 
 @router.get("/{user_id}", response_model=StaffDetailSchema)
+@handle_errors
 def staff_detail(
     user_id: int,
     auth_user: int = Depends(verify_access),
@@ -102,6 +109,7 @@ def staff_detail(
     return get_staff_detail(user_id, session)
 
 @router.get("/current/{user_id}", response_model=CurrentStaffSchema)
+@handle_errors
 def current_staff(
     user_id: int,
     auth_user: int = Depends(verify_access),

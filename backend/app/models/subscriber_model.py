@@ -29,9 +29,12 @@ class Subscriber(SQLModel, table=True):
     
     main_street: Optional[str] = Field(default=None, description="خیابان اصلی")
     side_street: Optional[str] = Field(default=None, description="خیابان فرعی")
-    alley: Optional[str] = Field(default=None, description="کوچه")
+    alley: Optional[str] = Field(default=None, description="کوچه اصلی")
+    side_alley: Optional[str] = Field(default=None, description="کوچه فرعی")
     
     building_name: Optional[str] = Field(default=None, description="نام ساختمان")
+    floor: Optional[str] = Field(default=None, description="طبقه")
+    unit: Optional[str] = Field(default=None, description="واحد")
     house_number: Optional[str] = Field(default=None, description="پلاک")
     postal_code: str = Field(description="کد پستی")
     
@@ -40,4 +43,5 @@ class Subscriber(SQLModel, table=True):
     subscriber_code: Optional[str] = None
     
     subscriber_ticket: Optional["TicketRecord"] = Relationship(back_populates="subscriber") # type: ignore
+    corporation: Optional["Corporation"] = Relationship(back_populates="subscriber") # type: ignore
      

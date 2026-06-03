@@ -8,15 +8,15 @@ const DrawerMenuItem = ({ item, level = 0, handleNavigation, openMenus, setOpenM
     const location = useLocation()
 
     const hasChildren = item.children && item.children.length > 0;
-    const isSelected = !hasChildren && (location.pathname === item.path || 
+    const isSelected = !hasChildren && (location.pathname === item.path ||
         item?.subPaths?.some(subPath => location.pathname.includes(subPath)))
     const Icon = item.icon
 
     const shouldBeOpen = () => {
         if (!hasChildren) return false
 
-        return item.children.some(child => 
-            child.path === location.pathname || 
+        return item.children.some(child =>
+            child.path === location.pathname ||
             child?.subPaths?.some(subPath => location.pathname.includes(subPath)))
     }
 
@@ -50,7 +50,7 @@ const DrawerMenuItem = ({ item, level = 0, handleNavigation, openMenus, setOpenM
                         '&.Mui-selected': {
                             backgroundColor: 'primary.light',
                             color: 'whitesmoke',
-                            cursor: 'inherit',
+                            cursor: 'pointer',
                             '& .MuiListItemIcon-root': {
                                 color: 'whitesmoke'
                             },
@@ -86,7 +86,12 @@ const DrawerMenuItem = ({ item, level = 0, handleNavigation, openMenus, setOpenM
                 <Collapse in={!!openMenus[item.title]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         {item.children.map((child, idx) => (
-                            <DrawerMenuItem key={idx} item={child} handleNavigation={handleNavigation} level={level + 1} />
+                            <DrawerMenuItem
+                                key={idx}
+                                item={child}
+                                handleNavigation={handleNavigation}
+                                level={level + 1}
+                            />
                         ))}
                     </List>
                 </Collapse>

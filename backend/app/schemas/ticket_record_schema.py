@@ -36,10 +36,15 @@ class TicketRecordList(BaseModel):
     model_config = { "from_attributes": True }
     
 
+class ResponseContent(BaseModel):
+    content: str
+
+
 class TicketRecordDetail(TicketRecordList):
     content: str
     staff: CurrentStaffSchema | None
     subscriber: SubscriberListSchema
+    response: ResponseContent | None
     is_active: bool
     updated_at: datetime
     

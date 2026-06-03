@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import staffRoutes from './Pages/staff/routes';
 import subscriberRoutes from './Pages/subscriber/routes';
 import ticketRoutes from './Pages/ticket/routes';
+import settingsRoutes from './Pages/settings/routes';
 
 const Register = lazy(() => import("./Pages/Register"));
 const Login = lazy(() => import("./Pages/Login"));
@@ -15,11 +16,15 @@ const NotFound = lazy(() => import("./Pages/NotFound"));
 export const router = createBrowserRouter([
     { path: "/register", element: <LazyWrapper><Register /></LazyWrapper> },
     { path: "/login", element: <LazyWrapper><Login /></LazyWrapper> },
-    { path: "/", element: <ProtectedRoute />, children:[
-        { path: "", element: <LazyWrapper><Home /></LazyWrapper> },
-    ]},
+    {
+        path: "/", element: <ProtectedRoute />,
+        children: [
+            { path: "", element: <LazyWrapper><Home /></LazyWrapper> },
+        ]
+    },
     { path: "*", element: <LazyWrapper><NotFound /></LazyWrapper> },
     ...staffRoutes,
     ...subscriberRoutes,
-    ...ticketRoutes
+    ...ticketRoutes,
+    ...settingsRoutes
 ])

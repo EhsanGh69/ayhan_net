@@ -25,9 +25,17 @@ export const subscriberService = {
             throw error
         }
     },
-    getSubscribers: async (query, field) => {
+    getSubscribers: async () => {
         try {
-            const { data } = await axiosInstance.get('/subscribers', {
+            const { data } = await axiosInstance.get('/subscribers')
+            return data
+        } catch (error) {
+            throw error
+        }
+    },
+    searchSubscribers: async (query, field) => {
+        try {
+            const { data } = await axiosInstance.get('/subscribers/search', {
                 params: { query, field }
             })
             return data
@@ -46,22 +54,6 @@ export const subscriberService = {
     removeSubscriber: async (subsId) => {
         try {
             const { data } = await axiosInstance.delete(`/subscribers/${subsId}`)
-            return data
-        } catch (error) {
-            throw error
-        }
-    },
-    getProvinces: async () => {
-        try {
-            const { data } = await axiosInstance.get('/provinces')
-            return data
-        } catch (error) {
-            throw error
-        }
-    },
-    getProvinceCities: async (provinceId) => {
-        try {
-            const { data } = await axiosInstance.get(`/provinces/${provinceId}`)
             return data
         } catch (error) {
             throw error

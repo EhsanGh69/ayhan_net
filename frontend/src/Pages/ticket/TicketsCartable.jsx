@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useContext } from 'react'
-import { Alert, Paper, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Alert, Grid, Paper, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Info } from '@mui/icons-material';
 import moment from 'jalali-moment';
 
@@ -17,6 +17,7 @@ import SubsTicketDetailModal from '../../components/ticketsCartable/SubsTicketDe
 import TicketTableCells from '../../components/ticketsCartable/TicketTableCells';
 import ResponseTicketModal from '../../components/ticketsCartable/ResponseTicketModal';
 import ChangeTicketStaffModal from '../../components/ticketsCartable/ChangeTicketStaffModal';
+import useErrorHandler from '../../hooks/useErrorHandler';
 
 export default function TicketsCartable() {
     const theme = useTheme();
@@ -33,7 +34,7 @@ export default function TicketsCartable() {
     const { getData } = useContext(GlobalContext)
     const userData = getData("userData")
 
-    const { getCurrentStaff, isGetCurrentStaffErr } = useCurrentStaff()
+    const { getCurrentStaff, isGetCurrentStaffErr, getCurrentStaffErr } = useCurrentStaff()
 
     const currentStaffHandler = async (userId) => {
         await getCurrentStaff({ userId })
@@ -45,7 +46,7 @@ export default function TicketsCartable() {
     }, [userData])
 
     const {
-        staffTicketRecords, staffTRsLoading, isStaffTRsErr
+        staffTicketRecords, staffTRsLoading, isStaffTRsErr, staffTRsErr
     } = useStaffTicketRecords(staffId)
 
     const filteredTicketRecords = staffTicketRecords?.filter(record => {
@@ -70,11 +71,8 @@ export default function TicketsCartable() {
         return normalizeHandler(filteredTicketRecords)
     }, [filteredTicketRecords])
 
-    useEffect(() => {
-        if (isGetCurrentStaffErr || isStaffTRsErr) {
-            setSnackbar({ open: true, message: 'خطا در دریافت اطلاعات', severity: 'error' })
-        }
-    }, [isGetCurrentStaffErr, isStaffTRsErr])
+    useErrorHandler(isStaffTRsErr, staffTRsErr, setSnackbar)
+    useErrorHandler(isGetCurrentStaffErr, getCurrentStaffErr, setSnackbar)
 
     if (staffTRsLoading) {
         return <LoadingBox />
@@ -86,7 +84,7 @@ export default function TicketsCartable() {
                 sx={{
                     width: '95%', p: 2,
                     border: '1px solid #000',
-                    backgroundColor: '#bab5d5ff',
+                    backgroundColor: '#d8d8d8',
                 }}
             >
                 <SearchBox
@@ -135,7 +133,6 @@ export default function TicketsCartable() {
                 closeHandler={() => setDetailModalOpen(false)}
                 setSnackbar={setSnackbar}
                 recordId={recordId}
-                showSubsInfo={true}
                 openResponse={() => setResponseModalOpen(true)}
                 openChangeStaff={() => setChangeStaffModalOpen(true)}
             />

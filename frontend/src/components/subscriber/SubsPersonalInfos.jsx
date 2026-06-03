@@ -1,7 +1,8 @@
-import { useMemo } from 'react'
-import { Grid, Typography } from '@mui/material'
-import { ArrowLeft, Remove } from '@mui/icons-material'
-import moment from "jalali-moment"
+import { useMemo } from 'react';
+import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material'
+import { ArrowLeft, Remove } from '@mui/icons-material';
+import moment from "jalali-moment";
+import InfosTable from '../table/InfosTable';
 
 export default function SubsPersonalInfos({ rowData }) {
     const infoStyles = useMemo(() => ({
@@ -14,45 +15,34 @@ export default function SubsPersonalInfos({ rowData }) {
     }))
 
     const infoItems = useMemo(() => ([
-        { name: 'subscriber_type', label: 'نوع مشترک', 
+        {
+            name: 'subscriber_type', label: 'نوع مشترک',
             value: rowData.subscriber_type === 'real' ? 'حقیقی' : 'حقوقی'
         },
-        { name: 'first_name', label: 'نام'},
-        { name: 'last_name', label: 'نام خانوادگی'},
-        { name: 'national_id', label: 'کد ملی'},
-        { name: 'certificate_number', label: 'شماره شناسنامه'},
-        { name: 'birth_date', label: 'تاریخ تولد', 
+        { name: 'first_name', label: 'نام', value: rowData.first_name },
+        { name: 'last_name', label: 'نام خانوادگی', value: rowData.last_name },
+        { name: 'national_id', label: 'کد ملی', value: rowData.national_id },
+        { name: 'certificate_number', label: 'شماره شناسنامه', value: rowData.certificate_number },
+        {
+            name: 'birth_date', label: 'تاریخ تولد',
             value: rowData.birth_date ? moment(rowData.birth_date).format('jYYYY/jMM/jDD') : null
         },
-        { name: 'father_name', label: 'نام پدر'},
-        { name: 'mobile', label: 'شماره همراه'},
-        { name: 'phone', label: 'شماره تلفن'},
-        { name: 'province', label: 'استان'},
-        { name: 'city', label: 'شهر'},
-        { name: 'area', label: 'منطقه'},
-        { name: 'main_street', label: 'خیابان اصلی'},
-        { name: 'side_street', label: 'خیابان فرعی'},
-        { name: 'alley', label: 'کوچه'},
-        { name: 'building_name', label: 'نام ساختمان'},
-        { name: 'house_number', label: 'پلاک'},
-        { name: 'postal_code', label: 'کد پستی'},
-		{ name: 'status', label: 'وضعیت'},
+        { name: 'father_name', label: 'نام پدر', value: rowData.father_name },
+        { name: 'mobile', label: 'شماره همراه', value: rowData.mobile },
+        { name: 'phone', label: 'شماره تلفن', value: rowData.phone },
+        { name: 'province', label: 'استان', value: rowData.province },
+        { name: 'city', label: 'شهر', value: rowData.city },
+        { name: 'area', label: 'منطقه', value: rowData.area },
+        { name: 'main_street', label: 'خیابان اصلی', value: rowData.main_street },
+        { name: 'side_street', label: 'خیابان فرعی', value: rowData.side_street },
+        { name: 'alley', label: 'کوچه', value: rowData.alley },
+        { name: 'building_name', label: 'نام ساختمان', value: rowData.building_name },
+        { name: 'house_number', label: 'پلاک', value: rowData.house_number },
+        { name: 'postal_code', label: 'کد پستی', value: rowData.postal_code },
+        { name: 'status', label: 'وضعیت', value: rowData.status },
     ]))
 
     return (
-        <Grid container gap={2} width="100%">
-            {infoItems.map(item => (
-                <Grid size={{ xs: 12, md: 3 }} key={item.name}>
-                    <Typography sx={{ ...infoStyles }} component='p'>
-                        <span>{item.label}</span>
-                        <ArrowLeft sx={{ fontSize: 28 }} />
-                        <b>{
-                            item?.value ? item?.value : rowData[item.name] 
-                            ? rowData[item.name] : <Remove />
-                        }</b>
-                    </Typography>
-                </Grid>
-            ))}
-        </Grid>
+        <InfosTable infoItems={infoItems} width={{ xs: '100%', md: '80%', lg: '70%' }}/>
     )
 }

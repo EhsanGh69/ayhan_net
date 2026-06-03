@@ -16,7 +16,7 @@ export default function TableContent({
                                 key={headCell.id}
                                 align='center'
                                 sortDirection={orderBy === headCell.id ? order : false}
-                                sx={{ backgroundColor: '#ccc' }}
+                                sx={{ backgroundColor: '#e0dada' }}
                             >
                                 {headCell.sortable
                                     ? (

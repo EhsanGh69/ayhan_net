@@ -9,6 +9,9 @@ import { useAddSubscriber, useCheckSubscriberExist } from '../../hooks/useSubscr
 import SubscriberForm from '../../components/subscriber/SubscriberForm';
 import { subscriberSchema } from '../../validations/usersValidations';
 import ConfirmModal from '../../components/ConfirmModal';
+import useErrorHandler from '../../hooks/useErrorHandler';
+import getISODate from '../../utils/getISODate';
+import { handleSubscriberValues } from '../../utils/handleSubscriberValues';
 
 
 export default function AddSubscriber() {
@@ -18,17 +21,12 @@ export default function AddSubscriber() {
     const navigate = useNavigate()
 
     const { addSubscriber, addSubsError, isAddSubsError, addSubsPending } = useAddSubscriber()
-    const { checkSubsExist, isCheckSubsExistErr } = useCheckSubscriberExist()
+    const { checkSubsExist, isCheckSubsExistErr, checkSubsExistErr } = useCheckSubscriberExist()
 
     const handleAddSubscriber = async (values) => {
-        const preparedValues = {
-            ...values,
-            birth_date: values.birth_date.toDate().toISOString().slice(0, 10),
-            province_id: Number(values.province_id),
-            city_id: Number(values.city_id),
-            area: Number(values.area)
-        }
-        await addSubscriber(preparedValues)
+        const finalData = handleSubscriberValues(values)
+
+        await addSubscriber(finalData)
             .then(() => {
                 setSnackbar({
                     open: true, message: 'مشترک جدید با موفقیت ایجاد شد', severity: 'success'
@@ -48,12 +46,8 @@ export default function AddSubscriber() {
         handleAddSubscriber(values)
     }
 
-    useEffect(() => {
-        const errResponse = addSubsError?.response?.data?.detail
-        const errorMsg = typeof errResponse === 'string' ? errResponse : 'خطا در ارسال اطلاعات'
-        if (isAddSubsError) setSnackbar({ open: true, message: errorMsg, severity: 'error' })
-        if (isCheckSubsExistErr) setSnackbar({ open: true, message: 'خطا در دریافت اطلاعات', severity: 'error' })
-    }, [addSubsError, isAddSubsError, isCheckSubsExistErr])
+    useErrorHandler(isAddSubsError, addSubsError, setSnackbar)
+    useErrorHandler(isCheckSubsExistErr, checkSubsExistErr, setSnackbar)
 
     return (
         <MainPage>
@@ -71,7 +65,9 @@ export default function AddSubscriber() {
                     national_id: '', certificate_number: '', birth_date: null,
                     father_name: '', mobile: '', phone: '', province_id: '',
                     city_id: '', area: '', main_street: '', side_street: '',
-                    alley: '', building_name: '', house_number: '', postal_code: ''
+                    alley: '', side_alley: '', building_name: '', house_number: '', 
+                    postal_code: '', floor: '', unit: '', 
+                    corporate_name: '', registration_number: '', corporate_national_id: ''
                 }}
                 handleSubmit={handleCheckSubsExist}
                 validationSchema={subscriberSchema}

@@ -10,6 +10,7 @@ import SearchSubs from '../../components/subscriber/SearchSubs';
 import SearchRows from '../../components/table/SearchRows';
 import LoadingBox from '../../components/LoadingBox';
 import SubsTabPanel from '../../components/subscriber/SubsTabPanel';
+import useErrorHandler from '../../hooks/useErrorHandler';
 
 export default function Subscribers() {
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
@@ -23,19 +24,14 @@ export default function Subscribers() {
         searchSubs, searchSubsLoading, searchSubsErr, isSearchSubsErr
     } = useSearchSubscriber(searchParams)
 
-    useEffect(() => {
-        const errResponse = searchSubsErr?.response?.data?.detail
-        const errorMsg = typeof errResponse === 'string' ? errResponse : 'خطا در دریافت اطلاعات'
-        if (isSearchSubsErr) setSnackbar({ open: true, message: errorMsg, severity: 'error' })
-    }, [searchSubsErr, isSearchSubsErr])
+    useErrorHandler(isSearchSubsErr, searchSubsErr, setSnackbar)
 
     return (
         <MainPage>
             <Paper
                 sx={{
                     width: '95%', p: 2,
-                    border: '1px solid #000',
-                    backgroundColor: '#bab5d5ff',
+                    backgroundColor: '#d8d8d8',
                 }}
             >
                 <SearchSubs

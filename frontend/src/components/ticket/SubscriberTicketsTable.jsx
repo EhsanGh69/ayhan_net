@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Alert, Typography, useMediaQuery } from '@mui/material';
-import { AddComment, Info } from '@mui/icons-material'
+import { AddComment, Info, Tag, Check } from '@mui/icons-material'
 import { useTheme } from "@mui/material/styles";
 import moment from "jalali-moment"
 
@@ -16,7 +16,7 @@ import SubsTicketDetailModal from '../ticketsCartable/SubsTicketDetailModal';
 import TicketTableCells from '../ticketsCartable/TicketTableCells';
 
 
-export default function SubscriberTicketsTable({ subsId }) {
+export default function SubscriberTicketsTable({ subsData }) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
@@ -27,7 +27,7 @@ export default function SubscriberTicketsTable({ subsId }) {
 
     const {
         subscriberTicketRecords, subsTRecordsLoading, isSubsTRecordsErr, subsTRecordsErr
-    } = useSubscriberTicketRecords(subsId)
+    } = useSubscriberTicketRecords(subsData?.id)
 
     const filteredTicketRecords = subscriberTicketRecords?.filter(record => {
         return Object.values(record).some(value => value.toString()
@@ -75,7 +75,7 @@ export default function SubscriberTicketsTable({ subsId }) {
                 open={addModalOpen}
                 closeHandler={() => setAddModalOpen(false)}
                 setSnackbar={setSnackbar}
-                subsId={addModalOpen ? subsId : null}
+                subsId={addModalOpen ? subsData?.id : null}
             />
 
             <SubsTicketDetailModal
@@ -86,6 +86,15 @@ export default function SubscriberTicketsTable({ subsId }) {
             />
 
             {subsTRecordsLoading && <LoadingBox />}
+
+            <Typography 
+                mb={3} p={1} variant='h6' bgcolor="#cacaca" borderRadius={1}
+                display="flex" alignItems="center" justifyContent="center"
+            >
+                <Check />
+                <span style={{ margin: "0 5px" }}>تیکت های</span>
+                <b>{subsData?.fullname}</b>
+            </Typography>
 
             {!!subscriberTicketRecords && subscriberTicketRecords.length > 0
                 ? (

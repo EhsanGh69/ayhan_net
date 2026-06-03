@@ -1,27 +1,36 @@
-import { useMemo } from 'react'
-import { LocationCity } from '@mui/icons-material'
-import { 
-    FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography 
+import { useEffect, useMemo, useState } from "react"
+import { LocationCity, ShareLocation, PinDrop, NotListedLocation, Minimize } from '@mui/icons-material'
+import {
+    Box, FormControl, FormHelperText, Grid, IconButton, InputAdornment,
+    InputLabel, MenuItem, Select, TextField, Typography
 } from '@mui/material'
 
 import { addressInputs } from '../../constants/SubscriberInputs'
-import SelectProvinceCity from './SelectProvinceCity'
+import SelectProvinceCityArea from './SelectProvinceCityArea'
 
 export default function LocationInputs({
     values, handleChange, handleBlur, errors, touched, setFieldValue
 }) {
-    const AREA_ITEMS = useMemo(() => ([
-        { id: '1', title: 'یک' },
-        { id: '2', title: 'دو' },
-        { id: '3', title: 'سه' },
-        { id: '4', title: 'چهار' },
-        { id: '5', title: 'پنج' },
-        { id: '6', title: 'شش' },
-        { id: '7', title: 'هفت' },
-        { id: '8', title: 'هشت' },
-        { id: '9', title: 'نه' },
-        { id: '10', title: 'ده' },
-    ]))
+    const optionalFields = useMemo(() => [
+        'side_street', 'alley', 'side_alley', 'building_name', 'floor', 'unit'
+    ])
+    const addressLabels = useMemo(() => ({
+        'province': 'استان', 'city': 'شهرستان', 'area': 'منطقه',
+        'main_street': 'خیابان', 'side_street': 'خیابان', 'alley': 'کوچه',
+        'side_alley': 'کوچه', 'building_name': 'ساختمان',
+        'floor': 'طبقه', 'unit': 'واحد', 'house_number': 'پلاک', 'postal_code': 'کدپستی'
+    }))
+    const [address, setAddress] = useState({})
+
+    useEffect(() => {
+        Object.entries(values).forEach(([field, value]) => {
+            Object.keys(addressLabels).forEach(label => {
+                if(!['province', 'city', 'area'].includes(label) && value) {
+                    if(field === label) setAddress(prev => ({ ...prev, [label]: value }))
+                }
+            })
+        })
+    }, [values])
 
     return (
         <Grid container bgcolor="#e3e3e3ff" my={1} p={2} borderRadius={1} gap={1}>
@@ -32,35 +41,16 @@ export default function LocationInputs({
                     <span>اطلاعات محل سکونت</span>
                 </Typography>
             </Grid>
-            <SelectProvinceCity
-                values={values} touched={touched} 
+            <SelectProvinceCityArea
+                values={values} touched={touched}
                 errors={errors} setFieldValue={setFieldValue}
+                address={address} setAddress={setAddress}
             />
-            <Grid size={{ xs: 12, md: 6, lg: 3 }}>
-                <FormControl fullWidth
-                    error={touched.area && Boolean(errors.area)}>
-                    <InputLabel>منطقه *</InputLabel>
-                    <Select
-                        value={values.area}
-                        onChange={(e) => setFieldValue("area", e.target.value)}
-                        label="منطقه"
-                    >
-                        {AREA_ITEMS.map(item => (
-                            <MenuItem key={item.id} value={item.id}>
-                                {item.title}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                    <FormHelperText>
-                        {touched.area && errors.area}
-                    </FormHelperText>
-                </FormControl>
-            </Grid>
             {addressInputs.map(input => (
                 <Grid key={input.name} size={{ xs: 12, md: 6, lg: 3 }}>
                     <TextField
                         fullWidth
-                        required={input.name === 'alley' || input.name === 'building_name' ? false : true}
+                        required={optionalFields.includes(input.name) ? false : true}
                         label={input.label}
                         name={input.name}
                         value={values[input.name]}
@@ -69,9 +59,50 @@ export default function LocationInputs({
                         error={touched[input.name] && Boolean(errors[input.name])}
                         helperText={touched[input.name] && errors[input.name]}
                         sx={{ mb: 2 }}
+                        slotProps={{
+                            input: {
+                                endAdornment: (
+                                    <>
+                                        {input.name === 'postal_code' && (
+                                            <InputAdornment position='end'>
+                                                <IconButton edge="end" title="استعلام کد پستی">
+                                                    <ShareLocation color='#4a4848' />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )}
+                                    </>
+                                )
+                            }
+                        }}
                     />
                 </Grid>
             ))}
+
+            {Object.keys(address).length > 0 && (
+                <Grid size={{ xs: 8 }}>
+                    <Box
+                        width="100%"
+                        border="1px solid #c2b8b8"
+                        borderRadius={1}
+                        p={2}
+                    >
+                        <Typography fontSize={20} color="#827d7d" display="flex" alignItems="center">
+                            <PinDrop sx={{ mr: 1 }} />
+                            <span>آدرس محل سکونت مشتری :</span>
+                        </Typography>
+                        <Typography color="#827d7d" fontSize={18} mt={1}>
+                            {Object.entries(addressLabels).map(([name, label]) => {
+                                if (address[name]) return (
+                                    <span key={name}>
+                                        {label}{" "}
+                                        <b>{address[name]}</b>{name !== "postal_code" && "، "}
+                                    </span>
+                                )
+                            })}
+                        </Typography>
+                    </Box>
+                </Grid>
+            )}
         </Grid>
     )
 }

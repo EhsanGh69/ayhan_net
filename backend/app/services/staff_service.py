@@ -127,7 +127,7 @@ def get_staff_list(session: Session):
 def get_staff_detail(user_id: int, session: Session):
     staff = session.exec(select(Staff).where(Staff.user_id == user_id)).first()
     if not staff:
-        raise HTTPException(status_code=404, detail="User staff not found")
+        raise HTTPException(status_code=404, detail="کاربری یافت نشد")
     
     return staff
     

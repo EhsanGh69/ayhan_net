@@ -5,10 +5,12 @@ import moment from 'jalali-moment';
 
 import { useTicketRecordDetail } from '../../hooks/useTicketRecord';
 import { modalBox } from "../../styles/globalStyles";
+import useErrorHandler from "../../hooks/useErrorHandler";
+import InfosTable from '../table/InfosTable';
 
 
 export default function SubsTicketDetailModal({
-    open, closeHandler, setSnackbar, recordId, showSubsInfo = false, openResponse = null,
+    open, closeHandler, setSnackbar, recordId, openResponse = null,
     openChangeStaff = null
 }) {
 
@@ -17,14 +19,7 @@ export default function SubsTicketDetailModal({
     } = useTicketRecordDetail(recordId)
 
 
-    useEffect(() => {
-        const errResponse = tRecordDetailErr?.response?.data?.detail
-        const errorMsg = typeof errResponse === 'string' ? errResponse : 'خطا در دریافت اطلاعات'
-        if (isTRecordDetailErr) {
-            setSnackbar({ open: true, message: errorMsg, severity: 'error' })
-            closeHandler()
-        }
-    }, [isTRecordDetailErr, tRecordDetailErr])
+    useErrorHandler(isTRecordDetailErr, tRecordDetailErr, setSnackbar)
 
     const infoStyles = useMemo(() => ({
         bgcolor: "secondary.main",
@@ -41,6 +36,10 @@ export default function SubsTicketDetailModal({
             { label: 'گروه تیکت', value: ticketRecordDetail?.group },
             { label: 'نام تیکت', value: ticketRecordDetail?.name },
             { label: 'توضیحات تیکت', value: ticketRecordDetail?.content },
+            { label: 'توضیحات پاسخ تیکت', value: ticketRecordDetail?.response?.content },
+            { label: 'مشترک', value:
+                `${ticketRecordDetail?.subscriber.first_name} ${ticketRecordDetail?.subscriber.last_name}` 
+            },
             { label: 'کاربر ثبت کننده', value: ticketRecordDetail?.user.display_name },
             {
                 label: 'ارجاع شده به کارتابل',
@@ -64,8 +63,7 @@ export default function SubsTicketDetailModal({
 
     return (
         <Modal open={open} onClose={closeHandler}>
-            <Box sx={modalBox} width={{ xs: "80%", md: "60%", lg: "40%", xl: "35%" }}>
-
+            <Box sx={{ ...modalBox }} width={{ xs: "80%", md: "60%", lg: "40%", xl: "35%" }}>
                 <IconButton size='medium' title='بستن'
                     sx={{ m: 0, p: 0, position: 'absolute', right: 5, top: 10 }}
                     onClick={closeHandler}
@@ -81,28 +79,7 @@ export default function SubsTicketDetailModal({
                     جزئیات تیکت
                 </Typography>
 
-                {detailItems.map((item, index) => (
-                    <Box key={index} mt={1}>
-                        <Typography variant='h6' sx={{ ...infoStyles }} component='p'>
-                            <span>{item.label}</span>
-                            <ArrowLeft fontSize='large' />
-                            <b>{item.value}</b>
-                        </Typography>
-                    </Box>
-                ))}
-
-                {showSubsInfo && (
-                    <Box mt={1}>
-                        <Typography variant='h6' sx={{ ...infoStyles }} component='p'>
-                            <span>مشترک</span>
-                            <ArrowLeft fontSize='large' />
-                            <b>
-                                {ticketRecordDetail?.subscriber.first_name}{" "}
-                                {ticketRecordDetail?.subscriber.last_name}
-                            </b>
-                        </Typography>
-                    </Box>
-                )}
+                <InfosTable infoItems={detailItems} />
 
                 {!!openResponse && (
                     <Button variant='contained' sx={{ mt: 2, fontSize: 25 }}

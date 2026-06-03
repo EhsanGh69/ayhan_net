@@ -115,7 +115,6 @@ export default function TicketsRefersList() {
                 closeHandler={() => setDetailModalOpen(false)}
                 setSnackbar={setSnackbar}
                 recordId={recordId}
-                showSubsInfo={true}
                 openResponse={() => setResponseModalOpen(true)}
                 openChangeStaff={() => setChangeStaffModalOpen(true)}
             />

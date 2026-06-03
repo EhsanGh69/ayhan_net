@@ -7,13 +7,16 @@ from fastapi.routing import APIRoute
 from app.routers.admin_router import router as admin_router
 from app.routers.auth_router import router as auth_router
 from app.routers.staff_router import router as staff_router
-from app.routers.provinces_router import router as provinces_router
 from app.routers.subscriber_router import router as subscriber_router
 from app.routers.ticket_router import router as ticket_router
 from app.routers.ticket_record_router import router as ticket_record_router
+from app.routers.location_router import router as location_router
 
 
-app = FastAPI(title="Ayhan Net")
+app = FastAPI(
+    title="Ayhan Net",
+    debug=False
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -26,10 +29,10 @@ app.add_middleware(
 app.include_router(admin_router)
 app.include_router(auth_router)
 app.include_router(staff_router)
-app.include_router(provinces_router)
 app.include_router(subscriber_router)
 app.include_router(ticket_router)
 app.include_router(ticket_record_router)
+app.include_router(location_router)
 
 app.mount("/media", StaticFiles(directory="app/media"), name="media")
 app.mount("/statics", StaticFiles(directory="app/statics"), name="statics")

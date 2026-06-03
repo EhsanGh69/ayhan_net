@@ -25,9 +25,9 @@ export const useSearchSubscriber = (searchParams) => {
         data: searchSubs, isLoading: searchSubsLoading, 
         error: searchSubsErr, isError: isSearchSubsErr
     } = useQuery({
-        queryKey: ['subscribersList', query, field],
+        queryKey: ['searchSubscribers', query, field],
         queryFn: async () => {
-            const data = await subscriberService.getSubscribers(query, field)
+            const data = await subscriberService.searchSubscribers(query, field)
             return data
         },
         retry: 1,
@@ -45,9 +45,11 @@ export const useSubscriber = (subsId) => {
     } = useQuery({
         queryKey: ['subscriberDetail', subsId],
         queryFn: async () => {
-            setData('provinceId', null)
+            setData('province', null)
+            setData('city', null)
             const data = await subscriberService.getSubscriber(subsId)
             setData('provinceId', data.province_id)
+            setData('cityId', data.city_id)
             return data
         },
         retry: 1,
@@ -76,7 +78,7 @@ export const useRemoveSubscriber = () => {
 
 export const useCheckSubscriberExist = () => {
     const { 
-        mutateAsync: checkSubsExist, isError: isCheckSubsExistErr
+        mutateAsync: checkSubsExist, isError: isCheckSubsExistErr, error: checkSubsExistErr
     } = useMutation({
         mutationFn: async (subsData) => {
             const result = await subscriberService.checkSubscriberExist(subsData)
@@ -84,7 +86,7 @@ export const useCheckSubscriberExist = () => {
         }
     })
 
-    return { checkSubsExist, isCheckSubsExistErr }
+    return { checkSubsExist, isCheckSubsExistErr, checkSubsExistErr }
 }
 
 export const useAddSubscriber = () => {
@@ -115,36 +117,11 @@ export const useEditSubscriber = () => {
             const result = await subscriberService.updateSubscriber(subsId, subsData)
             return result
         },
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['subscribersList'] })
-    })
-
-    return { editSubscriber, editSubsPending, editSubsError, isEditSubsError }
-}
-
-export const useLocation = () => {
-    const { 
-        data: provincesList, error: provListErr, isError: isProvListErr
-    } = useQuery({
-        queryKey: ['provincesList'],
-        queryFn: async () => {
-            const data = await subscriberService.getProvinces()
-            return data
-        },
-        staleTime: 5 * 60 * 1000,
-        gcTime: 10 * 60 * 1000,
-        retry: 1
-    })
-
-    const { mutateAsync: getCities, error: getCitiesError, isError: isGetCitiesError 
-    } = useMutation({
-        mutationFn: async (provinceId) => {
-            const result = await subscriberService.getProvinceCities(provinceId)
-            return result
+        onSuccess: (data, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['subscribersList'] })
+            queryClient.invalidateQueries({ queryKey: ['subscriberDetail', variables.subsId] })
         }
     })
 
-    return { 
-        provincesList, provListErr, isProvListErr,
-        getCities, getCitiesError, isGetCitiesError
-    }
+    return { editSubscriber, editSubsPending, editSubsError, isEditSubsError }
 }

@@ -50,5 +50,7 @@ export const menuItems = [
             { title: 'زیر منو 1', icon: LocalOffer, path: '/feasibility_cartable' },
         ]
     },
-    { title: 'تنظیمات', icon: Settings, path: '/settings' },
+    { title: 'تنظیمات', icon: Settings, path: '/settings', subPaths: [
+        '/settings/locations'
+    ] },
 ];

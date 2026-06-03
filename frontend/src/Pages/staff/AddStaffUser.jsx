@@ -7,6 +7,7 @@ import SnackAlert from '../../components/SnackAlert';
 import { useAddStaff } from '../../hooks/useStaff'
 import StaffForm from '../../components/staff/StaffForm';
 import { addStaffSchema } from '../../validations/usersValidations'
+import getISODate from '../../utils/getISODate';
 
 
 export default function AddStaffUser() {
@@ -24,7 +25,7 @@ export default function AddStaffUser() {
         }))
         formData.append("staff_data", JSON.stringify({
             display_name: values.display_name, national_id: values.national_id,
-            birth_date: values.birth_date.toDate().toISOString().slice(0, 10),
+            birth_date: getISODate(values.birth_date),
             father_name: values.father_name, mobile: values.mobile,
             phone: values.phone, org_mobile: values.org_mobile,
             org_phone: values.org_phone, address: values.address,

@@ -31,7 +31,7 @@ export default function IdentityInputs({
             <Field
               fullWidth
               name="birth_date"
-              label="تاریخ تولد *"
+              label={values.subscriber_type === 'legal' ? "تاریخ تولد نماینده شرکت/سازمان *" : "تاریخ تولد *"}
               component={JalaliDateField}
             />
           </Grid>
@@ -63,7 +63,7 @@ export default function IdentityInputs({
             <TextField
               fullWidth
               required
-              label={input.label}
+              label={values.subscriber_type === 'legal' ? `${input.label} نماینده شرکت/سازمان` : input.label}
               name={input.name}
               value={values[input.name]}
               onChange={handleChange}

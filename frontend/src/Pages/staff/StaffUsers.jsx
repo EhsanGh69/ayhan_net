@@ -27,7 +27,9 @@ export default function StaffUsers() {
   const normalizeHandler = (filteredData) => {
     return filteredData.map(row => {
       const { user, ...rest } = row
-      return { ...rest, ...user, full_name: `${user.first_name} ${user.last_name}` }
+      return { ...rest, ...user, 
+        full_name: `${user.first_name} ${user.last_name}`, is_admin: user.is_admin 
+      }
     })
   }
 

@@ -46,6 +46,10 @@ export default function SearchSubs({
                     autoComplete='off'
                     value={queryInput}
                     onChange={(e) => setQueryInput(e.target.value)}
+                    onKeyUp={(e) => {
+                        if(e.key === 'Enter') 
+                            setSearchParams(prev => ({ ...prev, field: fieldInput, query: queryInput }))
+                    }}
                     sx={{ minWidth: 300 }}
                     disabled={!fieldInput}
                     slotProps={{

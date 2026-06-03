@@ -32,15 +32,15 @@ class UserBaseSchema(BaseModel):
     last_name: str = Field(min_length=3, max_length=50, pattern=r"^[\u0600-\u06FF\s]+$")
     username: str = Field(min_length=3, max_length=50)
     
-    @field_validator("username")
-    def validate_username(cls, v):
-        if not re.fullmatch(r"[A-Za-z0-9_.@-]+", v):
-            raise ValueError("Invalid characters in username")
-        if not re.search(r"[A-Za-z]", v): 
-            raise ValueError("Username must contain at least one letter")
-        if not re.search(r"[0-9]", v):
-            raise ValueError("Username must contain at least one digit")
-        return v
+    # @field_validator("username")
+    # def validate_username(cls, v):
+    #     if not re.fullmatch(r"[A-Za-z0-9_.@-]+", v):
+    #         raise ValueError("Invalid characters in username")
+    #     if not re.search(r"[A-Za-z]", v): 
+    #         raise ValueError("Username must contain at least one letter")
+    #     if not re.search(r"[0-9]", v):
+    #         raise ValueError("Username must contain at least one digit")
+    #     return v
 
 
 class PasswordSchema(BaseModel):
@@ -73,10 +73,11 @@ class ChangePasswordSchema(BaseModel):
 
 class UserDetailSchema(BaseModel):
     id: int
-    first_name: str
-    last_name: str
+    first_name: str | None
+    last_name: str | None
     username: str
     is_active: bool
+    is_admin: bool
     
     model_config = { "from_attributes": True }
 

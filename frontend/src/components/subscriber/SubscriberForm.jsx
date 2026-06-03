@@ -5,6 +5,7 @@ import { Form, Formik } from 'formik'
 import IdentityInputs from './IdentityInputs';
 import ContactInputs from './ContactInputs';
 import LocationInputs from './LocationInputs';
+import CorporateInputs from './CorporateInputs';
 
 export default function SubscriberForm({
     initialValues, handleSubmit, validationSchema, isPending, btnTxt
@@ -27,6 +28,16 @@ export default function SubscriberForm({
                         handleChange={handleChange}
                         setFieldValue={setFieldValue}
                     />
+
+                    {values.subscriber_type === 'legal' && (
+                        <CorporateInputs
+                            values={values}
+                            errors={errors}
+                            touched={touched}
+                            handleBlur={handleBlur}
+                            handleChange={handleChange}
+                        />
+                    )}
 
                     <ContactInputs
                         values={values}
