@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { PersonAddAlt } from '@mui/icons-material'
 
+import MainPage from '../MainPage';
 import MainTable from '../../components/table/MainTable';
 import StaffTableRow from '../../components/staff/StaffTableRow';
 import { useStaffList } from '../../hooks/useStaff'
@@ -40,7 +41,7 @@ export default function StaffUsers() {
 
 
   return (
-    <>
+    <MainPage>
       <ChangeActModal
         closeHandler={() => setActModalOpen(false)}
         open={actModalOpen}
@@ -75,6 +76,6 @@ export default function StaffUsers() {
         )}
       />
       <SnackAlert snackbar={snackbar} setSnackbar={setSnackbar} />
-    </>
+    </MainPage>
   )
 }

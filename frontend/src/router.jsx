@@ -7,6 +7,7 @@ import staffRoutes from './Pages/staff/routes';
 import subscriberRoutes from './Pages/subscriber/routes';
 import ticketRoutes from './Pages/ticket/routes';
 import settingsRoutes from './Pages/settings/routes';
+import sellServicesRoutes from './Pages/sellServices/routes';
 
 const Register = lazy(() => import("./Pages/Register"));
 const Login = lazy(() => import("./Pages/Login"));
@@ -26,5 +27,6 @@ export const router = createBrowserRouter([
     ...staffRoutes,
     ...subscriberRoutes,
     ...ticketRoutes,
-    ...settingsRoutes
+    ...settingsRoutes,
+    ...sellServicesRoutes
 ])

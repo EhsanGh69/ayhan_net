@@ -9,6 +9,13 @@ from app.schemas.subscriber_schema import (
     SubscriberCreateUpdateSchema, SubscriberViewSchema, SubscriberRegister,
     CheckSubscriberExist, CorporationSchema
 )
+
+
+def subs_exist_query(subscriber_id: int, session: Session):
+    subscriber = session.get(Subscriber, subscriber_id)
+    if not subscriber:
+        raise HTTPException(status_code=404, detail="Subscriber is not found")
+    return subscriber
     
 
 def check_subs_exist_service(
@@ -79,15 +86,13 @@ def update_subscriber_service(
     subscriber_data: SubscriberCreateUpdateSchema,
     corporate_data: Optional[CorporationSchema] = None,
 ):
-    subscriber = session.get(Subscriber, subscriber_id)
-    if not subscriber:
-        raise HTTPException(status_code=404, detail="Subscriber is not found")
+    subscriber = subs_exist_query(subscriber_id, session)
         
     for field, value in subscriber_data.model_dump().items():
         setattr(subscriber, field, value)
 
         
-    if len(subscriber.subscriber_code) < 10:
+    if subscriber.subscriber_code and len(subscriber.subscriber_code) < 10:
         subs_code = generate_random_code(10)
         subscriber.subscriber_code = subs_code
         subscriber.status = "پیش ثبت نام"
@@ -113,9 +118,7 @@ def get_subscriber_detail(
     subscriber_id: int,
     session: Session
 ):
-    subscriber = session.get(Subscriber, subscriber_id)
-    if not subscriber:
-        raise HTTPException(status_code=404, detail="Subscriber not found")
+    subscriber = subs_exist_query(subscriber_id, session)
     
     subs_type = subscriber.subscriber_type
     
@@ -143,7 +146,7 @@ def get_subscribers_list(session: Session):
     return session.exec(select(Subscriber).order_by(desc(Subscriber.id))).all()
 
 
-def get_sub_location(location: str, location_id: int, session: Session):
+def sub_location_query(location: str, location_id: int, session: Session):
     if not location_id: 
         return None
     if location == "province":
@@ -177,17 +180,20 @@ def search_subscribers_service(
             national_id=sub.national_id, phone=sub.phone, status=sub.status,
             birth_date=sub.birth_date, father_name=sub.father_name,
             certificate_number=sub.certificate_number, mobile=sub.mobile,
-            province=(get_sub_location("province", sub.province_id, session)), 
-            city=(get_sub_location("city", sub.city_id, session)), 
-            area=(get_sub_location("area", sub.area, session)),
+            province=(sub_location_query("province", sub.province_id, session)), 
+            city=(sub_location_query("city", sub.city_id, session)), 
+            area=(sub_location_query("area", sub.area, session)),
             alley=sub.alley, building_name=sub.building_name, 
             house_number=sub.house_number, main_street=sub.main_street, 
             postal_code=sub.postal_code, side_street=sub.side_street,
             subscriber_type=sub.subscriber_type, subscriber_code=sub.subscriber_code,
             floor=sub.floor, side_alley=sub.side_alley,unit=sub.unit,
-            corporate_name=(None if sub.subscriber_type == 'real' else sub.corporation.name),
-            registration_number=(None if sub.subscriber_type == 'real' else sub.corporation.registration_number),
-            corporate_national_id=(None if sub.subscriber_type == 'real' else sub.corporation.national_id),
+            corporate_name=(None if not sub.subscriber_type or sub.subscriber_type == 'real' 
+                            else sub.corporation.name),
+            registration_number=(None if not sub.subscriber_type or sub.subscriber_type == 'real' 
+                                 else sub.corporation.registration_number),
+            corporate_national_id=(None if not sub.subscriber_type or sub.subscriber_type == 'real' 
+                                   else sub.corporation.national_id),
             
         )
         for sub in session.exec(select(Subscriber).where(column.ilike(f"%{query}%"))).all()
@@ -198,9 +204,7 @@ def remove_subscriber_service(
     subscriber_id: int,
     session: Session
 ):
-    subscriber = session.get(Subscriber, subscriber_id)
-    if not subscriber:
-        raise HTTPException(status_code=404, detail="Subscriber not found")
+    subscriber = subs_exist_query(subscriber_id, session)
     
     if subscriber.subscriber_type == 'legal':
         corporate = session.exec(
@@ -211,5 +215,3 @@ def remove_subscriber_service(
     session.delete(subscriber)
     session.commit()
     return JSONResponse(status_code=200, content={"detail": "Subscriber removed successfully"})
-
-# extract local province-city

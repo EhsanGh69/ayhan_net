@@ -44,4 +44,6 @@ class Subscriber(SQLModel, table=True):
     
     subscriber_ticket: Optional["TicketRecord"] = Relationship(back_populates="subscriber") # type: ignore
     corporation: Optional["Corporation"] = Relationship(back_populates="subscriber") # type: ignore
+    phone_sub: Optional["PhoneSubscription"] = Relationship(back_populates="subscriber") # type: ignore
+    nid_sub: Optional["NationalIdImage"] = Relationship(back_populates="subscriber") # type: ignore
      

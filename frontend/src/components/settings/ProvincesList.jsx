@@ -3,7 +3,8 @@ import { Add } from "@mui/icons-material"
 
 
 export default function ProvincesList({ 
-    allProvinces, selectedProvince, setSelectedProvince, setSelectedCity, setTitle, setModalOpen
+    allProvinces, selectedProvince, setSelectedProvince, setSelectedCity, setTitle, setModalOpen,
+    setLocationName
 }) {
     return (
         <Box display="flex">
@@ -35,6 +36,7 @@ export default function ProvincesList({
                 title='افزودن استان جدید'
                 onClick={() => {
                     setTitle('استان')
+                    setLocationName('')
                     setModalOpen(true)
                 }}
             >

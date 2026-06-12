@@ -7,10 +7,11 @@ import SnackAlert from '../../components/SnackAlert';
 import LoadingBox from '../../components/LoadingBox';
 import SearchBox from './SearchBox';
 import TableContent from './TableContent';
+import useErrorHandler from '../../hooks/useErrorHandler'
 
-export default function MainTable({ 
-    initOrder='', filteredData, isError, error, isLoading, title, addRoute, headCells,
-    searchChildren, tableChildren, AddIcon
+export default function MainTable({
+  initOrder = '', filteredData, isError, error, isLoading, title = '', addRoute, headCells,
+  searchChildren, tableChildren, AddIcon, showAddBtn = true
 }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -20,11 +21,7 @@ export default function MainTable({
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState(initOrder)
 
-  useEffect(() => {
-    const errResponse = error?.response?.data?.detail
-    const errorMsg = typeof errResponse === 'string' ? errResponse : 'خطا در دریافت اطلاعات'
-    if (isError) setSnackbar({ open: true, message: errorMsg, severity: 'error' })
-  }, [isError, error])
+  useErrorHandler(isError, error, setSnackbar)
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -33,15 +30,15 @@ export default function MainTable({
   }
 
   const sortedRows = useMemo(() => {
-    if(!filteredData) return []
+    if (!filteredData) return []
     return [...filteredData].sort((a, b) => {
       const A = a[orderBy]
       const B = b[orderBy]
 
-      if(typeof A === 'string'){
+      if (typeof A === 'string') {
         return order === 'asc'
-        ? A.localeCompare(B)
-        : B.localeCompare(A)
+          ? A?.localeCompare(B)
+          : B?.localeCompare(A)
       }
 
       return order === 'asc' ? A - B : B - A
@@ -60,23 +57,28 @@ export default function MainTable({
   }
 
   return (
-    <MainPage>
+    <>
       <Paper
         sx={{
-          width: '95%', p: 2,
-          border: '1px solid #000',
+          width: '95%',
+          p: 2,
+          border: '1px solid #918484',
           backgroundColor: '#c2bfbf',
           ml: isMobile ? -2 : 0
         }}
       >
-        <SearchBox addRoute={addRoute} isMobile={isMobile} title={title} AddIcon={AddIcon}>
+        <SearchBox
+          addRoute={addRoute} isMobile={isMobile}
+          title={title} AddIcon={AddIcon}
+          showAddBtn={showAddBtn}
+        >
           {searchChildren}
         </SearchBox>
 
-        {!!filteredData?.length 
+        {!!filteredData?.length
           ? (
-            <TableContent 
-              sortedRows={sortedRows} order={order} 
+            <TableContent
+              sortedRows={sortedRows} order={order}
               orderBy={orderBy} headCells={headCells}
               handleRequestSort={handleRequestSort}
               page={page} rowsPerPage={rowsPerPage}
@@ -104,6 +106,6 @@ export default function MainTable({
         />
       </Paper>
       <SnackAlert snackbar={snackbar} setSnackbar={setSnackbar} />
-    </MainPage>
+    </>
   )
 }

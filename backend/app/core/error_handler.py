@@ -1,7 +1,7 @@
 import traceback
 import logging
 from functools import wraps
-from fastapi.exceptions import HTTPException, ResponseValidationError
+from fastapi.exceptions import HTTPException
 
 
 logging.basicConfig(

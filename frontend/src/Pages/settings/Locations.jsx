@@ -15,6 +15,7 @@ export default function Locations() {
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
     const [selectedProvince, setSelectedProvince] = useState('')
     const [selectedCity, setSelectedCity] = useState('')
+    const [locationName, setLocationName] = useState('')
 
     const [selectedLocation, setSelectedLocation] = useState('')
     const [title, setTitle] = useState('')
@@ -49,6 +50,8 @@ export default function Locations() {
                 setSnackbar={setSnackbar}
                 title={title}
                 selectedLocation={selectedLocation}
+                locationName={locationName}
+                setLocationName={setLocationName}
             />
 
             <Paper
@@ -74,6 +77,7 @@ export default function Locations() {
                                 setSelectedCity={setSelectedCity}
                                 setModalOpen={setModalOpen}
                                 setTitle={setTitle}
+                                setLocationName={setLocationName}
                             />
 
                             <CitiesList
@@ -84,6 +88,7 @@ export default function Locations() {
                                 setSelectedLocation={setSelectedLocation}
                                 setModalOpen={setModalOpen}
                                 setTitle={setTitle}
+                                setLocationName={setLocationName}
                             />
 
                             {(selectedCity && cityAreas) && (
@@ -93,6 +98,7 @@ export default function Locations() {
                                     setSelectedLocation={setSelectedLocation}
                                     setModalOpen={setModalOpen}
                                     setTitle={setTitle}
+                                    setLocationName={setLocationName}
                                 />
                             )}
                         </>

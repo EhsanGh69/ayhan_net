@@ -8,9 +8,8 @@ import useErrorHandler, { isPersian } from '../../hooks/useErrorHandler'
 
 
 export default function CreateLocationModal({
-    open, closeHandler, selectedLocation = '', title, setSnackbar
+    open, closeHandler, selectedLocation = '', title, setSnackbar, locationName, setLocationName
 }) {
-    const [locationName, setLocationName] = useState('')
     const [notPersian, setNotPersian] = useState(false)
 
     useEffect(() => {

@@ -2,7 +2,9 @@ import { Box, Button, Chip, Paper, Stack, Typography } from "@mui/material"
 import { Add } from "@mui/icons-material"
 
 
-export default function AreasList({ cityAreas, selectedCity, setSelectedLocation, setTitle, setModalOpen }) {
+export default function AreasList({ 
+    cityAreas, selectedCity, setSelectedLocation, setTitle, setModalOpen, setLocationName
+}) {
     return (
         <Paper variant="outlined" sx={{ p: 2, bgcolor: '#f5f5f5' }}>
             <Box display="flex" justifyContent="space-between">
@@ -17,6 +19,7 @@ export default function AreasList({ cityAreas, selectedCity, setSelectedLocation
                     onClick={() => {
                         setSelectedLocation(selectedCity)
                         setTitle('منطقه')
+                        setLocationName('')
                         setModalOpen(true)
                     }}
                 >

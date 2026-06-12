@@ -1,7 +1,7 @@
 import {
   Dashboard, ShoppingCart , People , Settings , ContactPhone,
   LocalOffer, Assessment , ShoppingBasket , Comment , Payment ,
-  Store as StoreIcon, AssignmentReturn ,
+  Store as StoreIcon, AssignmentReturn , PhoneInTalk,
   Engineering, AdminPanelSettings, SupervisedUserCircle
 } from '@mui/icons-material';
 
@@ -12,7 +12,7 @@ export const menuItems = [
             { title: 'مشتری ها', icon: ContactPhone, path: '/subscribers', 
                 subPaths: ['/subscribers/add', '/subscribers/edit']
             },
-            { title: 'فروش / پیگیری اشتراک تلفن ثابت', icon: ShoppingBasket, path: '/phone' },
+            { title: 'فروش / پیگیری اشتراک تلفن ثابت', icon: PhoneInTalk, path: '/sellServices/phone' },
             { title: 'فروش / پیگیری اشتراک اینترنت', icon: ShoppingBasket, path: '/internet' },
             { title: 'فروش / پیگیری تجهیز انتهایی', icon: ShoppingBasket, path: '/tools' },
         ]

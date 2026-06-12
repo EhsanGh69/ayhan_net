@@ -53,6 +53,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         compare_type=True,
+        compare_server_default=True,
         dialect_opts={"paramstyle": "named"},
     )
 

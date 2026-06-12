@@ -83,7 +83,7 @@ def subscribers_search(
 @handle_errors
 def subscriber_detail(
     subscriber_id: int,
-    auth_user: int = Depends(verify_access),
+    # auth_user: int = Depends(verify_access),
     session: Session = Depends(get_session)
 ):
     return get_subscriber_detail(subscriber_id, session)

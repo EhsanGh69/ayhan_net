@@ -7,9 +7,11 @@ from .ticket_model import Ticket
 from .ticket_record_model import TicketRecord
 from .corporation_model import Corporation
 from .location_models import Province, City, Area
+from .phone_subscription_model import PhoneSubscription, NationalIdImage
 
 
 __all__ = [
     "User", "RefreshToken", "Staff", "Subscriber", "TicketGroup",
-    "Ticket", "TicketRecord", "Corporation", "Province", "City", "Area"
+    "Ticket", "TicketRecord", "Corporation", "Province", "City", "Area",
+    "PhoneSubscription", "NationalIdImage"
 ]

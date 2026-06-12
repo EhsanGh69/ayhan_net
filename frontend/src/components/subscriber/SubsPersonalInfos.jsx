@@ -17,7 +17,10 @@ export default function SubsPersonalInfos({ rowData }) {
     const infoItems = useMemo(() => ([
         {
             name: 'subscriber_type', label: 'نوع مشترک',
-            value: rowData.subscriber_type === 'real' ? 'حقیقی' : 'حقوقی'
+            value: rowData.subscriber_type ?
+             rowData.subscriber_type === 'real' 
+             ? 'حقیقی' : 'حقوقی'
+             : ''
         },
         { name: 'first_name', label: 'نام', value: rowData.first_name },
         { name: 'last_name', label: 'نام خانوادگی', value: rowData.last_name },

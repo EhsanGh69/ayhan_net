@@ -1,12 +1,12 @@
 import axios from 'axios';
 import axiosInstance from './axiosConfig';
 
-const BASE_URL = "http://127.0.0.1:8000/api"
+import { API_URL } from '../configUrl'
 
 export const authService = {
     login: async (credentials) => {
         try {
-            const { data } = await axios.post(`${BASE_URL}/auth/login`, credentials)
+            const { data } = await axios.post(`${API_URL}/auth/login`, credentials)
             return data
         } catch (error) {
             throw error
@@ -17,7 +17,7 @@ export const authService = {
             const refreshToken = localStorage.getItem('refresh_token')
 
             if (refreshToken) {
-                await axios.post(`${BASE_URL}/auth/logout`, {}, {
+                await axios.post(`${API_URL}/auth/logout`, {}, {
                     headers: { "Authorization": `Bearer ${refreshToken}` }
                 })
             }
@@ -65,7 +65,7 @@ export const authService = {
     },
     subscriberRegister: async (subsData) => {
         try {
-            const { data } = await axios.post(`${BASE_URL}/subscribers/register`, subsData)
+            const { data } = await axios.post(`${API_URL}/subscribers/register`, subsData)
             return data
         } catch (error) {
             console.log(error.response?.data?.detail)

@@ -6,6 +6,7 @@ import { Form, Formik } from 'formik'
 import Captcha from '../components/Captcha';
 import EndInputAdornment from '../components/auth/EndInputAdornment';
 import { useAuth } from '../hooks/useAuth';
+import useErrorHandler from '../hooks/useErrorHandler'
 import { loginSchema } from '../validations/authValidations'
 import SnackAlert from '../components/SnackAlert';
 
@@ -24,11 +25,7 @@ export default function Login() {
         await login({ username: values.username, password: values.password })
     }
 
-    useEffect(() => {
-        const errResponse = loginError?.response?.data?.detail
-        const errorMsg = typeof errResponse === 'string' ? errResponse : 'خطا در ارسال اطلاعات'
-        if (isLoginError) setSnackbar({ open: true, message: errorMsg, severity: 'error' })
-    }, [isLoginError, loginError])
+    useErrorHandler(isLoginError, loginError, setSnackbar)
 
     return (
         <Container component="main" maxWidth="xs">

@@ -11,6 +11,7 @@ from app.routers.subscriber_router import router as subscriber_router
 from app.routers.ticket_router import router as ticket_router
 from app.routers.ticket_record_router import router as ticket_record_router
 from app.routers.location_router import router as location_router
+from app.routers.phone_subscription_router import router as phone_subscription_router
 
 
 app = FastAPI(
@@ -24,6 +25,7 @@ app.add_middleware(
     allow_credentials=True, 
     allow_methods=["*"], 
     allow_headers=["*"],
+    expose_headers=["Content-Disposition"]
 )
 
 app.include_router(admin_router)
@@ -33,6 +35,7 @@ app.include_router(subscriber_router)
 app.include_router(ticket_router)
 app.include_router(ticket_record_router)
 app.include_router(location_router)
+app.include_router(phone_subscription_router)
 
 app.mount("/media", StaticFiles(directory="app/media"), name="media")
 app.mount("/statics", StaticFiles(directory="app/statics"), name="statics")

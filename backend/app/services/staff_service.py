@@ -1,5 +1,3 @@
-import uuid
-import os
 from fastapi import UploadFile, HTTPException
 from sqlmodel import Session, select
 
@@ -7,45 +5,10 @@ from app.models import User, Staff
 from app.schemas.auth_schema import UserBaseSchema, UserCreateSchema
 from app.schemas.staff_schema import StaffBaseSchema
 from app.core.security import hash_password
+from app.core.file_management import image_validation, save_file, delete_file
+
 
 MEDIA_ROOT = "app/media/org_images"
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
-MAX_FILE_SIZE = 200 * 1024  # 200KB
-
-def validate_org_image(file: UploadFile):
-    ext = file.filename.split(".")[-1].lower()
-    if ext not in ALLOWED_EXTENSIONS:
-        raise HTTPException(
-            status_code=400,
-            detail=f"فرمت تصویر آپلود شده غیرمجاز است"
-        )
-    
-    file.file.seek(0, 2) # go to end of file
-    size = file.file.tell()
-    file.file.seek(0) # go to start of file
-    if size > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=400,
-            detail=f"سایز تصویر آپلود شده بیش از حد مجاز است"
-        )
-    
-
-def save_org_image(file: UploadFile):
-    ext = file.filename.split(".")[-1]
-    unique_name = f"{uuid.uuid4()}.{ext}"
-    file_path = os.path.join(MEDIA_ROOT, unique_name)
-    with open(file_path, "wb") as f:
-        f.write(file.file.read())
-        
-    return unique_name
-
-def delete_org_image(filename: str):
-    if not filename:
-        return
-    file_path = os.path.join(MEDIA_ROOT, filename)
-    if os.path.exists(file_path):
-        os.remove(file_path)
-
 
 def create_staff_service(
     user_data: UserCreateSchema,
@@ -66,8 +29,8 @@ def create_staff_service(
     
     filename = None
     if org_image:
-        validate_org_image(org_image)
-        filename = save_org_image(org_image)
+        image_validation(org_image)
+        filename = save_file(org_image, MEDIA_ROOT)
     staff = Staff(
         **staff_data.model_dump(),
         org_image=filename, 
@@ -97,10 +60,9 @@ def update_staff_services(
     for field, value in staff_data.model_dump().items():
         setattr(staff, field, value)
     if org_image:
-        validate_org_image(org_image)
-        delete_org_image(staff.org_image)
-        new_filename = save_org_image(org_image)
-        staff.org_image = new_filename
+        image_validation(org_image)
+        delete_file(staff.org_image, MEDIA_ROOT)
+        staff.org_image = save_file(org_image, MEDIA_ROOT)
         
     session.commit()
     session.refresh(staff)

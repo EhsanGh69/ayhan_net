@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { PersonAdd } from '@mui/icons-material'
+import { useState } from 'react'
+import { PersonAdd, Sync } from '@mui/icons-material'
 
 import MainTable from '../../components/table/MainTable';
 import { subscriberHeadCells } from '../../constants/tableHeadCells'
@@ -8,6 +8,8 @@ import SubscriberTableRow from '../../components/subscriber/SubscriberTableRow';
 import RemoveSubsModal from '../../components/subscriber/RemoveSubsModal';
 import SnackAlert from '../../components/SnackAlert';
 import SearchInput from '../../components/table/SearchInput';
+import SubscriberTableAction from '../../components/subscriber/SubscriberTableAction';
+import MainPage from '../MainPage';
 
 export default function Subscribers() {
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
@@ -18,13 +20,12 @@ export default function Subscribers() {
     const { subscribersList, subsListLoading, subsListErr, isSubsListErr } = useSubscribersList()
 
     const filteredSubs = subscribersList?.filter(subs => {
-        return Object.values(subs).some(value => value.toString()
+        return Object.values(subs).some(value => value?.toString()
             .toLowerCase().includes(searchTerm.toLowerCase()))
     })
 
-
     return (
-        <>
+        <MainPage>
             <RemoveSubsModal
                 subs={subs}
                 open={removeModalOpen}
@@ -46,12 +47,20 @@ export default function Subscribers() {
                     <SubscriberTableRow
                         key={row.id}
                         row={row}
-                        setSubs={setSubs}
-                        setRemoveModalOpen={setRemoveModalOpen}
-                    />
+                        fields={['first_name', 'last_name', 'national_id', 
+                            'subscriber_code', 'status']}
+                        statusLabel={row.status}
+                        StatusIcon={Sync}
+                    >
+                        <SubscriberTableAction 
+                            row={row} 
+                            setSubs={setSubs} 
+                            setRemoveModalOpen={setRemoveModalOpen} 
+                        />
+                    </SubscriberTableRow>
                 )}
             />
             <SnackAlert snackbar={snackbar} setSnackbar={setSnackbar} />
-        </>
+        </MainPage>
     )
 }

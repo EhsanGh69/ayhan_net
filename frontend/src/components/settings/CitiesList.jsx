@@ -4,7 +4,7 @@ import { Add } from "@mui/icons-material"
 
 export default function CitiesList({
     provinceCities, selectedProvince, selectedCity, setSelectedCity, setSelectedLocation, setModalOpen,
-    setTitle
+    setTitle, setLocationName
 }) {
     return (
         <Box display="flex">
@@ -41,6 +41,7 @@ export default function CitiesList({
                 onClick={() => {
                     setSelectedLocation(selectedProvince)
                     setTitle('شهرستان')
+                    setLocationName('')
                     setModalOpen(true)
                 }}
             >

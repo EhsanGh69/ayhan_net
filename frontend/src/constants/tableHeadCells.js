@@ -14,14 +14,30 @@ export const baseSubsHeadCells = [
     { id: 'subscriber_code', label: 'کد مشترک', sortable: false },
 ]
 
+export const changeTechHeadCells = [
+    { id: 'first_name', label: 'نام', sortable: true },
+    { id: 'last_name', label: 'نام خانوادگی', sortable: true },
+    { id: 'phone_number', label: 'شماره تلفن', sortable: true },
+    { id: 'phone_type', label: 'نوع خط تلفن', sortable: true },
+    { id: 'status', label: 'وضعیت', sortable: false },
+    { id: 'actions', label: ' ', sortable: false }
+]
+
+export const newApplicantHeadCells = [
+    { id: 'first_name', label: 'نام', sortable: true },
+    { id: 'last_name', label: 'نام خانوادگی', sortable: true },
+    { id: 'status', label: 'وضعیت', sortable: false },
+    { id: 'actions', label: ' ', sortable: false }
+]
+
 export const subscriberHeadCells = [
-   ...baseSubsHeadCells,
-    { id: 'status', label: 'وضعیت', sortable: true },
+    ...baseSubsHeadCells,
+    { id: 'status', label: 'وضعیت', sortable: false },
     { id: 'actions', label: ' ', sortable: false }
 ]
 
 export const searchSubsHeadCells = [
-   ...baseSubsHeadCells,
+    ...baseSubsHeadCells,
     { id: 'actions', label: ' ', sortable: false }
 ]
 
